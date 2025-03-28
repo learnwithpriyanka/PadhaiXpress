@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from './Navbar.jsx'
 
-import Homepage from './component/HomePage/Homepage.jsx';
+import Homepage from './component/HomePage/HomePage.jsx';
 import AboutPage from './component/About/AboutPage.jsx';
 import ContactPage from './component/Contact/ContactPage.jsx';
 import SignupPage from './component/SignUp/SignupPage.jsx';
