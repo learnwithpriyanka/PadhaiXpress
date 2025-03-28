@@ -1,0 +1,160 @@
+
+.navbar{
+  background-color: #2D5F9A;
+  color:white !important;
+  
+ 
+}
+
+
+
+.nav-link{
+  /* color: white; */
+  margin-left: 50px;
+
+
+}
+
+
+.navbar-nav .nav-link {
+  color:white !important; /* Teal */
+}
+
+
+
+/* footer */
+
+.cont{
+  background-color: #2D5F9A;
+  color:white !important;
+   height: 340px;
+   width: 100%;
+
+   display: flex;
+   /* margin-top: 30px; */
+
+}
+
+
+.logo .img{
+  width: 150px;
+  height: 50px;
+  margin-top: 20px;
+  border-radius: 10px;
+  
+}
+
+
+
+.logo{
+  border-color: black;
+
+ 
+    width: 350px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-left:auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-color: #2D5F9A;
+
+
+}
+/* 
+.logo:hover{
+  background:linear-gradient(to right, #2D5F9A, #1E4A78);
+  transition-duration:2s;
+} */
+
+
+.company{
+  /* background-color: aliceblue; */
+  width: 350px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-left:auto;
+    margin-top:0;
+    margin-bottom: 2rem;
+
+}
+
+.company :hover{
+  color: black;
+  transition-duration: 1s;
+
+
+}
+
+
+
+
+
+.support{
+  /* background-color: aqua; */
+  width: 350px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-left:auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+}
+
+
+.social{
+  
+  
+  width: 350px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-left:auto;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    line-height: 35px;
+
+}
+
+.social :hover{
+  color: black;
+  transition-duration: 1s;
+
+}
+
+a{
+  text-decoration: none;
+  color: white;
+
+  margin-left: 20px;
+  
+}
+
+h4{
+  margin-left: 20px;
+}
+
+
+.head{
+  margin-top: 20px;
+}
+
+i{
+  margin-left: 20px;
+}
+
+
+.so{
+  margin-top: 20px;
+}
+
+
+#slogan{
+  margin-top: 25px;
+}
+
+
+
+
+
+
+
+

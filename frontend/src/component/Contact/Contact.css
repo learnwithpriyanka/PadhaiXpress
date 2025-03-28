@@ -1,0 +1,94 @@
+
+
+.image{
+   
+    background: url('./media/image/contactt.jpg');
+    width: 99vw;
+    height: 50vh; 
+    object-fit: cover; 
+    color:white;
+    text-align: center;
+    align-content: center;
+    
+    
+   
+   
+ 
+    
+}
+
+.c{
+    background-color:#f2e7bc;
+    margin: 0px !important;
+
+}
+
+
+.card1{
+
+    margin-top: 60px !important;
+    margin:30px;
+    align-items: center;
+    height:250px !important;
+    width:250px !important;
+    border-radius: 40px !important;
+    border: 2px solid black;
+    background-color: whitesmoke;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.card1:hover{
+    background-color: rgb(227, 229, 200);
+    box-shadow:0 20px 20px #2D5F9A ;
+    transition-duration: 0.5s;
+}
+
+
+p{
+    text-align: center;
+    
+    
+}
+
+.form{
+   
+    border:2px solid black;
+    border-radius: 30px;
+    
+
+
+ } 
+
+.frm{
+    width:80vh;
+    height:50px;
+    margin-bottom: 50px;
+    border-radius: 10px;
+    margin-left: 10px;
+    border:none;
+    text-align: center;
+   
+   
+}
+
+.frm:focus {
+    border: 2px solid blue; /* Change border color when clicked */
+  }
+
+label{
+    margin-left: 15px;
+    color: black;
+}
+
+.container{
+            text-align: center;
+            
+        }
+
+.container button{
+    border-radius: 20px;
+    
+    
+}
+

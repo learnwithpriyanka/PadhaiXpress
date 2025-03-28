@@ -1,0 +1,254 @@
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 50px;
+    min-height: 100vh;
+   
+    
+    background-image: url('/media/image/recyclebook1.webp'); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+}
+
+
+.hero-text {
+    flex: 1;
+    padding: 40px;
+    max-width: 50%;
+}
+
+.welcome-text {
+    font-size: 1.2rem;
+    color: #dde4ec;
+}
+
+.head1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f8f2f2;
+    margin-bottom: 15px;
+}
+
+.para {
+    font-size: 1rem;
+    color: #e9e0e0;
+    line-height: 1.6;
+}
+
+
+.learn-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border: none;
+    background-color: #dae915;
+    color: rgb(8, 8, 8);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.learn-btn:hover {
+    background-color: #afe736;
+}
+
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 50%;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+ 
+
+.donate1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #8ec5fc, #a0cfa0);
+    padding: 50px;
+    margin:0px;
+    width: 100%;
+    height: 55vh;
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.donate:hover {
+    transform: scale(1.02);
+}
+
+.image-container1 img {
+    width: 500px;
+    height: auto;
+    border-radius: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-container1 img:hover {
+    transform: scale(1.05);
+}
+
+.text-container1 {
+    max-width: 500px;
+    margin-left: 50px;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.tagline1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+h2 {
+    font-size: 36px;
+    margin: 10px 0;
+}
+
+.description1 {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.sustain{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #8ec5fc, #a0cfa0);
+    padding:20px;
+    margin:0px;
+    width: 100%;
+    height: 55vh;
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+.h1{
+    
+        font-size: 36px;
+        margin: 0;
+        margin-right: 200px;
+
+}
+.image-container2 img {
+    width: 500px;
+    height: 300px;
+    margin-left: 60px;
+    border-radius: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+.recycling-benefits {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.section-title {
+    font-size: 40px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.benefits-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.benefit-card {
+    background: #b8e1b9;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    width: 300px;
+}
+
+.benefit-card:hover {
+    transform: scale(1.05);
+}
+
+.highlight-card {
+    background: #3b6b35;
+    color: white;
+}
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+}
+
+.benefit-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.benefit-description {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main1 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card1 {
+        width: 90%;
+        max-width: 300px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card1 {
+        width: 90%;
+    }
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-container {
+        flex-direction: column;
+        text-align: center;
+        height: auto;
+        padding: 20px;
+    }
+
+    .hero-text,
+    .hero-image {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .head1 {
+        font-size: 2rem;
+    }
+
+    .hero-image img {
+        width: 80%;
+    }
+}
+@media (max-width: 768px) {
+    .hero-container {
+        background-size: contain; /* Adjusts the image size for smaller screens */
+    }
+}

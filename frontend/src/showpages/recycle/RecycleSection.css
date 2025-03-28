@@ -1,0 +1,111 @@
+
+/* Main Container */
+.recycle-container {
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+   
+}
+
+/* Card Styling */
+.recycle-card {
+    display: flex;
+    background: rgb(233, 199, 199);
+    width: 300px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    
+    flex-direction: column;
+    align-items: center;
+    margin-left: auto;
+}
+
+/* Hover Effect */
+.recycle-card:hover {
+    transform: scale(1.05);
+    box-shadow: 20px 12px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Image Styling */
+.recycle-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Title Styling */
+.recycle-title {
+    font-size: 1.4rem;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Paragraph Styling */
+.recycle-text {
+    font-size: 1rem;
+    color: #666;
+    margin: 10px 0;
+    flex-grow: 1;
+}
+
+/* Button Styling */
+.recycle-btn {
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    background: linear-gradient(135deg, #007BFF, #00D4FF);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 80%;
+    text-align: center;
+}
+
+.recycle-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #00a6d6);
+    transform: scale(1.05);
+}
+
+/* Section Heading */
+.recycle-header {
+    text-align: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recycle-header h3 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.recycle-header p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .recycle-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .recycle-card {
+        width: 90%;
+    }
+}

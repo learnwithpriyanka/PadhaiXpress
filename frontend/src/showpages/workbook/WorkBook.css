@@ -1,0 +1,83 @@
+
+.all{
+  background-color: #f2e7bc;
+  margin-top: 0;
+
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Default: 3 cards per row */
+    gap: 30px; /* Space between books */
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Responsive for Tablets (2 per row) */
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* Responsive for Mobile (1 per row) */
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  
+  
+  .card {
+    display: flex;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    height:350px;
+    width:338px;
+    overflow:hidden;
+    word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  
+  .search-bar {
+    
+    width: 100%;
+    max-width: 700px; /* Maximum width of the input */
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 50px;
+    /* margin: 20px auto; */
+    margin-left: 350px;
+    display: block; /* Centers the input */
+   
+  }
+
+  .search-bar input{
+    border:none;
+    outline:none;
+  }
+  .search-bar input{
+    width: 100%;
+  
+    padding: 20px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+  }
+  
+  .nik {
+    background-color:#f2e7bc;
+  }
+  
+  
