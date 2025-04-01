@@ -17,7 +17,7 @@ export default function NotesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.5 }}
         >
-          🚀 Coming Soon!
+           Coming Soon!
         </motion.h1>
         <motion.p 
           className="subtitle"
