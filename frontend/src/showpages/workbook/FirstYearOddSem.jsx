@@ -39,7 +39,7 @@ function FirstYearOddSem() {
                 {/* Book Grid */}
                 <div className="grid">
                     {displayedData.length > 0 ? (
-                       displayedData.map((wb) => (
+                        displayedData.map((wb) => (
                             <div key={wb.id} className="card">
                                 <img src={wb.image} alt={wb.name} />
                                 <h5 className="card-title">{wb.name}</h5>
@@ -47,7 +47,14 @@ function FirstYearOddSem() {
                             </div>
                         ))
                     ) : (
-                        <p>No books found.</p>
+                        <div className="priyanka">
+                            <h3>
+                                Sorry, this workbook is not available. If you need this workbook, feel free to contact me
+                                <a href="https://t.me/Brijeshpriya1409" target="_blank" rel="noopener noreferrer">
+                                    here on Telegram
+                                </a>.
+                            </h3>
+                        </div>
                     )}
                 </div>
                 {/* Show More/Less Button */}

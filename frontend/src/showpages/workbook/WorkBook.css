@@ -103,3 +103,24 @@
     background-color: #0056b3;
 }
   
+
+
+.priyanka h3{
+  display: inline-block; 
+  color: inherit; 
+  white-space: nowrap;
+  height: 50vh;
+ 
+  margin-left: 15px;
+}
+
+.priyanka a {
+  text-decoration: none; 
+  color: blue; 
+  margin-left: 5px; 
+}
+
+.priyanka a:hover {
+  text-decoration: underline; 
+  color: darkblue; 
+}
