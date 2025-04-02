@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')).render(
 
       {/* navigation route */}
       <Route path="/notes" element={<NotesPage/>}></Route>
-      <Route path="/workbook" element={<WorkbookPage/>}></Route>
+      <Route path="/workbook/*" element={<WorkbookPage/>}></Route>
       <Route path="/recycle" element={<RecycleaPage/>}></Route>
       <Route path="/project" element={<ProjectPage/>}></Route>
       

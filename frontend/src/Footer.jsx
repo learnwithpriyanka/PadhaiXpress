@@ -6,7 +6,7 @@ function Footer() {
         <footer>
             <div className='cont'>
                 <div className="logo">
-                    <a href='#'><img src='media/image/newlogo.png' alt='logo' className='img'></img></a>
+                    <a href='#'><img src='/media/image/newlogo.png' alt='logo' className='img'></img></a>
                     <p id='slogan'>Your One-Stop Hub for Study Materials!</p>
                 </div>
                 <div className='so'>
