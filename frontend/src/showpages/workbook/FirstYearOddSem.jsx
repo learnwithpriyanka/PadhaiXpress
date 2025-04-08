@@ -1,72 +1,33 @@
-import React, { useState } from 'react';
-import "./WorkBook.css";
+import React from 'react';
+import Year from './Year'; // Ensure the correct import path for Year
+import { useCart } from '../../cartcomponent/CartContext';
 
 const FirstYearOddSemData = [
-    { "id": 1, "code": "23MT1001", "name": "LINEAR ALGEBRA & CALCIULUS FOR ENGINEERS", "image": "/media/image/work.jpg" },
-    { "id": 2, "code": "24SC1203", "name": "DATA STRUCTURES", "image": "/media/image/work.jpg" },
-    { "id": 3, "code": "23EC1203", "name": "BASIC ELECTRICAL AND ELECTRONIC CIRCUITS", "image": "/media/image/work.jpg" },
-    { "id": 4, "code": "23EC1202", "name": "DIGITAL DESIGN AND COMPUTER ARCHITECTURE", "image": "/media/image/work.jpg" },
-    { "id": 5, "code": "23MET1005", "name": "MATERIAL SCIENCE AND METALLURGY", "image": "/media/image/work.jpg" },
-    { "id": 6, "code": "24SC1203", "name": "DATA STRUCTURES USING PYTHON", "image": "/media/image/work.jpg" },
-    { "id": 7, "code": "22CE1201", "name": "ENGINEERING GEOLOGY", "image": "/media/image/work.jpg" },
-    { "id": 8, "code": "23MT2003", "name": "MATHEMATICAL MODELLING & NUMERICAL METHODS", "image": "/media/image/work.jpg" },
-    { "id": 9, "code": "24AD1201", "name": "ARTIFICAL INTELLIGENCE", "image": "/media/image/work.jpg" }
-];
+    { id: "FY1", code: "23MT1001", name: "LINEAR ALGEBRA & CALCULUS FOR ENGINEERS" },
+    { id: "FY2", code: "24SC1203", name: "DATA STRUCTURES" },
+    { id: "FY3", code: "23EC1203", name: "BASIC ELECTRICAL AND ELECTRONIC CIRCUITS" },
+    { id: "FY4", code: "23EC1202", name: "DIGITAL DESIGN AND COMPUTER ARCHITECTURE" },
+    { id: "FY5", code: "23MET1005", name: "MATERIAL SCIENCE AND METALLURGY" },
+    { id: "FY6", code: "24SC1203", name: "DATA STRUCTURES USING PYTHON" },
+    { id: "FY7", code: "22CE1201", name: "ENGINEERING GEOLOGY" },
+    { id: "FY8", code: "23MT2003", name: "MATHEMATICAL MODELLING & NUMERICAL METHODS" },
+    { id: "FY9", code: "24AD1201", name: "ARTIFICIAL INTELLIGENCE" }
+].map((item) => ({
+    ...item,
+    image: "/media/image/klimage.png", // Add the image path here
+    price: "500" // Add the price here
+}));
 
 function FirstYearOddSem() {
-    const [search, setSearch] = useState("");
-    const [showAll, setShowAll] = useState(false);
-
-    const filteredWorkbookData = FirstYearOddSemData.filter((wb) =>
-        wb.name.toLowerCase().includes(search.toLowerCase())
-    );
-    const displayedData = showAll ? filteredWorkbookData : filteredWorkbookData.slice(0, 20);
+    const { cart, dispatch } = useCart(); // Ensure CartContext is properly set up
 
     return (
-        <>
-            <div className="all">
-                <div className="ner">
-                    <div className="search-bar">
-                        <input
-                            type="text"
-                            placeholder="Search Engineering books..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                {/* Book Grid */}
-                <div className="grid">
-                    {displayedData.length > 0 ? (
-                        displayedData.map((wb) => (
-                            <div key={wb.id} className="card">
-                                <img src={wb.image} alt={wb.name} />
-                                <h5 className="card-title">{wb.name}</h5>
-                                <p className="card-info">{wb.code}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="priyanka">
-                            <h3>
-                                Sorry, this workbook is not available. If you need this workbook, feel free to contact me
-                                <a href="https://t.me/Brijeshpriya1409" target="_blank" rel="noopener noreferrer">
-                                    here on Telegram
-                                </a>.
-                            </h3>
-                        </div>
-                    )}
-                </div>
-                {/* Show More/Less Button */}
-                {filteredWorkbookData.length > 20 && (
-                    <div className="show-more">
-                        <button onClick={() => setShowAll(!showAll)}>
-                            {showAll ? "Show Less" : "Show More"}
-                        </button>
-                    </div>
-                )}
-            </div>
-        </>
+        <Year
+            data={FirstYearOddSemData}
+            placeholder="Search for First Year Odd Semester workbooks..."
+            cart={cart}
+            dispatch={dispatch}
+        />
     );
 }
 

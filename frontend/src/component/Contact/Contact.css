@@ -2,11 +2,11 @@
 
 .image{
    
-    background: url('./media/image/contactt.jpg');
+    /* background: url('./media/image/contactt.jpg'); */
     width: 99vw;
     height: 50vh; 
     object-fit: cover; 
-    color:white;
+    color:black;
     text-align: center;
     align-content: center;
     

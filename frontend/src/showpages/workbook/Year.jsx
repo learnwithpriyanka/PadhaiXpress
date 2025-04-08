@@ -1,76 +1,99 @@
-
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import "./WorkBook.css";
 
-const workbooksData = [
-    { "id": 1, "title": "Computer Networks", "image": "media/image/work.jpg", "info": "Learn about networks" },
-    { "id": 2, "title": "Data Structures", "image": "media/image/work.jpg", "info": "Master DSA concepts" },
-    { "id": 3, "title": "Operating Systems", "image": "media/image/work.jpg", "info": "Understand OS concepts" },
-    { "id": 4, "title": "Database Management", "image": "media/image/work.jpg", "info": "SQL and NoSQL databases" },
-    { "id": 5, "title": "Software Engineering", "image": "media/image/work.jpg", "info": "Develop better software" },
-    { "id": 6, "title": "Artificial Intelligence", "image": "media/image/work.jpg", "info": "AI and Machine Learning" },
-    { "id": 7, "title": "Cyber Security", "image": "media/image/work.jpg", "info": "Protect systems from threats" },
-    { "id": 8, "title": "Cloud Computing", "image": "media/image/work.jpg", "info": "AWS, Azure, GCP" },
-    { "id": 9, "title": "Blockchain Technology", "image": "media/image/work.jpg", "info": "Decentralized networks" },
-    { "id": 10, "title": "Internet of Things", "image": "media/image/work.jpg", "info": "Connected devices" },
-    { "id": 11, "title": "Embedded Systems", "image": "media/image/work.jpg", "info": "Microcontrollers and IoT" },
-    { "id": 12, "title": "Computer Graphics", "image": "media/image/work.jpg", "info": "3D Rendering" },
-    { "id": 13, "title": "Digital Logic Design", "image": "media/image/work.jpg", "info": "Boolean algebra & circuits" },
-    { "id": 14, "title": "Big Data Analytics", "image": "media/image/work.jpg", "info": "Analyze large datasets" },
-    { "id": 15, "title": "Quantum Computing", "image": "media/image/work.jpg", "info": "Future of computing" },
-    { "id": 16, "title": "Wireless Communication", "image": "media/image/work.jpg", "info": "5G & beyond" },
-    { "id": 17, "title": "Image Processing", "image": "media/image/work.jpg", "info": "Computer vision" },
-    { "id": 18, "title": "Machine Learning", "image": "media/image/work.jpg", "info": "AI model training" },
-    { "id": 19, "title": "Human-Computer Interaction", "image": "media/image/work.jpg", "info": "UX/UI design principles" },
-    { "id": 20, "title": "Software Testing", "image": "media/image/work.jpg", "info": "Improve code quality" }
-  ];
+const Year = ({ data = [], placeholder = "Search...", cart = [], dispatch }) => {
+    const [search, setSearch] = useState("");
+    const [showAll, setShowAll] = useState(false);
 
-function Year()
-{
-  const [search,setSearch]=useState("");
+    // Filter workbooks based on search input
+    const filteredWorkbookData = data.filter((wb) =>
+        wb.name.toLowerCase().includes(search.toLowerCase())
+    );
 
-  const filteredWorkbookData = workbooksData.filter((wb) =>
-    wb.title.toLowerCase().includes(search.toLowerCase())
-);
+    // Limit displayed data if "Show All" is not enabled
+    const displayedData = showAll ? filteredWorkbookData : filteredWorkbookData.slice(0, 20);
 
-
-
-  return(
-    <>
-    <div className="all" >
-    <div className="ner">
-      <div className="search-bar">
-     <input
-        type="text"
-        placeholder=" Search Engineering books..."
-        value={search}
-        onChange={(e)=>
-          setSearch(e.target.value)
-        }
-      />
-     
-      </div>
-    </div>
-
-
-      {/* Book Grid */}
-      <div className="grid" >
-        {filteredWorkbookData.length > 0 ? (
-          filteredWorkbookData.map((wb) => (
-            <div key={wb.id} className="card">
-              <img src={wb.image} alt={wb.title} />
-              <h4 className="card-title">{wb.title}</h4>
-              <p className="card-info">{wb.info}</p>
+    return (
+        <div className="all">
+            {/* Search Bar */}
+            <div className="ner">
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder={placeholder}
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
             </div>
-          ))
-        ) : (
-          <p>No books found.</p>
-        )}
-      </div>
-    </div>
-    </>
-  );
-}
+
+            {/* Book Grid */}
+            <div className="grid">
+                {displayedData.length > 0 ? (
+                    displayedData.map((wb) => {
+                        const cartItem = cart.find((cartItem) => cartItem.id=== wb.id);
+                        return (
+                            <div key={wb.id} className="card">
+                                <img src={wb.image} alt={wb.name} />
+                                <h6 className="card-title">{wb.name} ({wb.code})</h6>
+                                <p className="card-price">Price: ₹{wb.price}</p>
+                                {/* Conditionally render buttons */}
+                                {cartItem ? (
+                                    <div className="cart-controls">
+                                        <button
+                                            onClick={() => dispatch({ type: 'DECREASE', payload: wb.id })}
+                                            aria-label="Decrease quantity"
+                                        >
+                                            -
+                                        </button>
+                                        <span>{cartItem.quantity}</span>
+                                        <button
+                                            onClick={() => dispatch({ type: 'INCREASE', payload: wb.id })}
+                                            aria-label="Increase quantity"
+                                        >
+                                            +
+                                        </button>
+                                        <button
+                                            onClick={() => dispatch({ type: 'REMOVE', payload: wb.id })}
+                                            aria-label="Remove item"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        className="addtocart"
+                                        onClick={() => dispatch({ type: 'ADD_TO_CART', payload: wb })}
+                                        aria-label="Add to cart"
+                                    >
+                                        Add to Cart
+                                    </button>
+                                )}
+                            </div>
+                        );
+                    })
+                ) : (
+                    <div className="priyanka">
+                        <h3>
+                            Sorry, this workbook is not available. If you need this workbook, feel free to contact me
+                            <a href="https://t.me/Brijeshpriya1409" target="_blank" rel="noopener noreferrer">
+                                here on Telegram
+                            </a>.
+                        </h3>
+                    </div>
+                )}
+            </div>
+
+            {/* Show More/Less Button */}
+            {filteredWorkbookData.length > 20 && (
+                <div className="show-more">
+                    <button onClick={() => setShowAll(!showAll)}>
+                        {showAll ? "Show Less" : "Show More"}
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default Year;
-

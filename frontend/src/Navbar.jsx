@@ -2,8 +2,12 @@ import React from 'react'
 import './index.css'
 
 import { Link } from "react-router-dom";
+import { useCart } from './cartcomponent/CartContext';
 
 function Navbar() {
+
+  const { cart } = useCart();
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
   return (
     <nav class="navbar navbar-expand-lg border-bottom " >
       <div class="container p-2">
@@ -58,6 +62,12 @@ function Navbar() {
               <li class="nav-item">
                 <Link class="nav-link active" to="signup">
                   Signup
+                </Link>
+              </li>
+
+              <li class="nav-item">
+                <Link class="nav-link active" to="cart">
+                Cart ({totalItems})
                 </Link>
               </li>
 

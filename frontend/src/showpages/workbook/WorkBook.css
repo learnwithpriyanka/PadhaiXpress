@@ -7,7 +7,7 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Default: 3 cards per row */
-    gap: 30px; /* Space between books */
+    gap: 15px; /* Space between books */
     justify-content: center;
     padding: 20px;
   }
@@ -33,15 +33,34 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    text-align: start;
     transition: transform 0.2s ease-in-out;
     height:350px;
     width:338px;
     overflow:hidden;
     word-wrap: break-word;
   overflow-wrap: break-word;
+  margin: 0 auto;
+  
 
   }
+  .card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 0;
+    object-fit: cover;
+    
+  }
+  .card h6{
+    margin-top: 0;
+  }
+
+  .card-price{
+    color: #2874f0;
+  }
+
   
   .card:hover {
     transform: scale(1.05);
