@@ -2,7 +2,7 @@ import React from 'react';
 import Year from './Year'; // Ensure the correct import path for Year
 import { useCart } from '../../cartcomponent/CartContext';
 
-const FirstYearOddSemData = [
+ export const FirstYearOddSemData = [
     { id: "FY1", code: "23MT1001", name: "LINEAR ALGEBRA & CALCULUS FOR ENGINEERS" },
     { id: "FY2", code: "24SC1203", name: "DATA STRUCTURES" },
     { id: "FY3", code: "23EC1203", name: "BASIC ELECTRICAL AND ELECTRONIC CIRCUITS" },
