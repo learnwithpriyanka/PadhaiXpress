@@ -1,103 +1,135 @@
-import React from "react";
-import "../signIn/signin.css";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import axios from "axios";
+import "./signup.css";
+import { useNavigate } from "react-router-dom";
 
-function Signup() {
+function SignUp() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      setMessage("");
+      return;
+    }
+    console.log("Form Data:", formData);
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/auth/signup", formData);
+      setMessage(response.data.message);
+      setError("");
+      setTimeout(()=>{
+        navigate("/signin");
+      },2000);
+    } catch (err) {
+      if(err.response){
+        setError(err.response.data.error || "An error occurred. Please try again.");
+
+      } else if(err.request){
+        setError("No response from the server. Please try again later.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+      console.log(err.response);
+      setMessage("");
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    window.location.href = "http://localhost:8080/api/auth/google";
+  };
+
   return (
-    <div className="conatiner">
-      <div className="row p-0 m-0">
-        <div
-          className="col-md-7 p-0 m-0"
-          style={{ backgroundColor: "black", width: "60%", height: "100vh" }}
-        >
-          <div className="container p-0 m-0">
-            <img
-              src="/media/image/image.webp"
-              alt="Padhai"
-              className="animateBg"
-              style={{ backgroundSize: "cover", width: "100%", height: "100vh" }}
-            />  
+    <div className="signup-container">
+      <div className="signup-left">
+        <img
+          src="/media/image/image.webp"
+          alt="Sign Up"
+          className="signup-image"
+        />
+      </div>
+      <div className="signup-right">
+        <h2>Welcome!</h2>
+        <h3>Create Your Account</h3>
+        <p>Join us and start your journey today.</p>
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              type="text"
+              id="name"
+              placeholder="Name"
+              className="form-input"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
-        </div>
-        <div
-          className="col-md-5 p-5"
-          style={{ backgroundColor: "white", width: "40%", height: "100vh" }}
-        >
-          <h2 className="mt-5">Welcome back!</h2>
-          <h3 className="mb-3">Register to your account</h3>
-          <p1 className="">It's nice to see you</p1>
-
-          <form>
-            <div className="form-group">
-              <label for="name"> </label>
-              <input
-                type="text"
-                className="form-control"
-                id="name"
-                placeholder="Your Name"
-              ></input>
-               <label for="email"> </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                placeholder="Your email"
-              ></input>
-              <label for="password"></label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="Enter new  password"
-              ></input>
-                 <label for="password"></label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="Confirm password"
-              ></input>
-              <button
-                type="submit"
-                className="btn btn-primary mt-3"
-                style={{ width: "100%" }}
-              >
-                Register
-              </button>
-              <br></br>
-
-              {/* <input type="checkbox" className="mt-3" id="rememberMe"></input>
-              <label htmlFor="rememberMe" className="mt-2 p-2">
-                {" "}
-                Remember me
-              </label>
-              <a href="#" className="m-5 " style={{ color: "blue" }}>
-                Forgot password?
-              </a> */}
-              <br></br>
-              <hr></hr>
-              <button type="submit" className=" mt-3" style={{ width: "100%" }}>
-                Continue with Google
-              </button>
-              <br></br>
-              <div
-                className="justify-content-center, mt-4"
-                style={{ textAlign: "center" }}
-              >
-                <p>
-                  Login with your Account?
-                  <Link to="/signin
-                  " style={{ color: "blue" }}>
-                    Login
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </form>
-        </div>
+          <div className="form-group">
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              className="form-input"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              className="form-input"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          {message && <p className="success-message">{message}</p>}
+          <button type="submit" className="form-button">Sign Up</button>
+          <button type="button" className="google-button" onClick={handleGoogleSignIn}>
+            Sign in with Google
+          </button>
+          <div className="login-link">
+            <p>
+              Already have an account?{" "}
+              <a href="/signin" className="link">
+                Sign In
+              </a>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default SignUp;

@@ -1,80 +1,84 @@
-import React from "react";
+import React, { useState ,useContext} from "react";
+import axios from "axios";
 import "./SignIn.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 function SignIn() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Access the login function from AuthContext
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8080/api/auth/signin", formData);
+      localStorage.setItem("token", response.data.token);
+      login(response.data.token); // Call the login function from AuthContext
+      setMessage(response.data.message);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      setMessage(err.response?.data?.error || "An error occurred. Please try again.");
+    }
+  };
+
   return (
-    <div className="conatiner ">
-      <div className="row   ">
-        <div
-          className="col-md-7 p-0 m-0"
-          style={{ backgroundColor: "black", width: "60%", height: "100vh" }}
-        >
-          <div className="container p-0 m-0">
-            <img src="/media/image/image.webp" alt="Padhai"  className="animateBg" style={{backgroundSize:"cover", width:"100%", height:"100vh"}} />
+    <div className="signin-container">
+      <div className="signin-left">
+        <img
+          src="/media/image/signin-image.jpg"
+          alt="Sign In"
+          className="signin-image"
+        />
+      </div>
+      <div className="signin-right">
+        <h2>Welcome Back!</h2>
+        <h3>Sign In to Your Account</h3>
+        <form className="signin-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              className="form-input"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
           </div>
-        </div>
-        <div
-          className="col-md-5 p-5"
-          style={{ backgroundColor: "white", width: "40%", height: "100vh" }}
-        >
-          <h2 className="mt-5">Welcome back!</h2>
-          <h3 className="mb-3">Login to your account</h3>
-          <p1 className="">It's nice to see you again.Ready to order?</p1>
-
-          <form>
-            <div className="form-group">
-              <label for="email"> </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                placeholder="Your username or email"
-              ></input>
-              <label for="password"></label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="Enter your password"
-              ></input>
-              <button
-                type="submit"
-                className="btn btn-primary mt-3"
-                style={{ width: "100%" }}
-              >
-                Log in
-              </button>
-              <br></br>
-
-              <input type="checkbox" className="mt-3" id="rememberMe"></input>
-              <label htmlFor="rememberMe" className="mt-2 p-2">
-                {" "}
-                Remember me
-              </label>
-              <a href="#" className="m-5 " style={{ color: "blue" }}>
-                Forgot password?
+          <div className="form-group">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {message && <p className="message">{message}</p>}
+          <button type="submit" className="form-button">Sign In</button>
+          <div className="signup-link">
+            <p>
+              Don't have an account?{" "}
+              <a href="/signup" className="link">
+                Sign Up
               </a>
-              <br></br>
-              <hr></hr>
-              <button type="submit" className=" mt-3" style={{ width: "100%", borderRadius:"10px" }}>
-                Continue with Google
-              </button>
-              <br></br>
-              <div
-                className="justify-content-center, mt-4"
-                style={{ textAlign: "center" }}
-              >
-                <p>
-                  Don't have Account ?
-                  <Link to="/signup" style={{ color: "blue" }}>
-                    Sign Up
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </form>
-        </div>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );

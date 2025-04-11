@@ -28,8 +28,11 @@ import ThirdYearEvenSem from './showpages/workbook/ThirdYearEvenSem';
 import FourthYearOddSem from './showpages/workbook/FourthYearOddSem';
 import FourthYearEvenSem from './showpages/workbook/FourthYearEvenSem';
 import Year1 from './showpages/workbook/Year1.jsx';
-
+import ForgotPassword from './component/signIn/ForgotPassword.jsx';
+import ProfilePage from './profile/ProfilePage.jsx';
+import { AuthProvider } from "./context/AuthContext";
 createRoot(document.getElementById('root')).render(
+  <AuthProvider>
   <CartProvider>
     <BrowserRouter>
       <Navbar />
@@ -41,6 +44,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="signup" element={<SignupPage />}></Route>
         <Route path='cart' element={<ShoppingCart />}></Route>
         <Route path="*" element={<NotFound />}></Route>
+        <Route path="/profile" element={<ProfilePage />}></Route>
 
         {/* navigation route */}
 
@@ -59,7 +63,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/recycle" element={<RecycleaPage />}></Route>
         <Route path="/project" element={<ProjectPage />}></Route>
 
-
+            
+        <Route path='/forgot-password' element={<ForgotPassword />} />
 
       </Routes>
 
@@ -67,4 +72,5 @@ createRoot(document.getElementById('root')).render(
 
     </BrowserRouter>
   </CartProvider>
+  </AuthProvider>
 );

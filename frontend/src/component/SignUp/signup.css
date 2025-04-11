@@ -1,26 +1,27 @@
-/* Container for the entire SignIn page */
-.signin-container {
+.signup-container {
     display: flex;
     height: 100vh;
     font-family: Arial, sans-serif;
+
+    
   }
   
-  /* Left section with the image */
-  .signin-left {
+  .signup-left {
     flex: 3;
     background-color: black;
+   
   }
   
-  .signin-image {
+  .signup-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
   
-  /* Right section with the form */
-  .signin-right {
+  .signup-right {
     flex: 2;
-    background-color:#f2e7bc ;
+   
+    background-color:#f2e7bc;
     padding: 40px;
     display: flex;
     flex-direction: column;
@@ -28,20 +29,19 @@
     align-items: center;
   }
   
-  .signin-right h2 {
+  .signup-right h2 {
     margin-bottom: 10px;
   }
   
-  .signin-right h3 {
+  .signup-right h3 {
     margin-bottom: 20px;
   }
   
-  .signin-right p {
+  .signup-right p {
     margin-bottom: 30px;
   }
   
-  /* Form styling */
-  .signin-form {
+  .signup-form {
     width: 100%;
     max-width: 400px;
   }
@@ -73,24 +73,6 @@
     background-color: #0056b3;
   }
   
-  /* Options below the form */
-  .form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .forgot-password {
-    color: blue;
-    text-decoration: none;
-  }
-  
-  .forgot-password:hover {
-    text-decoration: underline;
-  }
-  
-  /* Google button */
   .google-button {
     width: 100%;
     padding: 10px;
@@ -107,8 +89,7 @@
     background-color: #c23321;
   }
   
-  /* Signup link */
-  .signup-link {
+  .login-link {
     text-align: center;
     margin-top: 20px;
   }
@@ -121,3 +102,20 @@
   .link:hover {
     text-decoration: underline;
   }
+
+  
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .success-message {
+    color: green;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+
+
+  
