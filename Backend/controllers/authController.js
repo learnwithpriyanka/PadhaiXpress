@@ -1,7 +1,8 @@
 const userData = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const generateToken = require('../utils/generateToken');
-
+const UserData = require('../models/usermodel');
+const OrderData = require('../models/orderModel');
 
 module.exports.signupUser = async (req, res) => {
     console.log("Request Body:", req.body);
@@ -42,19 +43,14 @@ module.exports.signupUser = async (req, res) => {
 
         });
 
-
-
-
         // Send a success response
         res.status(201).json({ message: "User registered successfully." });
     } catch (err) {
         console.error("Error during user signup:", err.message);
         res.status(500).json({ error: "Internal server error. Please try again later." });
 
-
     }
 };
-
 
 module.exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -84,3 +80,57 @@ module.exports.loginUser = async (req, res) => {
 
 module.exports.logoutUser = async (req, res) => { };
 module.exports.getUserProfile = async (req, res) => { };
+
+module.exports.getUserAddress = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming user ID is available in req.user
+    const user = await UserData.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ address: user.address }); // Assuming `address` is a field in the user schema
+  } catch (error) {
+    console.error('Error fetching user address:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports.getOrderHistory = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming user ID is available in req.user
+    const orders = await OrderData.find({ userId });
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ error: 'No orders found' });
+    }
+
+    res.json({ orders });
+  } catch (error) {
+    console.error('Error fetching order history:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports.placeOrder = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming user ID is available in req.user
+    const { address, products, total } = req.body;
+
+    const newOrder = new OrderData({
+      userId,
+      address,
+      products,
+      total,
+      date: new Date(),
+    });
+
+    await newOrder.save();
+
+    res.status(201).json({ message: 'Order placed successfully' });
+  } catch (error) {
+    console.error('Error placing order:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
