@@ -1,7 +1,7 @@
 import React, { useState ,useContext} from "react";
 import axios from "axios";
 import "./SignIn.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function SignIn() {
@@ -12,6 +12,7 @@ function SignIn() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext); // Access the login function from AuthContext
+  const location = useLocation(); // Get the current location
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -25,9 +26,10 @@ function SignIn() {
       localStorage.setItem("token", response.data.token);
       login(response.data.token); // Call the login function from AuthContext
       setMessage(response.data.message);
+      const from = location.state?.from || "/";
       setTimeout(() => {
-        navigate("/");
-      }, 2000);
+        navigate(from);
+      }, 1500);
     } catch (err) {
       setMessage(err.response?.data?.error || "An error occurred. Please try again.");
     }

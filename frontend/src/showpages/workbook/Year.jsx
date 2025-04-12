@@ -56,6 +56,7 @@ const Year = ({ data = [], placeholder = "Search...", cart = [], dispatch }) => 
                                         <button
                                             onClick={() => dispatch({ type: 'REMOVE', payload: wb.id })}
                                             aria-label="Remove item"
+                                            className='deletebutton'
                                         >
                                             Delete
                                         </button>

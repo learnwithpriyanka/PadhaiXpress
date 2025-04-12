@@ -11,6 +11,21 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    background-color:#fdf6e3;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    padding-left: 30px;
+  }
+  .cart-item p{
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: justify;
+    margin-left: 20px;
+    margin: 0;
   }
   
   .cart-item img {
@@ -27,6 +42,10 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  .cart-controls .deletebutton {
+    background-color: #ef4444;
   }
   
   .cart-controls button:hover {
@@ -68,7 +87,16 @@
     width:22%;
     height: 40px;
   }
-
+  .auth-message {
+    background-color: yellowgreen;
+    color: #333;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+  }
 
   .addtocart{
     background-color: #007bff;

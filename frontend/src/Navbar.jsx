@@ -108,7 +108,7 @@ function Navbar() {
                   className="nav-link active dropdown-toggle"
                   onClick={toggleDropdown}
                 >
-                  <i className="fas fa-user-circle"></i> {/* Profile Icon */}
+                  <i class="fa-solid fa-user" style={{background:"black",width:"33px",height:"33px",borderRadius:"50%",alignItems:"center", fontSize:"24px"}}></i> {/* Profile Icon */}
                 </button>
                 {showDropdown && (
                   <ul className="dropdown-menu">
@@ -119,14 +119,10 @@ function Navbar() {
                     </li>
                     <li>
                       <Link className="dropdown-item" to="/orders">
-                        Orders
+                        Order History
                       </Link>
                     </li>
-                    <li>
-                      <Link className="dropdown-item" to="/favourites">
-                        Favourites
-                      </Link>
-                    </li>
+                    
                     <li>
                       <button className="dropdown-item" onClick={logout}>
                         Logout
@@ -136,8 +132,8 @@ function Navbar() {
                 )}
                 </li>
               )}
-              <li class="nav-item">
-                <Link class="nav-link active" to="cart">
+              <li class="nav-item" >
+                <Link class="nav-link active" to="cart" style={{color:"yellow"}}>
                   Cart ({totalItems})
                 </Link>
               </li>

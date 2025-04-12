@@ -2,6 +2,9 @@
 .navbar{
   background-color: #2D5F9A;
   color:white !important;
+  display: flex;
+  align-items: center;
+  
   
  
 }
@@ -15,6 +18,7 @@
    /* display: flex  ;
    justify-content: flex-end;
    padding: 10px 20px; */
+   
 
 
 }
@@ -161,9 +165,9 @@ i{
 
 /* Dropdown menu container */
 .nav-item.dropdown {
-  position: relative;
-  
+   position: relative;
 }
+
 
 /* Dropdown menu */
 .dropdown-menu {
@@ -192,7 +196,8 @@ i{
 }
 
 .dropdown-item:hover {
-  background-color: #f8f9fa;
+  background-color:gainsboro;
+  color: black;
 }
 
 /* Profile icon button */

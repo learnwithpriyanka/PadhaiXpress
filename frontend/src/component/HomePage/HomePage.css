@@ -4,6 +4,17 @@
     height: auto;
 } */
 
+.cards-containar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    background-color: #f2e7bc;
+
+   
+  }
+  
+
 .card{
     background-color: antiquewhite;
     width: 350px;
@@ -11,9 +22,10 @@
     padding: 1rem;
     margin-left:auto;
     margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
     border-color: #2D5F9A;
     align-items: center;
+    
     
 }
 
@@ -37,12 +49,32 @@
 }
 
 .card-img{
-    width: 90%;
+    width: 70%;
     height: 25vh;
     border-radius: 0.5rem;
     margin: 15px;
+    object-fit: cover;
+
+
+
+
+
+
 }
 
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333; /* Ensure the text color contrasts with the background */
+    margin-top: 10px;
+  }
+  
+  .card-info {
+    font-size: 14px;
+    color: #666; /* Ensure the text color contrasts with the background */
+    margin-top: 5px;
+  }
 /* .welcome{
     text-align: center;
     background-color: #FDC500;
