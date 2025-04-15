@@ -134,3 +134,62 @@ module.exports.placeOrder = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+
+
+module.exports.UserProfile= async (req, res) => {
+  try {
+      let profile = await Profile.findOne({ user: req.user.id });
+      if (!profile) {
+          profile = new Profile({
+              user: req.user.id,
+              name: req.user.name,
+              email: req.user.email,
+              addresses: []
+          });
+          await profile.save();
+      }
+      res.json(profile);
+  } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
+
+module.exports.AddAddress=async (req, res) => {
+  try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      profile.addresses.push(req.body);
+      await profile.save();
+      res.json(profile.addresses[profile.addresses.length - 1]);
+  } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+  }
+};
+
+module.exports.UpdateAddress=async (req, res) => {
+  try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      const address = profile.addresses.id(req.params.id);
+      if (!address) return res.status(404).json({ error: 'Address not found' });
+      
+      Object.assign(address, req.body);
+      await profile.save();
+      res.json(address);
+  } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+  }
+};
+
+module.exports.DeleteAddress=async (req, res) => {
+  try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      profile.addresses.pull(req.params.id);
+      await profile.save();
+      res.json({ message: 'Address deleted' });
+  } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+  }
+};

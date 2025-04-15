@@ -1,17 +1,23 @@
- require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
- const bcrypt = require("bcrypt");
-  const jwt = require("jsonwebtoken");
- const cookieParser = require("cookie-parser");
- const authRouter = require("./routes/authRoutes");
- const app = express();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
- const cors = require("cors");
+// Import routes
+const authRouter = require("./routes/authRoutes");
+const profileRoutes = require("./routes/profile"); // Updated path
 
- app.use(cors({
-   origin: "http://localhost:5173",
-   credentials: true,
- }));
+const app = express();
+
+// Middleware
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 
 // const nodemailer = require("nodemailer");
@@ -19,11 +25,10 @@ const express = require("express");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
- 
+
 // app.use(cors());
 
 // MongoDB Connection
-
 const connectDB = require("./config/mongoose-connection");
 connectDB();
 
@@ -58,6 +63,13 @@ connectDB();
 
 
 app.use("/api/auth", authRouter);
+app.use("/api/profile", profileRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Server error' });
+});
 
 // Start Server
 const PORT = 8080;
