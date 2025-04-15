@@ -22,7 +22,12 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/signin", formData);
+    const response = await axios.post("http://localhost:8080/api/auth/signin", formData, {
+      withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    });
       localStorage.setItem("token", response.data.token);
       login(response.data.token); // Call the login function from AuthContext
       setMessage(response.data.message);
@@ -31,8 +36,13 @@ function SignIn() {
         navigate(from);
       }, 1500);
     } catch (err) {
-      setMessage(err.response?.data?.error || "An error occurred. Please try again.");
-    }
+      console.error('Signin error:', err);
+      if (err.code === 'ERR_CONNECTION_REFUSED') {
+        setMessage('Cannot connect to server. Please make sure the server is running.');
+      } else {
+        setMessage(err.response?.data?.error || 'An error occurred. Please try again.');
+      }  
+      }
   };
 
   return (

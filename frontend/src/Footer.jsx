@@ -1,16 +1,27 @@
 import React from 'react'
 import './index.css'
+import { Link } from 'react-router-dom';
 
 function Footer() {
     return (
         <footer>
             <div className='cont'>
-                <div className="logo">
-                    <a href='#'><img src='/media/image/newlogo.png' alt='logo' className='img'></img></a>
+            
+            <div className="logo">
+                    <Link className="navbar-brand" to="/">
+                        <div className='px' style={{ display: 'flex', color: 'white', fontSize: '30px', fontWeight: 'bold' }}>
+                            <div className='px4'>
+                                <h3 style={{ backgroundColor: "green", padding: "10px", marginRight: "15px", borderRadius: "50%", fontWeight: "800" }}>PX</h3>
+                            </div>
+                            <div>
+                                <h3 className='px2' style={{ marginTop: "10px" }}>PadhaiXpress</h3>
+                            </div>
+                        </div>
+                    </Link>
                     <p id='slogan'>Your One-Stop Hub for Study Materials!</p>
                 </div>
                 <div className='so'>
-                    <h4>Connect with us</h4>
+                    <h4 className='head'>Connect with us</h4>
                     <div className="social">
                         <a href='#' >facebook<i class="fa-brands fa-facebook"></i></a>
                         <br></br>
@@ -23,14 +34,12 @@ function Footer() {
 
                     </div>
                 </div>
-                <div >
+                <div className='company-section'>
                     <h4 className='head'>Company</h4>
                     <div className="company">
-
-                        <p> <a href='#'>about</a></p>
-                        <p> <a href='#'>signup</a></p>
-                        <p> <a href='#'>contact</a></p>
-
+                        <p><Link to="/about">About</Link></p>
+                        <p><Link to="/signup">Sign Up</Link></p>
+                        <p><Link to="/contact">Contact</Link></p>
                     </div>
                 </div>
 

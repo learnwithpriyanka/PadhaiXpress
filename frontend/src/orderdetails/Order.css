@@ -271,6 +271,16 @@ textarea.form-input {
   font-weight: bold;
   color: #333;
 }
+.item-pages {
+  color: #666;
+  margin: 4px 0;
+}
+
+.item-print-type {
+  color: #2D5F9A;
+  font-weight: 500;
+  margin: 4px 0;
+}
 
 .item-total {
   font-weight: bold;

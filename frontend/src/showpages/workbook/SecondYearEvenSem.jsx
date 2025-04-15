@@ -12,7 +12,7 @@ function SecondYearEvenSem() {
     return (
         <Year
             data={SecondYearOddSemData}
-            placeholder="Search for Second Year Odd Semester workbooks..."
+            placeholder="Search for Second Year Even Semester workbooks..."
             cart={cart}
             dispatch={dispatch}
         />

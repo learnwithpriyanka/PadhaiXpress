@@ -10,7 +10,24 @@ const ShoppingCart = () => {
   const { isLoggedIn } = useContext(AuthContext); // Get the login status from AuthContext
   const [message, setMessage] = useState('');
 
-  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const handlePageTypeChange = (itemId, pageType) => {
+    dispatch({ 
+        type: 'UPDATE_PAGE_TYPE', 
+        payload: { 
+            id: itemId, 
+            pageType: pageType 
+        } 
+    });
+};
+
+const calculateItemPrice = (item) => {
+    const basePrice = item.price;
+    return item.pageType === "single" ? basePrice * 2 : basePrice;
+};
+
+const total = cart.reduce((acc, item) => 
+    acc + (calculateItemPrice(item) * item.quantity), 0
+);
 
   const handleBuyNow = () => {
     if (!isLoggedIn) {
@@ -34,7 +51,16 @@ const ShoppingCart = () => {
           <img src={item.image} alt={item.name} />
           <div>
             <h4>{item.name}</h4>
-            <p> ₹{item.price}</p>
+            <p> ₹{item.price} Pages:{item.pages}</p>
+            <select 
+                            value={item.pageType} 
+                            onChange={(e) => handlePageTypeChange(item.id, e.target.value)}
+                            className="page-type-select"
+                        >
+                            <option value="double">Double Side</option>
+                            <option value="single">Single Side</option>
+                        </select>
+                        <p>Price: ₹{calculateItemPrice(item)}</p>
             <div className="cart-controls">
               <button onClick={() => dispatch({ type: 'DECREASE', payload: item.id })}>-</button>
               <span>{item.quantity}</span>

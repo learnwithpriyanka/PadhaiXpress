@@ -55,7 +55,10 @@ export const ThirdYearOddSemData = [
 ].map((item) => ({
     ...item,
     image: "/media/image/klimage.png", // Add the image path here
-    price: "500" // Add the price here
+    price: "500", // Add the price here
+    pages:"250",
+    pageType: "double"
+
 }));
 
 function ThirdYearOddSem() {
@@ -64,7 +67,7 @@ function ThirdYearOddSem() {
     return (
         <Year
             data={ThirdYearOddSemData}
-            placeholder="Search for Second Year Odd Semester workbooks..."
+            placeholder="Search for Third Year Odd Semester workbooks..."
             cart={cart}
             dispatch={dispatch}
         />

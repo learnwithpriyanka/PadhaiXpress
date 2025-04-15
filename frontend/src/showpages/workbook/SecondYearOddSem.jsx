@@ -77,6 +77,8 @@ import Year from './Year';
     ...item,
     image: "/media/image/klimage.png", // Add the image path here
     price: "500" // Add the price here
+    ,pages:"200",
+    pageType:"double"
 }));
 
 function SecondYearOddSem() {

@@ -36,7 +36,7 @@ const Year = ({ data = [], placeholder = "Search...", cart = [], dispatch }) => 
                             <div key={wb.id} className="card">
                                 <img src={wb.image} alt={wb.name} />
                                 <h6 className="card-title">{wb.name} ({wb.code})</h6>
-                                <p className="card-price">Price: ₹{wb.price}</p>
+                                <p className="card-price">Price: ₹{wb.price} &nbsp; &nbsp;   Pages:{wb.pages}</p>
                                 {/* Conditionally render buttons */}
                                 {cartItem ? (
                                     <div className="cart-controls">

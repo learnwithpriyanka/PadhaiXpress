@@ -27,6 +27,12 @@ const cartReducer = (state, action) => {
       );
     case 'REMOVE':
       return state.filter((item) => item.id !== action.payload);
+      case 'UPDATE_PAGE_TYPE':
+            return state.map(item => 
+                item.id === action.payload.id 
+                    ? { ...item, pageType: action.payload.pageType }
+                    : item
+            );
     default:
       return state;
   }

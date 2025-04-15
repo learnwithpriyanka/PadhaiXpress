@@ -9,28 +9,28 @@ function Hero() {
         <div className='cards-containar'>
 
         <Link to='/workbook' className='card'>
-                <img src='media/image/workbook1.png ' alt='img' className='card-img'></img>
-                <h2 className='card-title'>Workbook</h2>
-                <p className='card-info'>go though</p>
+                <img src='media/image/klimage.png ' alt='img' className='card-img'></img>
+                <h2 className='card-title'>LAB WORKBOOK</h2>
+                <h3 className='card-info'> <i class="fa-solid fa-arrow-right-long"></i></h3>
             </Link>
 
             <Link to='/project' className='card'>
-                <img src='media/image/recycle.jpg' alt='img' className='card-img'></img>
+                <img src='media/image/print.png' alt='img' className='card-img'></img>
                 <h2 className='card-title'>Print Your Project</h2>
-                <p className='card-info'>go though</p>
+                <h3 className='card-info'><i class="fa-solid fa-arrow-right-long"></i></h3>
             </Link>
 
             <Link to='/recycle' className='card'>
                 <img src='media/image/recycle.jpg' alt='img' className='card-img'></img>
-                <h2 className='card-title'>Recycle</h2>
-                <p className='card-info'>go though</p>
+                <h2 className='card-title'style={{marginTop:"-15px"}} >Recycle</h2>
+                <h3 className='card-info'><i class="fa-solid fa-arrow-right-long"></i></h3>
             </Link>
 
         
          <Link to='/notes' className='card'>
-                <img  src='media/image/notes.jpg' alt='img' className='card-img'></img>
-                <h2 className='card-title'>Notes</h2>
-                <p className='card-info'>go though</p>
+                <img  src='media/image/note.png' alt='img' className='card-img'></img>
+                {/* <h2 className='card-title'>Notes</h2> */}
+                <h3 className='card-info' style={{marginTop:"0"}}><i class="fa-solid fa-arrow-right-long"></i></h3>
         </Link>
 
             

@@ -18,7 +18,14 @@ const OrderdetailPage = () => {
   });
   const [error, setError] = useState('');
 
-  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const calculateItemPrice = (item) => {
+    const basePrice = item.price;
+    return item.pageType === "single" ? basePrice * 2 : basePrice;
+  };
+
+  const total = cart.reduce((acc, item) => 
+    acc + (calculateItemPrice(item) * item.quantity), 0
+  );
   const deliveryCharge = total > 1000 ? 0 : 50;
   const tax = total * 0.18; // 18% GST
   const finalTotal = total + deliveryCharge + tax;
@@ -168,11 +175,14 @@ const OrderdetailPage = () => {
               <div className="item-details">
                 <h3>{item.name}</h3>
                 <p className="item-code">Code: {item.code}</p>
+                <p className="item-pages">Pages: {item.pages}</p>
+                <p className="item-print-type">Print Type: {item.pageType === 'single' ? 'Single Side' : 'Double Side'}</p>
+
                 <div className="item-price-qty">
                   <span className="quantity">Quantity: {item.quantity}</span>
-                  <span className="price">₹{item.price}</span>
+                  <span className="price">₹{calculateItemPrice(item)}</span>
                 </div>
-                <p className="item-total">Item Total: ₹{item.price * item.quantity}</p>
+                <p className="item-total">Item Total: ₹{(calculateItemPrice(item)* item.quantity).toFixed(2)}</p>
               </div>
             </div>
           ))}

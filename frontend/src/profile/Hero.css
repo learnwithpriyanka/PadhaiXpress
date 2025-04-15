@@ -1,0 +1,99 @@
+.profile-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.profile-header {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.profile-info p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.address-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.address-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.address-card {
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    position: relative;
+}
+
+.address-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.address-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.address-actions button:first-child {
+    background: #2D5F9A;
+    color: white;
+}
+
+.address-actions button:last-child {
+    background: #dc3545;
+    color: white;
+}
+
+.address-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.address-form input {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form-buttons button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-buttons button[type="submit"] {
+    background: #2D5F9A;
+    color: white;
+    flex: 1;
+}
+
+.form-buttons button[type="button"] {
+    background: #6c757d;
+    color: white;
+}
