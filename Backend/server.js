@@ -72,8 +72,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-const PORT = 8080;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = 8080;
+app.listen(process.env.PORT || 8080, () => console.log(`Server running on port ${PORT}`));
 app.get("/", (req,res)=>{
   res.send("server is working well!");
 });
