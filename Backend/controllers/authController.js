@@ -58,7 +58,7 @@ module.exports.loginUser = async (req, res) => {
     try {
         let user = await userData.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "User not found" });
+            return res.status(400).json({ error: "User not found " });
         }
         bcrypt.compare(password, user.password).then((result) => {
             if (result) {
