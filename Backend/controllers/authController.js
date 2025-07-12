@@ -6,15 +6,15 @@ const OrderData = require('../models/orderModel');
 
 module.exports.signupUser = async (req, res) => {
     console.log("Request Body:", req.body);
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, universityId, address, role, confirmPassword } = req.body;
 
     try {
         // Validate required fields
-        if (!name || !email || !password || !confirmPassword) {
-            return res.status(400).json({ error: "All fields are required." });
+        if (!name || !email || !password || !universityId) {
+            return res.status(400).json({ error: "Name, email, password, and university ID are required." });
         }
-
-        if (password !== confirmPassword) {
+        // Optionally check confirmPassword if provided
+        if (confirmPassword !== undefined && password !== confirmPassword) {
             return res.status(400).json({ error: "Passwords do not match." });
         }
 
@@ -30,8 +30,9 @@ module.exports.signupUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            confirmPassword: hashedPassword
-
+            universityId,
+            address: address || null,
+            role: role || 'customer',
         });
         await user.save();
 
@@ -40,7 +41,6 @@ module.exports.signupUser = async (req, res) => {
             httpOnly: true,
             secure: true,
             maxAge: 1000 * 60 * 60 * 24 * 30,
-
         });
 
         // Send a success response
@@ -48,7 +48,6 @@ module.exports.signupUser = async (req, res) => {
     } catch (err) {
         console.error("Error during user signup:", err.message);
         res.status(500).json({ error: "Internal server error. Please try again later." });
-
     }
 };
 
@@ -116,7 +115,7 @@ module.exports.getOrderHistory = async (req, res) => {
 module.exports.placeOrder = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming user ID is available in req.user
-    const { address, products, total } = req.body;
+    const { address, products, total, razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
 
     const newOrder = new OrderData({
       userId,
@@ -124,6 +123,9 @@ module.exports.placeOrder = async (req, res) => {
       products,
       total,
       date: new Date(),
+      razorpay_payment_id,
+      razorpay_order_id,
+      razorpay_signature,
     });
 
     await newOrder.save();
