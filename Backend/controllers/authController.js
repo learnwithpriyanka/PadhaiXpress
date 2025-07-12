@@ -1,5 +1,5 @@
 const userData = require('../models/usermodel');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken');
 const UserData = require('../models/usermodel');
 const OrderData = require('../models/orderModel');
