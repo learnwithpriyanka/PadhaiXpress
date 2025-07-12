@@ -34,10 +34,6 @@ function Hero() {
         </Link>
 
             
-
-            
-
-            
             
         </div>
         </> 

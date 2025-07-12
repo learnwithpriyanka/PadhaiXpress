@@ -1,137 +1,30 @@
 .cart {
-    padding: 20px;
-    
-    margin: 0 auto;
-    background-color:#f2e7bc;
-   
-  }
-
-  
-  .cart-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    background-color:#fdf6e3;
-    margin-top: 20px;
-    margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 10px;
-    padding-left: 30px;
-  }
-  .cart-item p{
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    text-align: justify;
-    margin-left: 20px;
-    margin: 0;
-  }
-  
-  .cart-item img {
-    width: 100px;
-    height: 100px;
-    margin-right: 20px;
-  }
-  
-  .cart-controls button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .cart-controls .deletebutton {
-    background-color: #ef4444;
-  }
-  
-  .cart-controls button:hover {
-    background-color: #0056b3;
-  }
-  
-  .total {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-  
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    
-  }
-
-
-  .continueShopping{
-    color: black;
-    background-color: #007bff;
-    border-radius: 10px;
-    width: 22%;
-    text-align: center;
-    
-  }
-
-  .buynow{
-    background-color: red;
-    font-size: 14px;
-    color: white;
-    margin-top: 0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width:22%;
-    height: 40px;
-  }
-  .auth-message {
-    background-color: yellowgreen;
-    color: #333;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 25px;
-  }
-
-  .addtocart{
-    background-color: #007bff;
-    
-    font-size: 14px;
-    color: white;
-    margin-top: 0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width:100%;
-    height: 40px;
-  }
-
-
-  .page-type-select {
-    padding: 8px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 14px;
-    width: 150px;
+  max-width: 700px;
+  margin: 32px auto;
+  padding: 24px;
+  background: #fffce7;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
 }
-
-.cart-item {
-    /* ...existing styles... */
-    position: relative;
-}
-
-.cart-item select {
-    margin-bottom: 10px;
-}
-
-.cart-item p {
-    margin: 5px 0;
+.cart h2 { margin-bottom: 24px; font-size: 2rem; font-weight: 700; color: #22223b; }
+.cart-item { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 24px; background: #f9f9f9; border-radius: 12px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);}
+.cart-item img { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; }
+.cart-item h4 { margin: 0 0 8px 0; font-size: 1.1rem; color: #22223b; }
+.cart-item p { margin: 4px 0; font-size: 1rem; color: #4a4e69; }
+.cart-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.cart-controls button { padding: 6px 12px; background: #007bff; color: #fff; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
+.cart-controls .deletebutton { background: #ef4444; }
+.cart-controls button:hover { background: #0056b3; }
+.total { font-size: 1.2rem; font-weight: 600; margin-top: 24px; color: #22223b; }
+.buttons { display: flex; gap: 16px; margin-top: 24px; }
+.continueShopping, .buynow { flex: 1; padding: 12px 0; border-radius: 8px; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; transition: background 0.2s; }
+.continueShopping { background: #ef7008; color: #22223b; }
+.buynow { background: #007bff; color: #fff; }
+.buynow:hover { background: #0056b3; }
+.auth-message { background: #e0ffe0; color: #22223b; padding: 12px; border-radius: 6px; text-align: center; font-weight: 500; font-size: 1.1rem; margin: 16px 0; }
+@media (max-width: 600px) {
+  .cart { padding: 12px; max-width: 100%; }
+  .cart-item { flex-direction: column; gap: 12px; padding: 10px; }
+  .cart-item img { width: 70px; height: 70px; }
+  .buttons { flex-direction: column; gap: 10px; }
 }

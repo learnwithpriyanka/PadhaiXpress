@@ -18,7 +18,7 @@
 }
 
 .c{
-    background-color:#f2e7bc;
+    background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
     margin: 0px !important;
 
 }

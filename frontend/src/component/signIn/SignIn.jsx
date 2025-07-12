@@ -3,6 +3,7 @@ import axios from "axios";
 import "./SignIn.css";
 import { useNavigate,useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { supabase } from '../../supabaseClient';
 
 function SignIn() {
   const [formData, setFormData] = useState({
@@ -11,8 +12,8 @@ function SignIn() {
   });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Access the login function from AuthContext
-  const location = useLocation(); // Get the current location
+  const { login } = useContext(AuthContext);
+  const location = useLocation();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -22,34 +23,56 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    const response = await axios.post("http://localhost:8080/api/auth/signin", formData, {
-      withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-    });
-      localStorage.setItem("token", response.data.token);
-      login(response.data.token); // Call the login function from AuthContext
-      setMessage(response.data.message);
-      const from = location.state?.from || "/";
-      setTimeout(() => {
-        navigate(from);
-      }, 1500);
-    } catch (err) {
-      console.error('Signin error:', err);
-      if (err.code === 'ERR_CONNECTION_REFUSED') {
-        setMessage('Cannot connect to server. Please make sure the server is running.');
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (error) {
+        setMessage(error.message);
       } else {
-        setMessage(err.response?.data?.error || 'An error occurred. Please try again.');
-      }  
+        // Store the JWT access token for API calls
+        localStorage.setItem("token", data.session.access_token);
+        login(data.session.access_token);
+        setMessage("Login successful!");
+        const from = location.state?.from || "/";
+        setTimeout(() => {
+          navigate(from);
+        }, 1500);
+
+        // 2. Get user ID
+        const userId = data.user.id;
+
+        // 3. Fetch user role from users table
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', userId)
+          .single();
+
+        if (userError) {
+          // handle error
+          return;
+        }
+
+        // 4. Redirect based on role
+        if (userData.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (userData.role === 'printer') {
+          navigate('/printer-dashboard');
+        } else {
+          navigate('/'); // or user dashboard/home
+        }
       }
+    } catch (err) {
+      setMessage("An error occurred. Please try again.");
+    }
   };
 
   return (
     <div className="signin-container">
       <div className="signin-left">
         <img
-          src="/media/image/signin-image.jpg"
+          src="/media/image/image.webp"
           alt="Sign In"
           className="signin-image"
         />

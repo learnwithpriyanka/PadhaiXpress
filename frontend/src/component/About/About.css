@@ -1,5 +1,12 @@
-.hero{
-    background-color:#f2e7bc;
+.team-container-bg{
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
+
+}
+ 
+ .hero{
+    /* background-color:#f2e7bc; */
+    background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
+
     padding: 60px;
  text-align: center;
     /* margin: 20px; */
@@ -9,7 +16,7 @@
 
 .hero2{
    
-    background-color: #f2e7bc; 
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
  text-align: center; 
  
 
@@ -39,7 +46,7 @@
   
     text-align: center;
     padding: 20px;
-    background-color: #f2e7bc;
+    background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
   }
   
   .team {
@@ -65,7 +72,8 @@
   }
 
   .team-member :hover{
-    background-color: #f8f9fa;
+    background-color: #f8f9fa;  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
+
     box-shadow:0 20px 20px black ;
     transition-duration: 0.5s;
   }

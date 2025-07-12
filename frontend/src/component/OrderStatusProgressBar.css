@@ -1,0 +1,60 @@
+/* src/component/OrderStatusProgressBar.css */
+.order-status-progress-bar {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    justify-content: center;
+  }
+  
+  .step-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 1;
+    transition: background 0.3s, color 0.3s;
+  }
+  
+  .step-circle.active {
+    background: #2196f3;
+    color: #fff;
+    box-shadow: 0 0 8px #2196f3;
+  }
+  
+  .step-label {
+    margin-top: 8px;
+    font-size: 14px;
+    text-align: center;
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+  }
+  
+  .step-line {
+    width: 60px;
+    height: 4px;
+    background: #e0e0e0;
+    margin: 0 8px;
+    border-radius: 2px;
+    transition: background 0.3s;
+    z-index: 0;
+  }
+  
+  .step-line.active {
+    background: linear-gradient(90deg, #2196f3 60%, #90caf9 100%);
+    box-shadow: 0 0 8px #2196f3;
+  }

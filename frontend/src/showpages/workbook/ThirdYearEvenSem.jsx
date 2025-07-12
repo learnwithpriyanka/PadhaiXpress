@@ -1,26 +1,19 @@
 import React from 'react';
-import { useCart } from '../../cartcomponent/CartContext'; // Ensure CartContext is properly set up
 import Year from './Year';
-import {ThirdYearOddSemData} from './ThirdYearOddSem'; // Adjust the import path as necessary
-
-
-
+import { useCart } from '../../cartcomponent/CartContext';
 
 function ThirdYearEvenSem() {
-   
     const { cart, dispatch } = useCart();
 
     return (
         <Year
-            data={ThirdYearOddSemData}
+            year="Third"
+            sem="Even"
             placeholder="Search for Third Year Even Semester workbooks..."
             cart={cart}
             dispatch={dispatch}
         />
     );
-        
-
-
 }
 
 export default ThirdYearEvenSem;

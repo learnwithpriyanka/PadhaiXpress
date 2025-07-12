@@ -1,11 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../cartcomponent/CartContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Order.css';
+import { supabase } from '../supabaseClient';
+
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => {
+      resolve(true);
+    };
+    script.onerror = () => {
+      resolve(false);
+    };
+    document.body.appendChild(script);
+  });
+};
+
+async function placeOrderWithSupabase({ address, cart, total, razorpayInfo, clearCart }) {
+  const user = (await supabase.auth.getUser()).data.user;
+  if (!user) throw new Error('Not logged in');
+
+  // 1. Create order
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .insert([{
+      user_id: user.id,
+      address,
+      total,
+      status: 'placed', // <-- add this line
+      ...razorpayInfo // { razorpay_payment_id, razorpay_order_id, razorpay_signature }
+    }])
+    .select()
+    .single();
+
+  if (orderError) throw orderError;
+
+  // 2. Add order items
+  const orderItems = cart.map(item => ({
+    order_id: order.id,
+    product_id: item.product_id || item.id,
+    quantity: item.quantity,
+    price: Number(item.product?.price) || 0,
+    page_type: item.page_type,
+  }));
+
+  const { error: itemsError } = await supabase
+    .from('order_items')
+    .insert(orderItems);
+
+  if (itemsError) throw itemsError;
+
+  // 3. Clear cart from database
+  await supabase
+    .from('cart_items')
+    .delete()
+    .eq('user_id', user.id);
+
+  // 4. Clear cart in context (this will trigger real-time update)
+  clearCart(user.id);
+
+  return order;
+}
 
 const OrderdetailPage = () => {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
@@ -19,8 +84,8 @@ const OrderdetailPage = () => {
   const [error, setError] = useState('');
 
   const calculateItemPrice = (item) => {
-    const basePrice = item.price;
-    return item.pageType === "single" ? basePrice * 2 : basePrice;
+    const basePrice = Number(item.product?.price) || 0;
+    return item.page_type === "single" ? basePrice * 2 : basePrice;
   };
 
   const total = cart.reduce((acc, item) => 
@@ -30,12 +95,58 @@ const OrderdetailPage = () => {
   const tax = total * 0.18; // 18% GST
   const finalTotal = total + deliveryCharge + tax;
 
+  useEffect(() => {
+    loadRazorpayScript();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  // Move Razorpay logic inside the component
+  const createRazorpayOrder = (amount) => {
+    const options = {
+      key: 'rzp_test_YoGzNbhZznaSoq',
+      amount: Math.round(amount * 100), // in paise
+      currency: 'INR',
+      name: 'PadhaiXpress',
+      description: 'Order Payment',
+      receipt: `receipt_${Date.now()}`,
+      prefill: {
+        name: formData.fullName,
+        contact: formData.phoneNumber,
+      },
+      theme: { color: '#3399cc' },
+      handler: async function (response) {
+        // Handle payment success
+        try {
+          const fullAddress = `${formData.fullName}\n${formData.streetAddress}\n${formData.landmark ? formData.landmark + '\n' : ''}${formData.city}, ${formData.state} - ${formData.pinCode}\nPhone: ${formData.phoneNumber}`;
+          const razorpayInfo = {
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+          };
+          await placeOrderWithSupabase({
+            address: fullAddress,
+            cart,
+            total: finalTotal,
+            razorpayInfo,
+            clearCart, // Pass the clearCart function
+          });
+          alert('Order placed and payment successful!');
+          navigate('/orders');
+        } catch (err) {
+          setError('Order placement failed: ' + err.message);
+        }
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   const handlePlaceOrder = async () => {
@@ -61,25 +172,17 @@ const OrderdetailPage = () => {
     }
 
     try {
-      const fullAddress = `${formData.fullName}\n${formData.streetAddress}\n${formData.landmark ? formData.landmark + '\n' : ''}${formData.city}, ${formData.state} - ${formData.pinCode}\nPhone: ${formData.phoneNumber}`;
-      
-      const response = await axios.post('http://localhost:8080/api/orders', {
-        address: fullAddress,
-        products: cart,
-        total,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (response.status === 201) {
-        alert('Order placed successfully!');
-        navigate('/orders'); // Redirect to order history
+      // Check if Razorpay is loaded
+      if (!window.Razorpay) {
+        setError('Payment gateway is loading. Please try again in a moment.');
+        return;
       }
+
+      // Create and open Razorpay checkout
+      createRazorpayOrder(finalTotal);
     } catch (error) {
-      console.error('Error placing order:', error);
-      setError('Failed to place order. Please try again.');
+      console.error('Payment initiation error:', error);
+      setError('Failed to initiate payment. Please try again.');
     }
   };
 
@@ -170,13 +273,13 @@ const OrderdetailPage = () => {
           {cart.map((item) => (
             <div key={item.id} className="order-item">
               <div className="item-image">
-                <img src={item.image} alt={item.name} />
+                <img src={item.product?.image} alt={item.product?.name} />
               </div>
               <div className="item-details">
-                <h3>{item.name}</h3>
-                <p className="item-code">Code: {item.code}</p>
-                <p className="item-pages">Pages: {item.pages}</p>
-                <p className="item-print-type">Print Type: {item.pageType === 'single' ? 'Single Side' : 'Double Side'}</p>
+                <h3>{item.product?.name}</h3>
+                <p className="item-code">Code: {item.product?.code}</p>
+                <p className="item-pages">Pages: {item.product?.pages}</p>
+                <p className="item-print-type">Print Type: {item.page_type === 'single' ? 'Single Side' : 'Double Side'}</p>
 
                 <div className="item-price-qty">
                   <span className="quantity">Quantity: {item.quantity}</span>

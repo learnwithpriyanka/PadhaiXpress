@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./signup.css";
 import { useNavigate } from "react-router-dom";
+import { supabase } from '../../supabaseClient';
 
 function SignUp() {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    name: "",
+    universityId: ""
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -27,31 +29,70 @@ function SignUp() {
       setMessage("");
       return;
     }
-    console.log("Form Data:", formData);
+    if (!formData.name || !formData.email || !formData.password || !formData.universityId) {
+      setError("Please fill all required fields.");
+      setMessage("");
+      return;
+    }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/signup", formData);
-      setMessage(response.data.message);
-      setError("");
-      setTimeout(()=>{
-        navigate("/signin");
-      },2000);
-    } catch (err) {
-      if(err.response){
-        setError(err.response.data.error || "An error occurred. Please try again.");
+      // 1. Register with Supabase for authentication
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
 
-      } else if(err.request){
-        setError("No response from the server. Please try again later.");
+      if (error) {
+        setError(error.message);
+        setMessage("");
       } else {
-        setError("An unexpected error occurred. Please try again.");
+        // Insert user profile into Supabase 'users' table
+        const user = data.user;
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert([{
+            id: user.id, // Use the Supabase Auth user id
+            email: formData.email,
+            name: formData.name,
+            university_id: formData.universityId,
+            address: formData.address || null,
+            role: 'customer'
+          }]);
+        if (insertError) {
+          setError(insertError.message);
+          setMessage("");
+          return;
+        }
+        setMessage("Signup successful! Please check your email to verify your account.");
+        setError("");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2000);
       }
-      console.log(err.response);
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
       setMessage("");
     }
   };
 
-  const handleGoogleSignIn = () => {
-    window.location.href = "http://localhost:8080/api/auth/google";
+  const handleGoogleSignIn = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/signup-success`
+        }
+      });
+      
+      if (error) {
+        setError('Google sign-in failed: ' + error.message);
+        setMessage('');
+      }
+      // The redirect will handle the rest of the flow
+    } catch (err) {
+      setError('Google sign-in failed. Please try again.');
+      setMessage('');
+    }
   };
 
   return (
@@ -74,7 +115,7 @@ function SignUp() {
               id="name"
               placeholder="Name"
               className="form-input"
-              value={formData.name}
+              value={formData.name || ""}
               onChange={handleChange}
               required
             />
@@ -90,6 +131,18 @@ function SignUp() {
               required
             />
           </div>
+          <div className="form-group">
+            <input
+              type="text"
+              id="universityId"
+              placeholder="University ID Number"
+              className="form-input"
+              value={formData.universityId}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
           <div className="form-group">
             <input
               type="password"
@@ -115,8 +168,8 @@ function SignUp() {
           {error && <p className="error-message">{error}</p>}
           {message && <p className="success-message">{message}</p>}
           <button type="submit" className="form-button">Sign Up</button>
-          <button type="button" className="google-button" onClick={handleGoogleSignIn}>
-            Sign in with Google
+          <button type="button" className="google-button" onClick={handleGoogleSignIn} disabled>
+            Google Sign-in (Coming Soon)
           </button>
           <div className="login-link">
             <p>
