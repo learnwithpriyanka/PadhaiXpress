@@ -1,83 +1,96 @@
-import React,{useContext,useState} from 'react';
+import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'; // Import AuthContext if needed
-import './Cart.css'; // Assuming you have a CSS file for styling
+import './Cart.css';
 
 const ShoppingCart = () => {
-  const { cart, dispatch } = useCart();
-  const navigate = useNavigate(); // Initialize useNavigate
-  const { isLoggedIn } = useContext(AuthContext); // Get the login status from AuthContext
+  const { cart, updateCartItem, removeFromCart } = useCart();
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
 
   const handlePageTypeChange = (itemId, pageType) => {
-    dispatch({ 
-        type: 'UPDATE_PAGE_TYPE', 
-        payload: { 
-            id: itemId, 
-            pageType: pageType 
-        } 
-    });
-};
+    updateCartItem(itemId, { page_type: pageType });
+  };
 
-const calculateItemPrice = (item) => {
-    const basePrice = item.price;
-    return item.pageType === "single" ? basePrice * 2 : basePrice;
-};
+  const handleQuantityChange = (itemId, quantity) => {
+    if (quantity < 1) return; // Prevent negative quantities
+    updateCartItem(itemId, { quantity });
+  };
 
-const total = cart.reduce((acc, item) => 
+  const handleRemove = (itemId) => {
+    removeFromCart(itemId);
+  };
+
+  const calculateItemPrice = (item) => {
+    const basePrice = Number(item.product?.price) || 0;
+    return item.page_type === "single" ? basePrice * 2 : basePrice;
+  };
+
+  const total = cart.reduce((acc, item) =>
     acc + (calculateItemPrice(item) * item.quantity), 0
-);
+  );
 
   const handleBuyNow = () => {
-    if (!isLoggedIn) {
-      setMessage('Please sign in first to continue shopping...');
-      setTimeout(() => {
-        navigate('/signin', { 
-          state: { from: '/cart' }
-        });
-      }, 4000); // Wait 2 seconds before redirecting
-    } else {
-      navigate('/orderdetails');
+    if (!cart.length) {
+      setMessage('Your cart is empty!');
+      return;
     }
+    navigate('/orderdetails');
   };
 
   return (
     <div className="cart">
       <h2>Shopping Cart</h2>
-      
-      {cart.map((item) => (
-        <div key={item.id} className="cart-item">
-          <img src={item.image} alt={item.name} />
-          <div>
-            <h4>{item.name}</h4>
-            <p> ₹{item.price} Pages:{item.pages}</p>
-            <select 
-                            value={item.pageType} 
-                            onChange={(e) => handlePageTypeChange(item.id, e.target.value)}
-                            className="page-type-select"
-                        >
-                            <option value="double">Double Side</option>
-                            <option value="single">Single Side</option>
-                        </select>
-                        <p>Price: ₹{calculateItemPrice(item)}</p>
-            <div className="cart-controls">
-              <button onClick={() => dispatch({ type: 'DECREASE', payload: item.id })}>-</button>
-              <span>{item.quantity}</span>
-              <button onClick={() => dispatch({ type: 'INCREASE', payload: item.id })}>+</button>
-              <button onClick={() => dispatch({ type: 'REMOVE', payload: item.id })} className='deletebutton'>Delete</button>
+      {cart.length === 0 ? (
+        <div className="empty-cart">
+          <p>Your cart is empty. Start shopping!</p>
+        </div>
+      ) : (
+        cart.map((item) => (
+          <div key={item.id} className="cart-item">
+            <img src={item.product?.image} alt={item.product?.name} />
+            <div>
+              <h4>{item.product?.name}</h4>
+              <p>Code: {item.product?.code}</p>
+              <p>Base Price: ₹{item.product?.price} | Pages: {item.product?.pages}</p>
+              <select
+                value={item.page_type}
+                onChange={(e) => handlePageTypeChange(item.id, e.target.value)}
+                className="page-type-select"
+              >
+                <option value="double">Double Side</option>
+                <option value="single">Single Side</option>
+              </select>
+              <p>Calculated Price: ₹{calculateItemPrice(item)}</p>
+              <div className="cart-controls">
+                <button 
+                  onClick={() => handleQuantityChange(item.id, item.quantity - 1)} 
+                  disabled={item.quantity <= 1}
+                >
+                  -
+                </button>
+                <span>{item.quantity}</span>
+                <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>
+                  +
+                </button>
+                <button onClick={() => handleRemove(item.id)} className='deletebutton'>
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-      <div className="total">Total:  ₹{total.toFixed(2)}</div>
+        ))
+      )}
+      <div className="total">Total: ₹{total.toFixed(2)}</div>
       {message && (
         <div className="auth-message">
           {message}
         </div>
       )}
       <div className="buttons">
-       <button className='continueShopping'> <Link to="/workbook/year1/firstyearoddsem" > Go back to Continue Shopping</Link></button>
+        <button className='continueShopping'>
+          <Link to="/workbook/year1/firstyearoddsem"> Go back to Continue Shopping</Link>
+        </button>
         <button className='buynow' onClick={handleBuyNow}>Buy Now</button>
       </div>
     </div>

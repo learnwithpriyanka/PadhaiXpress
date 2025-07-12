@@ -5,6 +5,7 @@ import './component/HomePage/homepage.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from './Navbar.jsx'
+import RealTimeNotifications from './component/RealTimeNotifications.jsx'
 
 import Homepage from './component/HomePage/HomePage.jsx';
 import AboutPage from './component/About/AboutPage.jsx';
@@ -34,12 +35,17 @@ import { AuthProvider } from "./context/AuthContext";
 import OrderdetailPage from './orderdetails/OrderdetailPage.jsx';
 import Order from './orderdetails/Order.jsx';
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx';
+import ViewOrderDetailsPage from './orderdetails/ViewOrderDetailsPage.jsx';
+
+import AdminDashboard from './admin/AdminDashboard';
+import PrinterDashboard from './printer/PrinterDashboard';
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>
     <CartProvider>
       <BrowserRouter>
         <Navbar />
+        <RealTimeNotifications />
         <Routes>
           <Route path="/" element={<Homepage />}></Route>
           <Route path="about" element={<AboutPage />}></Route>
@@ -50,9 +56,10 @@ createRoot(document.getElementById('root')).render(
           <Route path="*" element={<NotFound />}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path='/orders' element={<Order />}></Route>
+          <Route path='/viewdetails/:orderid' element={<ViewOrderDetailsPage />} />
           
           <Route path='/orderdetails' element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['customer','admin','printer']}>
               <OrderdetailPage />
             </PrivateRoute>
           }></Route>
@@ -76,6 +83,23 @@ createRoot(document.getElementById('root')).render(
 
 
           <Route path='/forgot-password' element={<ForgotPassword />} />
+
+          <Route
+            path="/admin-dashboard"
+            element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/printer-dashboard"
+            element={
+              <PrivateRoute allowedRoles={['printer']}>
+                <PrinterDashboard />
+              </PrivateRoute>
+            }
+          />
 
         </Routes>
 

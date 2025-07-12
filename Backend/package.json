@@ -5,20 +5,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-     "postinstall": "echo Dependencies installed freshly by Render"
+    "postinstall": "echo Dependencies installed freshly by Render"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "@supabase/supabase-js": "^2.50.4",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "razorpay": "^2.9.6"
   }
 }

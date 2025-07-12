@@ -1,0 +1,55 @@
+/* preHero.css */
+.notes-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #f2e7bc, #f2e7bc);
+  }
+  
+  .notes-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .notes-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
+  
+  .icon {
+    font-size: 2rem;
+    margin-top: 1rem;
+  }
+  
+  .icon span {
+    display: inline-block;
+    animation: wiggle 1.5s infinite ease-in-out;
+  }
+  
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+  }
+  

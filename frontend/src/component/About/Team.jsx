@@ -3,7 +3,7 @@ import "./About.css";
 
 function Team() {
   return (
-    <div>
+    <div className="team-container-bg">
       <div className="team-container">
         <h1 className="h11">Our Team</h1>
 

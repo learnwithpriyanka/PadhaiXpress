@@ -1,55 +1,142 @@
-import React, { createContext, useContext, useReducer,useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 
 const CartContext = createContext();
 
 const cartReducer = (state, action) => {
   switch (action.type) {
+    case 'SET_CART':
+      return action.payload;
     case 'ADD_TO_CART':
-      const existingItem = state.find((item) => item.id === action.payload.id);
-      if (existingItem) {
-        return state.map((item) =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...state, { ...action.payload, quantity: 1 }];
-      }
-    case 'INCREASE':
-      return state.map((item) =>
-        item.id === action.payload ? { ...item, quantity: item.quantity + 1 } : item
+      return [...state, action.payload];
+    case 'UPDATE_CART_ITEM':
+      return state.map(item =>
+        item.id === action.payload.id ? { ...item, ...action.payload } : item
       );
-    case 'DECREASE':
-      return state.map((item) =>
-        item.id === action.payload && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      );
-    case 'REMOVE':
-      return state.filter((item) => item.id !== action.payload);
-      case 'UPDATE_PAGE_TYPE':
-            return state.map(item => 
-                item.id === action.payload.id 
-                    ? { ...item, pageType: action.payload.pageType }
-                    : item
-            );
+    case 'REMOVE_FROM_CART':
+      return state.filter(item => item.id !== action.payload);
+    case 'CLEAR_CART':
+      return [];
     default:
       return state;
   }
 };
 
 export const CartProvider = ({ children }) => {
-    // Initialize cart state from localStorage
-    const initialCart = JSON.parse(localStorage.getItem('cart')) || [];
+  const [cart, dispatch] = useReducer(cartReducer, []);
 
-  const [cart, dispatch] = useReducer(cartReducer, initialCart);
-// Save cart state to localStorage whenever it changes
+  // Load cart from Supabase on mount
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    const fetchCart = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data, error } = await supabase
+        .from('cart_items')
+        .select('*, product:product_id(*)') // JOIN with products table
+        .eq('user_id', user.id);
+      if (!error) {
+        dispatch({ type: 'SET_CART', payload: data });
+      }
+    };
+    fetchCart();
+    // Optionally, listen for auth changes and refetch cart
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) fetchCart();
+      else dispatch({ type: 'SET_CART', payload: [] });
+    });
+    return () => { listener?.unsubscribe(); };
+  }, []);
+
+  // Add to cart
+  const addToCart = async (product) => {
+    console.log('addToCart called with product:', product);
+    
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log('Current user:', user);
+    
+    if (!user) {
+      console.log('No user found, returning');
+      return;
+    }
+    
+    // Check if already in cart
+    const { data: existing, error: existingError } = await supabase
+      .from('cart_items')
+      .select('*, product:product_id(*)')
+      .eq('user_id', user.id)
+      .eq('product_id', product.id)
+      .single();
+        
+    console.log('Existing cart item:', existing);
+    console.log('Existing error:', existingError);
+    
+    if (existing) {
+      // If already in cart, increase quantity
+      console.log('Item exists, updating quantity');
+      const { data, error } = await supabase
+        .from('cart_items')
+        .update({ quantity: existing.quantity + 1 })
+        .eq('id', existing.id)
+        .select('*, product:product_id(*)')
+        .single();
+      console.log('Update result:', data, error);
+      if (!error) dispatch({ type: 'UPDATE_CART_ITEM', payload: data });
+    } else {
+      // If not in cart, insert new
+      console.log('Item does not exist, inserting new');
+      const { data, error } = await supabase
+        .from('cart_items')
+        .insert([{
+          user_id: user.id,
+          product_id: product.id,
+          quantity: 1,
+          page_type: product.pageType || 'double',
+        }])
+        .select('*, product:product_id(*)')
+        .single();
+      console.log('Insert result:', data, error);
+      if (!error) dispatch({ type: 'ADD_TO_CART', payload: data });
+    }
+  };
+
+  // Update cart item (quantity, page_type, etc.)
+  const updateCartItem = async (id, updates) => {
+    const { data, error } = await supabase
+      .from('cart_items')
+      .update(updates)
+      .eq('id', id)
+      .select('*, product:product_id(*)') // JOIN with products table
+      .single();
+    if (!error) dispatch({ type: 'UPDATE_CART_ITEM', payload: data });
+  };
+
+  // Remove from cart
+  const removeFromCart = async (id) => {
+    const { error } = await supabase
+      .from('cart_items')
+      .delete()
+      .eq('id', id);
+    if (!error) dispatch({ type: 'REMOVE_FROM_CART', payload: id });
+  };
+
+  // Clear cart
+  const clearCart = async (user_id) => {
+    const { error } = await supabase
+      .from('cart_items')
+      .delete()
+      .eq('user_id', user_id);
+    if (!error) dispatch({ type: 'CLEAR_CART' });
+  };
 
   return (
-    <CartContext.Provider value={{ cart, dispatch }}>
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      updateCartItem,
+      removeFromCart,
+      clearCart,
+      dispatch // for legacy compatibility
+    }}>
       {children}
     </CartContext.Provider>
   );

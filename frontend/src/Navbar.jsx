@@ -4,6 +4,7 @@ import './index.css'
 import { Link } from "react-router-dom";
 import { useCart } from './cartcomponent/CartContext';
 import { AuthContext } from './context/AuthContext';
+import { supabase } from './supabaseClient';
 
 function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
@@ -11,6 +12,7 @@ function Navbar() {
   const dropdownRef = useRef(null); // Ref for the dropdown menu
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const [userRole, setUserRole] = useState('');
 
   
   const toggleDropdown = (e) => {
@@ -32,27 +34,46 @@ function Navbar() {
     };
   }, []);
 
-
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { data, error } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        if (!error && data && data.role) {
+          setUserRole(data.role);
+        }
+      } catch (err) {
+        // Ignore errors for now
+      }
+    };
+    if (isLoggedIn) {
+      fetchUserRole();
+    } else {
+      setUserRole('');
+    }
+  }, [isLoggedIn]);
 
 
   return (
-    <nav class="navbar navbar-expand-lg border-bottom " >
-      <div class="container p-2">
-        <Link class="navbar-brand" to="/" state={{ color: "white" }}>
-          {/* <a href='#'><img src='media/image/newlogo.png' alt='logo' className='img' style={{width:"20%"}}></img></a> */}
-          <div className='px' style={{ display: 'flex', color: 'white', fontSize: '30px', fontWeight: 'bold', marginLeft: '-50px' }}>
-            <div className='px4' style={{ width: "70px", height: "20px", borderColor: "white", borderRadius: "50%", }}>
-              <h3 style={{ backgroundColor: "green", padding: "10px", marginRight: "15px", borderRadius: "50%", fontWeight: "800" }}>PX</h3>
-
+    <nav className="navbar navbar-expand-lg border-bottom" style={{ background: 'white', color: 'black' }}>
+      <div className="container p-2">
+        <Link className="navbar-brand" to="/" state={{ color: "black" }}>
+          <div className='px' style={{ display: 'flex', color: 'black', fontSize: '30px', fontWeight: 'bold', marginLeft: '-50px' }}>
+            <div className='px4' style={{ width: "70px", height: "20px", borderColor: "black", borderRadius: "50%" }}>
+              <h3 style={{ backgroundColor: "green", padding: "10px", marginRight: "15px", borderRadius: "50%", fontWeight: "800", color: 'white' }}>PX</h3>
             </div>
             <div>
-
-              <h3 className='px2 ' style={{ marginTop: "10px" }}>PadhaiXpress</h3>
+              <h3 className='px2 ' style={{ marginTop: "10px", color: 'black' }}>PadhaiXpress</h3>
             </div>
           </div>
         </Link>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -60,90 +81,90 @@ function Navbar() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon" style={{ color: 'black' }}></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-          <form class="d-flex" role="search">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item ">
-                <Link class="nav-link active" to="/">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <form className="d-flex" role="search">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item ">
+                <Link className="nav-link active" to="/" style={{ color: 'black' }}>
                   Home
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link active" aria-current="page" to="about" state={{ color: "white" }} >
+              <li className="nav-item">
+                <Link className="nav-link active" aria-current="page" to="about" state={{ color: "black" }} style={{ color: 'black' }}>
                   About us
                 </Link>
               </li>
-              <li class="nav-item ">
-                <Link class="nav-link active" to="contact" >
+              <li className="nav-item ">
+                <Link className="nav-link active" to="contact" style={{ color: 'black' }}>
                   Contact
                 </Link>
               </li>
               {!isLoggedIn && (
-
-                <li class="nav-item">
-
-                  <Link class="nav-link active" to="signup">
+                <li className="nav-item">
+                  <Link className="nav-link active" to="signup" style={{ color: 'black' }}>
                     Signup
                   </Link>
                 </li>
-
               )}
-
               {!isLoggedIn && (
-                <li class="nav-item">
-
-                  <Link class="nav-link active" to="signin">
+                <li className="nav-item">
+                  <Link className="nav-link active" to="signin" style={{ color: 'black' }}>
                     SignIn
                   </Link>
                 </li>
               )}
-              
-
-{isLoggedIn && (
-              <li className="nav-item dropdown"  ref={dropdownRef}> 
-                <button
-                  className="nav-link active dropdown-toggle"
-                  onClick={toggleDropdown}
-                >
-                  <i class="fa-solid fa-user" style={{background:"black",width:"33px",height:"33px",borderRadius:"50%",alignItems:"center", fontSize:"24px"}}></i> {/* Profile Icon */}
-                </button>
-                {showDropdown && (
-                  <ul className="dropdown-menu">
-                    <li>
-                      <Link className="dropdown-item" to="/profile">
-                        Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/orders">
-                        Order History
-                      </Link>
-                    </li>
-                    
-                    <li>
-                      <button className="dropdown-item" onClick={logout}>
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                )}
+              {isLoggedIn && (
+                <li className="nav-item dropdown" ref={dropdownRef}>
+                  <button
+                    className="nav-link active dropdown-toggle"
+                    onClick={toggleDropdown}
+                    style={{ color: 'black', background: 'transparent' }}
+                  >
+                    <i className="fa-solid fa-user" style={{ background: "#f3f4f6", width: "33px", height: "33px", borderRadius: "50%", alignItems: "center", fontSize: "24px", color: 'black' }}></i> {/* Profile Icon */}
+                  </button>
+                  {showDropdown && (
+                    <ul className="dropdown-menu">
+                      {userRole === 'admin' && (
+                        <li>
+                          <Link className="dropdown-item" to="/admin-dashboard" style={{ color: 'black' }}>
+                            Admin Dashboard
+                          </Link>
+                        </li>
+                      )}
+                      {userRole === 'printer' && (
+                        <li>
+                          <Link className="dropdown-item" to="/printer-dashboard" style={{ color: 'black' }}>
+                            Printer Dashboard
+                          </Link>
+                        </li>
+                      )}
+                      <li>
+                        <Link className="dropdown-item" to="/profile" style={{ color: 'black' }}>
+                          Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/orders" style={{ color: 'black' }}>
+                          Order History
+                        </Link>
+                      </li>
+                      <li>
+                        <button className="dropdown-item" onClick={logout} style={{ color: 'black' }}>
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  )}
                 </li>
               )}
-              <li class="nav-item" >
-                <Link class="nav-link active" to="cart" style={{color:"yellow"}}>
+              <li className="nav-item" >
+                <Link className="nav-link active" to="cart" style={{ color: "yellow" }}>
                   Cart ({totalItems})
                 </Link>
               </li>
-
-
-
-
-
             </ul>
-
           </form>
         </div>
       </div>

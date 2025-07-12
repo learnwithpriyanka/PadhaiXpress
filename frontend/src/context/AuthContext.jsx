@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { supabase } from '../supabaseClient';
 
 export const AuthContext = createContext();
 
@@ -15,8 +16,13 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem("token");
+    // Remove all Supabase keys
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith('sb-'))
+      .forEach((key) => localStorage.removeItem(key));
     setIsLoggedIn(false);
   };
 

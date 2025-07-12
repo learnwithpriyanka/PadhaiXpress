@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -8,6 +8,7 @@ const cors = require("cors");
 // Import routes
 const authRouter = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profile"); // Updated path
+const paymentRoutes = require("./routes/paymentRoutes");
 
 const app = express();
 
@@ -64,6 +65,7 @@ connectDB();
 
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

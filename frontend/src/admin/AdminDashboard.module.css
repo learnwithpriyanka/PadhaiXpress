@@ -1,0 +1,224 @@
+.adminDashboard {
+  min-height: 100vh;
+  background: #f7f7fa;
+}
+.header {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-bottom: 1px solid #e5e7eb;
+  padding: 32px 0 16px 0;
+  margin-bottom: 32px;
+}
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #22223b;
+}
+.subtitle {
+  color: #666;
+  font-size: 1rem;
+  margin-top: 4px;
+}
+.totalOrders {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 8px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 48px 24px;
+}
+.orderCard {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 32px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.orderCard:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+.orderHeader {
+  background: #f3f4f6;
+  padding: 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.orderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.orderId {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #22223b;
+}
+.orderInfo {
+  color: #555;
+  font-size: 0.98rem;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.statusBadge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #e0e7ff;
+  color: #3730a3;
+  text-transform: capitalize;
+}
+.statusBadge.placed { background: #e0e7ff; color: #3730a3; }
+.statusBadge.printed { background: #fef9c3; color: #b45309; }
+.statusBadge.outForDelivery { background: #ede9fe; color: #7c3aed; }
+.statusBadge.delivered { background: #dcfce7; color: #166534; }
+
+.viewDetailsBtn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.viewDetailsBtn:hover {
+  background: #1d4ed8;
+}
+.progressBarSection {
+  padding: 16px 24px 0 24px;
+}
+.productList {
+  padding: 24px;
+}
+.productListTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #22223b;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.productsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.productCard {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 16px;
+  gap: 18px;
+  border: 1px solid #e5e7eb;
+}
+.productImage {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+.productDetails {
+  flex: 1;
+  min-width: 0;
+}
+.productName {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #22223b;
+  margin-bottom: 4px;
+}
+.productMeta {
+  color: #555;
+  font-size: 0.97rem;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.productQty {
+  font-size: 0.97rem;
+  color: #22223b;
+  font-weight: 500;
+}
+.productTotal {
+  font-size: 0.97rem;
+  color: #2563eb;
+  font-weight: 600;
+}
+.orderActions {
+  background: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.actionGroup {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.statusSelect {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  background: #fff;
+  color: #22223b;
+}
+.deliveryInput {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  background: #fff;
+  color: #22223b;
+}
+.deleteBtn {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.deleteBtn:hover {
+  background: #b91c1c;
+}
+@media (max-width: 900px) {
+  .headerContent, .mainContent { padding: 0 8px; }
+  .orderHeader, .productList, .orderActions, .progressBarSection { padding: 12px; }
+}
+@media (max-width: 600px) {
+  .headerContent, .mainContent { padding: 0 2px; }
+  .orderHeader, .productList, .orderActions, .progressBarSection { padding: 6px; }
+  .orderCard { margin-bottom: 18px; }
+  .productCard { flex-direction: column; gap: 8px; align-items: flex-start; }
+} 
