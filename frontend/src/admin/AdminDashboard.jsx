@@ -57,6 +57,28 @@ const AdminDashboard = () => {
     return styles.statusBadge;
   };
 
+  const getPaymentStatusText = (order) => {
+    if (order.payment_method === 'cod') {
+      return `Cash on Delivery - Pay ₹${order.total} on delivery`;
+    } else if (order.payment_method === 'online') {
+      return 'Online Payment - Paid';
+    } else {
+      // For orders without payment_method, we can't determine payment type
+      // So we'll show a generic message
+      return 'Payment Method: Not specified';
+    }
+  };
+
+  const getPaymentStatusColor = (order) => {
+    if (order.payment_method === 'cod') {
+      return '#f59e0b'; // Orange for COD
+    } else if (order.payment_method === 'online') {
+      return '#10b981'; // Green for online payment
+    } else {
+      return '#6b7280'; // Gray for unspecified
+    }
+  };
+
   if (loading) {
     return (
       <div className={styles.adminDashboard} style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh'}}>
@@ -112,6 +134,20 @@ const AdminDashboard = () => {
                     <span><IndianRupee style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {order.total}</span>
                     <span><Clock style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {order.delivery_time ? new Date(order.delivery_time).toLocaleString() : 'TBD'}</span>
                   </div>
+                  {/* Payment Status */}
+                  <div style={{ 
+                    marginTop: '8px',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    backgroundColor: getPaymentStatusColor(order) === '#f59e0b' ? '#fef3c7' : 
+                                   getPaymentStatusColor(order) === '#10b981' ? '#d1fae5' : '#f3f4f6',
+                    color: getPaymentStatusColor(order),
+                    display: 'inline-block'
+                  }}>
+                    {getPaymentStatusText(order)}
+                  </div>
                 </div>
                 <div>
                   <span className={getStatusBadgeClass(order.status)}>{order.status}</span>
@@ -120,6 +156,80 @@ const AdminDashboard = () => {
                   <Eye style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> View Details
                 </button>
               </div>
+
+              {/* Delivery Address Section */}
+              {order.address && (
+                <div style={{
+                  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  margin: '16px 0',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '4px',
+                    height: '100%',
+                    background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)'
+                  }}></div>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px'
+                  }}>
+                    <div style={{
+                      background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)',
+                      color: 'white',
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      boxShadow: '0 2px 8px rgba(234, 88, 12, 0.3)'
+                    }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                      </svg>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#374151',
+                        marginBottom: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <span>📍</span>
+                        Delivery Address
+                      </div>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: '#4b5563',
+                        lineHeight: '1.5',
+                        whiteSpace: 'pre-line',
+                        fontFamily: 'monospace',
+                        background: 'white',
+                        padding: '8px 12px',
+                        borderRadius: '6px',
+                        border: '1px solid #e5e7eb',
+                        marginTop: '4px'
+                      }}>
+                        {order.address}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Progress Bar */}
               <div className={styles.progressBarSection}>
                 <OrderStatusProgressBar status={order.status} />

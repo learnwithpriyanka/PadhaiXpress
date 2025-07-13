@@ -39,6 +39,8 @@ import ViewOrderDetailsPage from './orderdetails/ViewOrderDetailsPage.jsx';
 
 import AdminDashboard from './admin/AdminDashboard';
 import PrinterDashboard from './printer/PrinterDashboard';
+import TermsOfService from './component/TermsOfService/TermsOfService.jsx';
+import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>
@@ -83,6 +85,8 @@ createRoot(document.getElementById('root')).render(
 
 
           <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/terms' element={<TermsOfService />} />
+          <Route path='/privacy' element={<PrivacyPolicy />} />
 
           <Route
             path="/admin-dashboard"

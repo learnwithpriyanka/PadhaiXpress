@@ -60,7 +60,7 @@ function Navbar() {
 
 
   return (
-    <nav className="navbar navbar-expand-lg border-bottom" style={{ background: 'white', color: 'black' }}>
+    <nav className="navbar navbar-expand-sm border-bottom" style={{ background: 'white', color: 'black' }}>
       <div className="container p-2">
         <Link className="navbar-brand" to="/" state={{ color: "black" }}>
           <div className='px' style={{ display: 'flex', color: 'black', fontSize: '30px', fontWeight: 'bold', marginLeft: '-50px' }}>
@@ -122,46 +122,65 @@ function Navbar() {
                     onClick={toggleDropdown}
                     style={{ color: 'black', background: 'transparent' }}
                   >
-                    <i className="fa-solid fa-user" style={{ background: "#f3f4f6", width: "33px", height: "33px", borderRadius: "50%", alignItems: "center", fontSize: "24px", color: 'black' }}></i> {/* Profile Icon */}
+                    <div className="profile-icon-container">
+                      <i className="fa-solid fa-user profile-icon"></i>
+                    </div> {/* Profile Icon */}
                   </button>
                   {showDropdown && (
-                    <ul className="dropdown-menu">
-                      {userRole === 'admin' && (
-                        <li>
-                          <Link className="dropdown-item" to="/admin-dashboard" style={{ color: 'black' }}>
-                            Admin Dashboard
+                    <div className="modern-dropdown-menu">
+                      <div className="dropdown-header">
+                        <div className="user-info">
+                          <div className="user-avatar">
+                            <i className="fa-solid fa-user"></i>
+                          </div>
+                          <div className="user-details">
+                            <span className="user-role">{userRole === 'admin' ? 'Administrator' : userRole === 'printer' ? 'Printer' : 'Student'}</span>
+                            <span className="user-status">Online</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="dropdown-divider"></div>
+                      
+                      <div className="dropdown-items">
+                        {userRole === 'admin' && (
+                          <Link className="dropdown-item-modern" to="/admin-dashboard">
+                            <i className="fa-solid fa-chart-line"></i>
+                            <span>Admin Dashboard</span>
                           </Link>
-                        </li>
-                      )}
-                      {userRole === 'printer' && (
-                        <li>
-                          <Link className="dropdown-item" to="/printer-dashboard" style={{ color: 'black' }}>
-                            Printer Dashboard
+                        )}
+                        {userRole === 'printer' && (
+                          <Link className="dropdown-item-modern" to="/printer-dashboard">
+                            <i className="fa-solid fa-print"></i>
+                            <span>Printer Dashboard</span>
                           </Link>
-                        </li>
-                      )}
-                      <li>
-                        <Link className="dropdown-item" to="/profile" style={{ color: 'black' }}>
-                          Profile
+                        )}
+                        <Link className="dropdown-item-modern" to="/profile">
+                          <i className="fa-solid fa-user-circle"></i>
+                          <span>Profile</span>
                         </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item" to="/orders" style={{ color: 'black' }}>
-                          Order History
+                        <Link className="dropdown-item-modern" to="/orders">
+                          <i className="fa-solid fa-history"></i>
+                          <span>Order History</span>
                         </Link>
-                      </li>
-                      <li>
-                        <button className="dropdown-item" onClick={logout} style={{ color: 'black' }}>
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
+                      </div>
+                      
+                      <div className="dropdown-divider"></div>
+                      
+                      <button className="dropdown-item-modern logout-item" onClick={logout}>
+                        <i className="fa-solid fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                      </button>
+                    </div>
                   )}
                 </li>
               )}
               <li className="nav-item" >
-                <Link className="nav-link active" to="cart" style={{ color: "yellow" }}>
-                  Cart ({totalItems})
+                <Link className="nav-link active cart-link" to="cart">
+                  <div className="cart-icon-container">
+                    <i className="fa-solid fa-shopping-cart cart-icon"></i>
+                    <span className="cart-count">{totalItems}</span>
+                  </div>
                 </Link>
               </li>
             </ul>

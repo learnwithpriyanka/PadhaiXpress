@@ -23,9 +23,12 @@ const loadRazorpayScript = () => {
   });
 };
 
-async function placeOrderWithSupabase({ address, cart, total, razorpayInfo, clearCart }) {
+async function placeOrderWithSupabase({ address, cart, total, razorpayInfo, clearCart, paymentMethod }) {
   const user = (await supabase.auth.getUser()).data.user;
   if (!user) throw new Error('Not logged in');
+
+  // Set all orders to 'placed' status regardless of payment method
+  const orderStatus = 'placed';
 
   // 1. Create order
   const { data: order, error: orderError } = await supabase
@@ -34,8 +37,9 @@ async function placeOrderWithSupabase({ address, cart, total, razorpayInfo, clea
       user_id: user.id,
       address,
       total,
-      status: 'placed', // <-- add this line
-      ...razorpayInfo // { razorpay_payment_id, razorpay_order_id, razorpay_signature }
+      status: orderStatus,
+      payment_method: paymentMethod, // Uncommented to store payment method
+      ...razorpayInfo // { razorpay_payment_id, razorpay_order_id, razorpay_signature } - will be null for COD
     }])
     .select()
     .single();
@@ -81,6 +85,7 @@ const OrderdetailPage = () => {
     pinCode: '',
     landmark: ''
   });
+  const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' or 'cod'
   const [error, setError] = useState('');
 
   const calculateItemPrice = (item) => {
@@ -105,6 +110,10 @@ const OrderdetailPage = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
   };
 
   // Move Razorpay logic inside the component
@@ -135,7 +144,8 @@ const OrderdetailPage = () => {
             cart,
             total: finalTotal,
             razorpayInfo,
-            clearCart, // Pass the clearCart function
+            clearCart,
+            paymentMethod: 'online',
           });
           alert('Order placed and payment successful!');
           navigate('/orders');
@@ -172,17 +182,31 @@ const OrderdetailPage = () => {
     }
 
     try {
-      // Check if Razorpay is loaded
-      if (!window.Razorpay) {
-        setError('Payment gateway is loading. Please try again in a moment.');
-        return;
-      }
+      const fullAddress = `${formData.fullName}\n${formData.streetAddress}\n${formData.landmark ? formData.landmark + '\n' : ''}${formData.city}, ${formData.state} - ${formData.pinCode}\nPhone: ${formData.phoneNumber}`;
 
-      // Create and open Razorpay checkout
-      createRazorpayOrder(finalTotal);
+      if (paymentMethod === 'cod') {
+        // Handle Cash on Delivery
+        await placeOrderWithSupabase({
+          address: fullAddress,
+          cart,
+          total: finalTotal,
+          razorpayInfo: {}, // Empty object for COD
+          clearCart,
+          paymentMethod: 'cod',
+        });
+        alert('Order placed successfully! Pay ₹' + finalTotal.toFixed(2) + ' on delivery.');
+        navigate('/orders');
+      } else {
+        // Handle online payment
+        if (!window.Razorpay) {
+          setError('Payment gateway is loading. Please try again in a moment.');
+          return;
+        }
+        createRazorpayOrder(finalTotal);
+      }
     } catch (error) {
-      console.error('Payment initiation error:', error);
-      setError('Failed to initiate payment. Please try again.');
+      console.error('Order placement error:', error);
+      setError('Failed to place order. Please try again.');
     }
   };
 
@@ -316,8 +340,42 @@ const OrderdetailPage = () => {
               You saved ₹50 on delivery charges
             </div>
           )}
+
+          {/* Payment Method Selection */}
+          <div className="payment-method-section">
+            <h3>Payment Method</h3>
+            <div className="payment-options">
+              <label className="payment-option">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="online"
+                  checked={paymentMethod === 'online'}
+                  onChange={handlePaymentMethodChange}
+                />
+                <div className="payment-option-content">
+                  <i className="fa-solid fa-credit-card"></i>
+                  <span>Online Payment</span>
+                </div>
+              </label>
+              <label className="payment-option">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={paymentMethod === 'cod'}
+                  onChange={handlePaymentMethodChange}
+                />
+                <div className="payment-option-content">
+                  <i className="fa-solid fa-money-bill-wave"></i>
+                  <span>Cash on Delivery</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
           <button className="place-order" onClick={handlePlaceOrder}>
-            Place Order
+            {paymentMethod === 'cod' ? 'Place Order (Pay on Delivery)' : 'Place Order'}
           </button>
         </div>
       </div>
