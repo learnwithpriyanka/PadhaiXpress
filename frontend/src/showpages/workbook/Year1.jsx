@@ -7,7 +7,6 @@ function Year1() {
     const [semester, setSemester] = useState('');
     const navigate = useNavigate();
 
-
     const handleReset = () => {
         setYear('');
         setSemester('');
@@ -46,44 +45,42 @@ function Year1() {
     };
 
     return (
-        <>
-            <div className="year1">
-                <div className="year1-card">
-                    <h1>Select Year and Semester</h1>
-                    <div>
-                        <label htmlFor="year">Year: </label>
-                        <select
-                            id="year"
-                            value={year}
-                            onChange={(e) => setYear(e.target.value)}
-                        >
-                            <option value="">Select Year</option>
-                            <option value="1">1st Year</option>
-                            <option value="2">2nd Year</option>
-                            <option value="3">3rd Year</option>
-                            <option value="4">4th Year</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="semester">Semester: </label>
-                        <select
-                            id="semester"
-                            value={semester}
-                            onChange={(e) => setSemester(e.target.value)}
-                        >
-                            <option value="">Select Semester</option>
-                            <option value="1">Odd Sem</option>
-                            <option value="2">Even Sem</option>
-                        </select>
-                    </div>
-                    <div className="buttons">
-                        
-                        <button onClick={handleReset}>Reset</button>
-                        <button onClick={handleNext}>Next</button>
-                    </div>
+        <div className="simple-year1">
+            <div className="simple-card">
+                <h2>Select Year and Semester</h2>
+                
+                <div className="form-group">
+                    <label>Year:</label>
+                    <select
+                        value={year}
+                        onChange={(e) => setYear(e.target.value)}
+                    >
+                        <option value="">Select Year</option>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label>Semester:</label>
+                    <select
+                        value={semester}
+                        onChange={(e) => setSemester(e.target.value)}
+                    >
+                        <option value="">Select Semester</option>
+                        <option value="1">Odd Sem</option>
+                        <option value="2">Even Sem</option>
+                    </select>
+                </div>
+
+                <div className="button-group">
+                    <button className="reset-btn" onClick={handleReset}>Reset</button>
+                    <button className="next-btn" onClick={handleNext}>Next</button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

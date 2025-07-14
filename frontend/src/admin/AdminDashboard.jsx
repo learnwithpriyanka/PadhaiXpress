@@ -1,10 +1,12 @@
 // frontend/src/admin/AdminDashboard.jsx
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import OrderStatusProgressBar from '../component/OrderStatusProgressBar';
 import { Calendar, Package, Eye, Trash2, Clock, IndianRupee, ShoppingCart } from 'lucide-react';
 import styles from './AdminDashboard.module.css';
+
+import ProductManager from './ProductManager';
 
 const statusOptions = [
   'placed',
@@ -17,10 +19,19 @@ const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deletingOrderId, setDeletingOrderId] = useState(null);
   const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
+  const [bookLoading, setBookLoading] = useState(true);
+  const [bookError, setBookError] = useState('');
+  const [showAddBook, setShowAddBook] = useState(false);
+  const [addingBook, setAddingBook] = useState(false);
+  const [deletingBookId, setDeletingBookId] = useState(null);
+  const [newBook, setNewBook] = useState({ name: '', code: '', price: '', pages: '', image: '' });
 
   useEffect(() => {
     fetchOrders();
+    fetchBooks();
   }, []);
 
   const fetchOrders = async () => {
@@ -41,8 +52,136 @@ const AdminDashboard = () => {
   };
 
   const deleteOrder = async (orderId) => {
-    await supabase.from('orders').delete().eq('id', orderId);
-    fetchOrders();
+    // Show confirmation dialog
+    const isConfirmed = window.confirm(
+      `Are you sure you want to delete Order #${orderId}? This action cannot be undone and will remove the order from both admin dashboard and user history.`
+    );
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    try {
+      setDeletingOrderId(orderId);
+      setError('');
+
+      console.log('Starting deletion for order:', orderId);
+
+      // Method 1: Try to delete order directly (Supabase should handle foreign key constraints)
+      const { data: deletedOrder, error: orderError } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', orderId)
+        .select();
+
+      console.log('Direct order deletion result:', { deletedOrder, orderError });
+
+      if (orderError) {
+        console.error('Direct deletion failed, trying step-by-step approach:', orderError);
+        
+        // Method 2: Step-by-step deletion if direct deletion fails
+        // First delete order items
+        const { error: itemsError } = await supabase
+          .from('order_items')
+          .delete()
+          .eq('order_id', orderId);
+
+        if (itemsError) {
+          console.error('Error deleting order items:', itemsError);
+          throw new Error(`Failed to delete order items: ${itemsError.message}`);
+        }
+
+        console.log('Order items deleted successfully');
+
+        // Then delete the order
+        const { error: finalOrderError } = await supabase
+          .from('orders')
+          .delete()
+          .eq('id', orderId);
+
+        if (finalOrderError) {
+          console.error('Error deleting order after items:', finalOrderError);
+          throw new Error(`Failed to delete order: ${finalOrderError.message}`);
+        }
+
+        console.log('Order deleted successfully via step-by-step method');
+      } else {
+        console.log('Order deleted successfully via direct method');
+      }
+
+      // Refresh the orders list
+      await fetchOrders();
+
+      // Show success message
+      alert(`Order #${orderId} has been successfully deleted.`);
+
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      setError(`Failed to delete order: ${error.message}`);
+      
+      // Show error alert for better visibility
+      alert(`Error deleting order: ${error.message}`);
+    } finally {
+      setDeletingOrderId(null);
+    }
+  };
+
+  const fetchBooks = async () => {
+    setBookLoading(true);
+    setBookError('');
+    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    if (error) setBookError('Failed to fetch books');
+    setBooks(data || []);
+    setBookLoading(false);
+  };
+
+  const handleAddBook = async (e) => {
+    e.preventDefault();
+    setAddingBook(true);
+    setBookError('');
+    // Basic validation
+    if (!newBook.name || !newBook.code || !newBook.price || !newBook.pages) {
+      setBookError('Please fill all required fields.');
+      setAddingBook(false);
+      return;
+    }
+    const { data, error } = await supabase.from('products').insert([
+      {
+        name: newBook.name,
+        code: newBook.code,
+        price: Number(newBook.price),
+        pages: Number(newBook.pages),
+        image: newBook.image || null,
+      }
+    ]);
+    if (error) {
+      setBookError('Failed to add book: ' + error.message);
+    } else {
+      setShowAddBook(false);
+      setNewBook({ name: '', code: '', price: '', pages: '', image: '' });
+      fetchBooks();
+    }
+    setAddingBook(false);
+  };
+
+  const handleDeleteBook = async (bookId) => {
+    if (!window.confirm('Are you sure you want to delete this book?')) return;
+    setDeletingBookId(bookId);
+    setBookError('');
+    const { error } = await supabase.from('products').delete().eq('id', bookId);
+    if (error) {
+      setBookError('Failed to delete book: ' + error.message);
+    } else {
+      fetchBooks();
+    }
+    setDeletingBookId(null);
+  };
+
+  // Test function to verify delete button is working
+  const testDeleteButton = (orderId) => {
+    console.log('Delete button clicked for order:', orderId);
+    alert(`Delete button clicked for Order #${orderId}. Proceeding with deletion...`);
+    deleteOrder(orderId);
   };
 
   const handleViewDetails = (orderId) => {
@@ -116,6 +255,10 @@ const AdminDashboard = () => {
           <div>
             <div className={styles.title}>Admin Dashboard</div>
             <div className={styles.subtitle}>Manage and track all orders</div>
+          </div>
+
+          <div className={styles.totalOrders}>
+            <Link to="/admin-dashboard/product-manager">Product Manager</Link>
           </div>
           <div className={styles.totalOrders}>Total Orders: {orders.length}</div>
         </div>
@@ -283,8 +426,40 @@ const AdminDashboard = () => {
                     className={styles.deliveryInput}
                   />
                 </div>
-                <button onClick={() => deleteOrder(order.id)} className={styles.deleteBtn}>
-                  <Trash2 style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> Delete Order
+                <button 
+                  onClick={() => {
+                    console.log('Delete button clicked for order:', order.id);
+                    if (window.confirm(`Delete Order #${order.id}?`)) {
+                      simpleDelete(order.id);
+                    }
+                  }} 
+                  className={styles.deleteBtn}
+                  disabled={deletingOrderId === order.id}
+                  style={{
+                    opacity: deletingOrderId === order.id ? 0.6 : 1,
+                    cursor: deletingOrderId === order.id ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {deletingOrderId === order.id ? (
+                    <>
+                      <div style={{
+                        width: 16,
+                        height: 16,
+                        border: '2px solid #fff',
+                        borderTop: '2px solid transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite',
+                        display: 'inline-block',
+                        marginRight: 6
+                      }}></div>
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> 
+                      Delete Order
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -299,6 +474,7 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
+      
     </div>
   );
 };

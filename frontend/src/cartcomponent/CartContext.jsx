@@ -51,51 +51,69 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (product) => {
     console.log('addToCart called with product:', product);
     
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log('Current user:', user);
-    
-    if (!user) {
-      console.log('No user found, returning');
-      return;
-    }
-    
-    // Check if already in cart
-    const { data: existing, error: existingError } = await supabase
-      .from('cart_items')
-      .select('*, product:product_id(*)')
-      .eq('user_id', user.id)
-      .eq('product_id', product.id)
-      .single();
-        
-    console.log('Existing cart item:', existing);
-    console.log('Existing error:', existingError);
-    
-    if (existing) {
-      // If already in cart, increase quantity
-      console.log('Item exists, updating quantity');
-      const { data, error } = await supabase
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user);
+      
+      if (!user) {
+        console.log('No user found, showing alert');
+        alert('Please sign in to add items to cart');
+        return;
+      }
+      
+      // Check if already in cart
+      const { data: existing, error: existingError } = await supabase
         .from('cart_items')
-        .update({ quantity: existing.quantity + 1 })
-        .eq('id', existing.id)
         .select('*, product:product_id(*)')
+        .eq('user_id', user.id)
+        .eq('product_id', product.id)
         .single();
-      console.log('Update result:', data, error);
-      if (!error) dispatch({ type: 'UPDATE_CART_ITEM', payload: data });
-    } else {
-      // If not in cart, insert new
-      console.log('Item does not exist, inserting new');
-      const { data, error } = await supabase
-        .from('cart_items')
-        .insert([{
-          user_id: user.id,
-          product_id: product.id,
-          quantity: 1,
-          page_type: product.pageType || 'double',
-        }])
-        .select('*, product:product_id(*)')
-        .single();
-      console.log('Insert result:', data, error);
-      if (!error) dispatch({ type: 'ADD_TO_CART', payload: data });
+          
+      console.log('Existing cart item:', existing);
+      console.log('Existing error:', existingError);
+      
+      if (existing) {
+        // If already in cart, increase quantity
+        console.log('Item exists, updating quantity');
+        const { data, error } = await supabase
+          .from('cart_items')
+          .update({ quantity: existing.quantity + 1 })
+          .eq('id', existing.id)
+          .select('*, product:product_id(*)')
+          .single();
+        console.log('Update result:', data, error);
+        if (!error) {
+          dispatch({ type: 'UPDATE_CART_ITEM', payload: data });
+          alert('Item quantity updated in cart!');
+        } else {
+          console.error('Error updating cart item:', error);
+          alert('Error updating cart item. Please try again.');
+        }
+      } else {
+        // If not in cart, insert new
+        console.log('Item does not exist, inserting new');
+        const { data, error } = await supabase
+          .from('cart_items')
+          .insert([{
+            user_id: user.id,
+            product_id: product.id,
+            quantity: 1,
+            page_type: product.pageType || 'double',
+          }])
+          .select('*, product:product_id(*)')
+          .single();
+        console.log('Insert result:', data, error);
+        if (!error) {
+          dispatch({ type: 'ADD_TO_CART', payload: data });
+          alert('Item added to cart successfully!');
+        } else {
+          console.error('Error adding item to cart:', error);
+          alert('Error adding item to cart. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Error in addToCart:', error);
+      alert('An error occurred. Please try again.');
     }
   };
 

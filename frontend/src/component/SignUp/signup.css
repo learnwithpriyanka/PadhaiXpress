@@ -116,6 +116,485 @@
     margin-bottom: 10px;
   }
 
+  /* Responsive Design for iPhone 14 Pro Max (430px) */
+  @media (max-width: 430px) {
+    .signup-container {
+      flex-direction: column;
+      height: auto;
+      min-height: 100vh;
+    }
+    
+    .signup-left {
+      flex: none;
+      height: 200px;
+    }
+    
+    .signup-right {
+      flex: none;
+      padding: 30px 20px;
+      min-height: calc(100vh - 200px);
+    }
+    
+    .signup-form {
+      max-width: 100%;
+    }
+    
+    .signup-right h2 {
+      font-size: 1.75rem;
+      margin-bottom: 8px;
+    }
+    
+    .signup-right h3 {
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+    }
+    
+    .signup-right p {
+      font-size: 0.875rem;
+      margin-bottom: 20px;
+    }
+    
+    .form-input {
+      padding: 12px 16px;
+      font-size: 16px; /* Prevent zoom on iOS */
+      min-height: 44px;
+    }
+    
+    .form-button {
+      padding: 12px 16px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .google-button {
+      padding: 12px 16px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+  }
 
+  /* Responsive Design for iPhone 12/13/14 (390px) */
+  @media (max-width: 390px) {
+    .signup-left {
+      height: 180px;
+    }
+    
+    .signup-right {
+      padding: 25px 15px;
+      min-height: calc(100vh - 180px);
+    }
+    
+    .signup-right h2 {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+    
+    .signup-right h3 {
+      font-size: 1.125rem;
+      margin-bottom: 12px;
+    }
+    
+    .signup-right p {
+      font-size: 0.8125rem;
+      margin-bottom: 18px;
+    }
+    
+    .form-input {
+      padding: 10px 14px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .form-button {
+      padding: 10px 14px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .google-button {
+      padding: 10px 14px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+  }
+
+  /* Responsive Design for iPhone SE (375px) */
+  @media (max-width: 375px) {
+    .signup-left {
+      height: 160px;
+    }
+    
+    .signup-right {
+      padding: 20px 12px;
+      min-height: calc(100vh - 160px);
+    }
+    
+    .signup-right h2 {
+      font-size: 1.375rem;
+      margin-bottom: 5px;
+    }
+    
+    .signup-right h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    
+    .signup-right p {
+      font-size: 0.75rem;
+      margin-bottom: 15px;
+    }
+    
+    .form-input {
+      padding: 8px 12px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .form-button {
+      padding: 8px 12px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .google-button {
+      padding: 8px 12px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+  }
+
+  /* Responsive Design for iPhone 5/SE (320px) */
+  @media (max-width: 320px) {
+    .signup-left {
+      height: 140px;
+    }
+    
+    .signup-right {
+      padding: 15px 10px;
+      min-height: calc(100vh - 140px);
+    }
+    
+    .signup-right h2 {
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+    }
+    
+    .signup-right h3 {
+      font-size: 0.875rem;
+      margin-bottom: 8px;
+    }
+    
+    .signup-right p {
+      font-size: 0.6875rem;
+      margin-bottom: 12px;
+    }
+    
+    .form-input {
+      padding: 6px 10px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .form-button {
+      padding: 6px 10px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+    
+    .google-button {
+      padding: 6px 10px;
+      font-size: 16px;
+      min-height: 44px;
+    }
+  }
+
+  /* Responsive Design for tablets (768px - 1023px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .signup-container {
+      flex-direction: column;
+      height: auto;
+      min-height: 100vh;
+    }
+    
+    .signup-left {
+      flex: none;
+      height: 250px;
+    }
+    
+    .signup-right {
+      flex: none;
+      padding: 40px 30px;
+      min-height: calc(100vh - 250px);
+    }
+    
+    .signup-right h2 {
+      font-size: 2rem;
+    }
+    
+    .signup-right h3 {
+      font-size: 1.5rem;
+    }
+    
+    .signup-right p {
+      font-size: 1rem;
+    }
+    
+    .form-input {
+      padding: 15px 20px;
+      font-size: 16px;
+      min-height: 48px;
+    }
+    
+    .form-button {
+      padding: 15px 20px;
+      font-size: 16px;
+      min-height: 48px;
+    }
+    
+    .google-button {
+      padding: 15px 20px;
+      font-size: 16px;
+      min-height: 48px;
+    }
+  }
+
+  /* Responsive Design for small laptops (1024px - 1365px) */
+  @media (min-width: 1024px) and (max-width: 1365px) {
+    .signup-right {
+      padding: 35px 30px;
+    }
+    
+    .signup-right h2 {
+      font-size: 2.25rem;
+    }
+    
+    .signup-right h3 {
+      font-size: 1.625rem;
+    }
+    
+    .signup-right p {
+      font-size: 1.125rem;
+    }
+    
+    .form-input {
+      padding: 12px 18px;
+      font-size: 16px;
+      min-height: 46px;
+    }
+    
+    .form-button {
+      padding: 12px 18px;
+      font-size: 16px;
+      min-height: 46px;
+    }
+    
+    .google-button {
+      padding: 12px 18px;
+      font-size: 16px;
+      min-height: 46px;
+    }
+  }
+
+  /* Responsive Design for large screens (1366px+) */
+  @media (min-width: 1366px) {
+    .signup-right {
+      padding: 50px 40px;
+    }
+    
+    .signup-right h2 {
+      font-size: 2.5rem;
+    }
+    
+    .signup-right h3 {
+      font-size: 1.75rem;
+    }
+    
+    .signup-right p {
+      font-size: 1.25rem;
+    }
+    
+    .form-input {
+      padding: 15px 20px;
+      font-size: 18px;
+      min-height: 50px;
+    }
+    
+    .form-button {
+      padding: 15px 20px;
+      font-size: 18px;
+      min-height: 50px;
+    }
+    
+    .google-button {
+      padding: 15px 20px;
+      font-size: 18px;
+      min-height: 50px;
+    }
+  }
+
+  /* Responsive Design for 4K screens (1920px+) */
+  @media (min-width: 1920px) {
+    .signup-right {
+      padding: 60px 50px;
+    }
+    
+    .signup-right h2 {
+      font-size: 3rem;
+    }
+    
+    .signup-right h3 {
+      font-size: 2rem;
+    }
+    
+    .signup-right p {
+      font-size: 1.5rem;
+    }
+    
+    .form-input {
+      padding: 18px 25px;
+      font-size: 20px;
+      min-height: 55px;
+    }
+    
+    .form-button {
+      padding: 18px 25px;
+      font-size: 20px;
+      min-height: 55px;
+    }
+    
+    .google-button {
+      padding: 18px 25px;
+      font-size: 20px;
+      min-height: 55px;
+    }
+  }
+
+  /* Touch-friendly interactions for mobile */
+  @media (max-width: 768px) {
+    .form-button:hover {
+      background-color: #007bff; /* Disable hover on mobile */
+    }
+    
+    .form-button:active {
+      background-color: #0056b3;
+    }
+    
+    .google-button:hover {
+      background-color: #db4437; /* Disable hover on mobile */
+    }
+    
+    .google-button:active {
+      background-color: #c23321;
+    }
+    
+    .link:hover {
+      text-decoration: none; /* Disable hover on mobile */
+    }
+    
+    .link:active {
+      text-decoration: underline;
+    }
+  }
+
+  /* Landscape orientation for mobile */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .signup-container {
+      flex-direction: row;
+      height: 100vh;
+    }
+    
+    .signup-left {
+      flex: 2;
+      height: 100%;
+    }
+    
+    .signup-right {
+      flex: 1;
+      padding: 20px 15px;
+      height: 100%;
+    }
+    
+    .signup-right h2 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+    
+    .signup-right h3 {
+      font-size: 1.125rem;
+      margin-bottom: 10px;
+    }
+    
+    .signup-right p {
+      font-size: 0.875rem;
+      margin-bottom: 15px;
+    }
+    
+    .form-input {
+      padding: 8px 12px;
+      font-size: 16px;
+      min-height: 40px;
+    }
+    
+    .form-button {
+      padding: 8px 12px;
+      font-size: 16px;
+      min-height: 40px;
+    }
+    
+    .google-button {
+      padding: 8px 12px;
+      font-size: 16px;
+      min-height: 40px;
+    }
+  }
+
+  /* High DPI displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .signup-image {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  }
+
+  /* Reduced motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .form-input {
+      transition: none;
+    }
+    
+    .form-button {
+      transition: none;
+    }
+    
+    .google-button {
+      transition: none;
+    }
+    
+    .form-button:hover {
+      transform: none;
+    }
+    
+    .google-button:hover {
+      transform: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .signup-container {
+      display: block;
+      height: auto;
+    }
+    
+    .signup-left {
+      display: none;
+    }
+    
+    .signup-right {
+      background-color: white !important;
+      color: black !important;
+      padding: 20px;
+    }
+  }
 
   

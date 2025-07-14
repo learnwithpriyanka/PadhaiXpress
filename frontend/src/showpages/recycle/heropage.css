@@ -198,57 +198,866 @@ h2 {
     font-weight: bold;
 }
 
-.benefit-description {
-    font-size: 14px;
-    color: #666;
-}
-
-/* Responsive Design */
-/* @media (max-width: 768px) {
-    .main1 {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card1 {
-        width: 90%;
-        max-width: 300px;
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .card1 {
-        width: 90%;
-    }
-}
-
-
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design for iPhone 14 Pro Max (430px) */
+@media (max-width: 430px) {
     .hero-container {
         flex-direction: column;
-        text-align: center;
-        height: auto;
         padding: 20px;
+        min-height: 100vh;
     }
-
-    .hero-text,
-    .hero-image {
+    
+    .hero-text {
+        padding: 20px;
         max-width: 100%;
-        padding: 20px;
     }
-
+    
+    .welcome-text {
+        font-size: 1rem;
+    }
+    
     .head1 {
         font-size: 2rem;
+        margin-bottom: 10px;
     }
-
-    .hero-image img {
-        width: 80%;
+    
+    .para {
+        font-size: 0.9rem;
+    }
+    
+    .learn-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .hero-image {
+        max-width: 100%;
+        margin-top: 20px;
+    }
+    
+    .donate1 {
+        flex-direction: column;
+        padding: 30px 20px;
+        height: auto;
+        min-height: 60vh;
+    }
+    
+    .image-container1 img {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .text-container1 {
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .tagline1 {
+        font-size: 16px;
+    }
+    
+    h2 {
+        font-size: 28px;
+    }
+    
+    .description1 {
+        font-size: 14px;
+    }
+    
+    .sustain {
+        flex-direction: column;
+        padding: 30px 20px;
+        height: auto;
+        min-height: 60vh;
+    }
+    
+    .h1 {
+        font-size: 28px;
+        margin-right: 0;
+        text-align: center;
+    }
+    
+    .image-container2 img {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+    
+    .recycling-benefits {
+        padding: 40px 15px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+    
+    .benefits-container {
+        gap: 15px;
+    }
+    
+    .benefit-card {
+        width: 100%;
+        max-width: 280px;
+        padding: 15px;
+    }
+    
+    .benefit-title {
+        font-size: 16px;
     }
 }
-@media (max-width: 768px) {
+
+/* Responsive Design for iPhone 12/13/14 (390px) */
+@media (max-width: 390px) {
     .hero-container {
-        background-size: contain; /* Adjusts the image size for smaller screens */
+        padding: 15px;
+    }
+    
+    .hero-text {
+        padding: 15px;
+    }
+    
+    .welcome-text {
+        font-size: 0.9rem;
+    }
+    
+    .head1 {
+        font-size: 1.75rem;
+    }
+    
+    .para {
+        font-size: 0.85rem;
+    }
+    
+    .learn-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .donate1 {
+        padding: 25px 15px;
+    }
+    
+    .text-container1 {
+        margin-top: 15px;
+    }
+    
+    .tagline1 {
+        font-size: 14px;
+    }
+    
+    h2 {
+        font-size: 24px;
+    }
+    
+    .description1 {
+        font-size: 13px;
+    }
+    
+    .sustain {
+        padding: 25px 15px;
+    }
+    
+    .h1 {
+        font-size: 24px;
+    }
+    
+    .recycling-benefits {
+        padding: 30px 10px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+    
+    .benefit-card {
+        max-width: 260px;
+        padding: 12px;
+    }
+    
+    .benefit-title {
+        font-size: 14px;
+    }
+}
+
+/* Responsive Design for iPhone SE (375px) */
+@media (max-width: 375px) {
+    .hero-container {
+        padding: 12px;
+    }
+    
+    .hero-text {
+        padding: 12px;
+    }
+    
+    .welcome-text {
+        font-size: 0.85rem;
+    }
+    
+    .head1 {
+        font-size: 1.5rem;
+    }
+    
+    .para {
+        font-size: 0.8rem;
+    }
+    
+    .learn-btn {
+        padding: 7px 14px;
+        font-size: 0.8rem;
+    }
+    
+    .donate1 {
+        padding: 20px 12px;
+    }
+    
+    .text-container1 {
+        margin-top: 12px;
+    }
+    
+    .tagline1 {
+        font-size: 13px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+    
+    .description1 {
+        font-size: 12px;
+    }
+    
+    .sustain {
+        padding: 20px 12px;
+    }
+    
+    .h1 {
+        font-size: 20px;
+    }
+    
+    .recycling-benefits {
+        padding: 25px 8px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .benefit-card {
+        max-width: 240px;
+        padding: 10px;
+    }
+    
+    .benefit-title {
+        font-size: 13px;
+    }
+}
+
+/* Responsive Design for iPhone 5/SE (320px) */
+@media (max-width: 320px) {
+    .hero-container {
+        padding: 10px;
+    }
+    
+    .hero-text {
+        padding: 10px;
+    }
+    
+    .welcome-text {
+        font-size: 0.8rem;
+    }
+    
+    .head1 {
+        font-size: 1.25rem;
+    }
+    
+    .para {
+        font-size: 0.75rem;
+    }
+    
+    .learn-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+    
+    .donate1 {
+        padding: 15px 10px;
+    }
+    
+    .text-container1 {
+        margin-top: 10px;
+    }
+    
+    .tagline1 {
+        font-size: 12px;
+    }
+    
+    h2 {
+        font-size: 18px;
+    }
+    
+    .description1 {
+        font-size: 11px;
+    }
+    
+    .sustain {
+        padding: 15px 10px;
+    }
+    
+    .h1 {
+        font-size: 18px;
+    }
+    
+    .recycling-benefits {
+        padding: 20px 5px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .benefit-card {
+        max-width: 220px;
+        padding: 8px;
+    }
+    
+    .benefit-title {
+        font-size: 12px;
+    }
+}
+
+/* Responsive Design for tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .hero-container {
+        padding: 40px;
+    }
+    
+    .hero-text {
+        padding: 30px;
+    }
+    
+    .welcome-text {
+        font-size: 1.1rem;
+    }
+    
+    .head1 {
+        font-size: 2.25rem;
+    }
+    
+    .para {
+        font-size: 0.95rem;
+    }
+    
+    .learn-btn {
+        padding: 11px 22px;
+        font-size: 0.95rem;
+    }
+    
+    .donate1 {
+        padding: 40px 30px;
+        height: 50vh;
+    }
+    
+    .image-container1 img {
+        width: 400px;
+    }
+    
+    .text-container1 {
+        max-width: 400px;
+        margin-left: 30px;
+    }
+    
+    .tagline1 {
+        font-size: 17px;
+    }
+    
+    h2 {
+        font-size: 32px;
+    }
+    
+    .description1 {
+        font-size: 15px;
+    }
+    
+    .sustain {
+        padding: 30px 20px;
+        height: 50vh;
+    }
+    
+    .h1 {
+        font-size: 32px;
+        margin-right: 100px;
+    }
+    
+    .image-container2 img {
+        width: 400px;
+        height: 250px;
+        margin-left: 40px;
+    }
+    
+    .recycling-benefits {
+        padding: 50px 30px;
+    }
+    
+    .section-title {
+        font-size: 36px;
+        margin-bottom: 35px;
+    }
+    
+    .benefit-card {
+        width: 280px;
+        padding: 18px;
+    }
+    
+    .benefit-title {
+        font-size: 17px;
+    }
+}
+
+/* Responsive Design for small laptops (1024px - 1365px) */
+@media (min-width: 1024px) and (max-width: 1365px) {
+    .hero-container {
+        padding: 45px;
+    }
+    
+    .hero-text {
+        padding: 35px;
+    }
+    
+    .welcome-text {
+        font-size: 1.15rem;
+    }
+    
+    .head1 {
+        font-size: 2.375rem;
+    }
+    
+    .para {
+        font-size: 1.025rem;
+    }
+    
+    .learn-btn {
+        padding: 11.5px 23px;
+        font-size: 1.025rem;
+    }
+    
+    .donate1 {
+        padding: 45px 35px;
+        height: 52vh;
+    }
+    
+    .image-container1 img {
+        width: 450px;
+    }
+    
+    .text-container1 {
+        max-width: 450px;
+        margin-left: 40px;
+    }
+    
+    .tagline1 {
+        font-size: 17.5px;
+    }
+    
+    h2 {
+        font-size: 34px;
+    }
+    
+    .description1 {
+        font-size: 15.5px;
+    }
+    
+    .sustain {
+        padding: 35px 25px;
+        height: 52vh;
+    }
+    
+    .h1 {
+        font-size: 34px;
+        margin-right: 150px;
+    }
+    
+    .image-container2 img {
+        width: 450px;
+        height: 275px;
+        margin-left: 50px;
+    }
+    
+    .recycling-benefits {
+        padding: 55px 35px;
+    }
+    
+    .section-title {
+        font-size: 38px;
+        margin-bottom: 37px;
+    }
+    
+    .benefit-card {
+        width: 290px;
+        padding: 19px;
+    }
+    
+    .benefit-title {
+        font-size: 17.5px;
+    }
+}
+
+/* Responsive Design for large screens (1366px+) */
+@media (min-width: 1366px) {
+    .hero-container {
+        padding: 50px;
+    }
+    
+    .hero-text {
+        padding: 40px;
+    }
+    
+    .welcome-text {
+        font-size: 1.2rem;
+    }
+    
+    .head1 {
+        font-size: 2.5rem;
+    }
+    
+    .para {
+        font-size: 1rem;
+    }
+    
+    .learn-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    .donate1 {
+        padding: 50px;
+        height: 55vh;
+    }
+    
+    .image-container1 img {
+        width: 500px;
+    }
+    
+    .text-container1 {
+        max-width: 500px;
+        margin-left: 50px;
+    }
+    
+    .tagline1 {
+        font-size: 18px;
+    }
+    
+    h2 {
+        font-size: 36px;
+    }
+    
+    .description1 {
+        font-size: 16px;
+    }
+    
+    .sustain {
+        padding: 20px;
+        height: 55vh;
+    }
+    
+    .h1 {
+        font-size: 36px;
+        margin-right: 200px;
+    }
+    
+    .image-container2 img {
+        width: 500px;
+        height: 300px;
+        margin-left: 60px;
+    }
+    
+    .recycling-benefits {
+        padding: 60px 20px;
+    }
+    
+    .section-title {
+        font-size: 40px;
+        margin-bottom: 40px;
+    }
+    
+    .benefit-card {
+        width: 300px;
+        padding: 20px;
+    }
+    
+    .benefit-title {
+        font-size: 18px;
+    }
+}
+
+/* Responsive Design for 4K screens (1920px+) */
+@media (min-width: 1920px) {
+    .hero-container {
+        padding: 60px;
+    }
+    
+    .hero-text {
+        padding: 50px;
+    }
+    
+    .welcome-text {
+        font-size: 1.4rem;
+    }
+    
+    .head1 {
+        font-size: 3rem;
+    }
+    
+    .para {
+        font-size: 1.2rem;
+    }
+    
+    .learn-btn {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+    }
+    
+    .donate1 {
+        padding: 60px;
+        height: 60vh;
+    }
+    
+    .image-container1 img {
+        width: 600px;
+    }
+    
+    .text-container1 {
+        max-width: 600px;
+        margin-left: 60px;
+    }
+    
+    .tagline1 {
+        font-size: 22px;
+    }
+    
+    h2 {
+        font-size: 44px;
+    }
+    
+    .description1 {
+        font-size: 20px;
+    }
+    
+    .sustain {
+        padding: 30px;
+        height: 60vh;
+    }
+    
+    .h1 {
+        font-size: 44px;
+        margin-right: 250px;
+    }
+    
+    .image-container2 img {
+        width: 600px;
+        height: 360px;
+        margin-left: 80px;
+    }
+    
+    .recycling-benefits {
+        padding: 80px 30px;
+    }
+    
+    .section-title {
+        font-size: 50px;
+        margin-bottom: 50px;
+    }
+    
+    .benefit-card {
+        width: 350px;
+        padding: 25px;
+    }
+    
+    .benefit-title {
+        font-size: 22px;
+    }
+}
+
+/* Touch-friendly interactions for mobile */
+@media (max-width: 768px) {
+    .learn-btn:hover {
+        background-color: #dae915; /* Disable hover on mobile */
+    }
+    
+    .learn-btn:active {
+        background-color: #afe736;
+    }
+    
+    .donate:hover {
+        transform: scale(1); /* Disable hover on mobile */
+    }
+    
+    .donate:active {
+        transform: scale(0.98);
+    }
+    
+    .image-container1 img:hover {
+        transform: scale(1); /* Disable hover on mobile */
+    }
+    
+    .image-container1 img:active {
+        transform: scale(0.98);
+    }
+    
+    .benefit-card:hover {
+        transform: scale(1); /* Disable hover on mobile */
+    }
+    
+    .benefit-card:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-container {
+        flex-direction: row;
+        padding: 15px;
+    }
+    
+    .hero-text {
+        padding: 15px;
+        max-width: 50%;
+    }
+    
+    .hero-image {
+        max-width: 50%;
+    }
+    
+    .donate1 {
+        flex-direction: row;
+        padding: 20px 15px;
+        height: 40vh;
+    }
+    
+    .image-container1 img {
+        width: 200px;
+    }
+    
+    .text-container1 {
+        max-width: 50%;
+        margin-left: 15px;
+        margin-top: 0;
+    }
+    
+    .sustain {
+        flex-direction: row;
+        padding: 15px 10px;
+        height: 40vh;
+    }
+    
+    .h1 {
+        font-size: 20px;
+        margin-right: 0;
+        text-align: left;
+    }
+    
+    .image-container2 img {
+        width: 200px;
+        height: 120px;
+        margin-left: 15px;
+        margin-top: 0;
+    }
+    
+    .recycling-benefits {
+        padding: 30px 15px;
+    }
+    
+    .benefits-container {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .benefit-card {
+        width: 150px;
+        padding: 10px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero-image img {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .image-container1 img,
+    .image-container2 img {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .benefit-card {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .learn-btn {
+        transition: none;
+    }
+    
+    .donate1,
+    .sustain {
+        transition: none;
+    }
+    
+    .image-container1 img,
+    .image-container2 img {
+        transition: none;
+    }
+    
+    .benefit-card {
+        transition: none;
+    }
+    
+    .donate:hover,
+    .image-container1 img:hover,
+    .benefit-card:hover {
+        transform: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .hero-container {
+        background-image: none;
+        background-color: white;
+        color: black;
+    }
+    
+    .donate1,
+    .sustain {
+        background: white;
+        color: black;
+        box-shadow: none;
+        border: 2px solid #333;
+    }
+    
+    .recycling-benefits {
+        background: white;
+        color: black;
+    }
+    
+    .benefit-card {
+        background: white;
+        color: black;
+        box-shadow: none;
+        border: 1px solid #333;
+    }
+    
+    .highlight-card {
+        background: #333;
+        color: white;
     }
 }  
