@@ -1,14 +1,25 @@
 .adminDashboard {
   min-height: 100vh;
   background: #f7f7fa;
+  width: 100%;
+  overflow-x: hidden;
 }
+
+/* Add spin animation for loading states */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .header {
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   border-bottom: 1px solid #e5e7eb;
   padding: 32px 0 16px 0;
   margin-bottom: 32px;
+  width: 100%;
 }
+
 .headerContent {
   max-width: 1200px;
   margin: 0 auto;
@@ -16,17 +27,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .title {
   font-size: 2rem;
   font-weight: bold;
   color: #22223b;
 }
+
 .subtitle {
   color: #666;
   font-size: 1rem;
   margin-top: 4px;
 }
+
 .totalOrders {
   background: #e0e7ff;
   color: #3730a3;
@@ -35,11 +51,15 @@
   font-weight: 500;
   font-size: 1rem;
 }
+
 .mainContent {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px 48px 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .orderCard {
   background: #fff;
   border-radius: 16px;
@@ -48,10 +68,14 @@
   margin-bottom: 32px;
   overflow: hidden;
   transition: box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .orderCard:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
 }
+
 .orderHeader {
   background: #f3f4f6;
   padding: 24px;
@@ -59,17 +83,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .orderMeta {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
+
 .orderId {
   font-size: 1.1rem;
   font-weight: 600;
   color: #22223b;
 }
+
 .orderInfo {
   color: #555;
   font-size: 0.98rem;
@@ -77,6 +108,7 @@
   gap: 24px;
   flex-wrap: wrap;
 }
+
 .statusBadge {
   display: inline-block;
   padding: 6px 18px;
@@ -87,6 +119,7 @@
   color: #3730a3;
   text-transform: capitalize;
 }
+
 .statusBadge.placed { background: #e0e7ff; color: #3730a3; }
 .statusBadge.printed { background: #fef9c3; color: #b45309; }
 .statusBadge.outForDelivery { background: #ede9fe; color: #7c3aed; }
@@ -102,16 +135,25 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
 }
+
 .viewDetailsBtn:hover {
   background: #1d4ed8;
 }
+
 .progressBarSection {
   padding: 16px 24px 0 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .productList {
   padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .productListTitle {
   font-size: 1.1rem;
   font-weight: 600;
@@ -121,11 +163,14 @@
   align-items: center;
   gap: 8px;
 }
+
 .productsGrid {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  width: 100%;
 }
+
 .productCard {
   display: flex;
   align-items: center;
@@ -134,24 +179,31 @@
   padding: 16px;
   gap: 18px;
   border: 1px solid #e5e7eb;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .productImage {
   width: 64px;
   height: 64px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
+  flex-shrink: 0;
 }
+
 .productDetails {
   flex: 1;
   min-width: 0;
 }
+
 .productName {
   font-size: 1rem;
   font-weight: 500;
   color: #22223b;
   margin-bottom: 4px;
 }
+
 .productMeta {
   color: #555;
   font-size: 0.97rem;
@@ -159,16 +211,19 @@
   gap: 16px;
   flex-wrap: wrap;
 }
+
 .productQty {
   font-size: 0.97rem;
   color: #22223b;
   font-weight: 500;
 }
+
 .productTotal {
   font-size: 0.97rem;
   color: #2563eb;
   font-weight: 600;
 }
+
 .orderActions {
   background: #f3f4f6;
   border-top: 1px solid #e5e7eb;
@@ -176,12 +231,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .actionGroup {
   display: flex;
   gap: 18px;
   align-items: center;
+  flex-wrap: wrap;
 }
+
 .statusSelect {
   padding: 8px 16px;
   border-radius: 6px;
@@ -190,6 +250,7 @@
   background: #fff;
   color: #22223b;
 }
+
 .deliveryInput {
   padding: 8px 16px;
   border-radius: 6px;
@@ -198,6 +259,7 @@
   background: #fff;
   color: #22223b;
 }
+
 .deleteBtn {
   background: #ef4444;
   color: #fff;
@@ -208,17 +270,622 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
 }
+
 .deleteBtn:hover {
   background: #b91c1c;
 }
-@media (max-width: 900px) {
-  .headerContent, .mainContent { padding: 0 8px; }
-  .orderHeader, .productList, .orderActions, .progressBarSection { padding: 12px; }
+
+/* Responsive Design - Desktop (1200px and above) */
+@media (min-width: 1200px) {
+  .headerContent, .mainContent {
+    max-width: 1400px;
+  }
+  
+  .orderCard {
+    margin-bottom: 40px;
+  }
+  
+  .productCard {
+    padding: 20px;
+    gap: 24px;
+  }
+  
+  .productImage {
+    width: 80px;
+    height: 80px;
+  }
 }
-@media (max-width: 600px) {
-  .headerContent, .mainContent { padding: 0 2px; }
-  .orderHeader, .productList, .orderActions, .progressBarSection { padding: 6px; }
-  .orderCard { margin-bottom: 18px; }
-  .productCard { flex-direction: column; gap: 8px; align-items: flex-start; }
+
+/* Responsive Design - Laptop (1024px to 1199px) */
+@media (max-width: 1199px) and (min-width: 1024px) {
+  .headerContent, .mainContent {
+    padding: 0 20px;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 20px;
+  }
+  
+  .productMeta {
+    gap: 12px;
+  }
+}
+
+/* Responsive Design - Tablet (768px to 1023px) */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .headerContent, .mainContent {
+    padding: 0 16px;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 16px;
+  }
+  
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .viewDetailsBtn {
+    align-self: flex-end;
+  }
+  
+  .orderActions {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .actionGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .actionGroup > label {
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .statusSelect, .deliveryInput {
+    width: 100%;
+  }
+  
+  .deleteBtn {
+    width: 100%;
+  }
+  
+  .productMeta {
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive Design - Mobile Large (481px to 767px) */
+@media (max-width: 767px) and (min-width: 481px) {
+  .headerContent, .mainContent {
+    padding: 0 12px;
+  }
+  
+  .header {
+    padding: 20px 0 12px 0;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .totalOrders {
+    padding: 6px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 12px;
+  }
+  
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .orderInfo {
+    gap: 16px;
+    font-size: 0.9rem;
+  }
+  
+  .viewDetailsBtn {
+    align-self: flex-end;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .orderActions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .actionGroup {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .actionGroup > label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9rem;
+  }
+  
+  .statusSelect, .deliveryInput {
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .deleteBtn {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .productCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .productImage {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .productMeta {
+    gap: 6px;
+    font-size: 0.85rem;
+  }
+  
+  .productQty, .productTotal {
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive Design - Mobile Medium (375px to 480px) - iPhone 14 Pro Max, etc. */
+@media (max-width: 480px) and (min-width: 375px) {
+  .headerContent, .mainContent {
+    padding: 0 12px;
+  }
+  
+  .header {
+    padding: 16px 0 8px 0;
+    margin-bottom: 16px;
+  }
+  
+  .headerContent {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .title {
+    font-size: 1.4rem;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .totalOrders {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    align-self: flex-end;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 12px;
+  }
+  
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .orderId {
+    font-size: 1.1rem;
+  }
+  
+  .orderInfo {
+    gap: 10px;
+    font-size: 0.85rem;
+    flex-direction: column;
+  }
+  
+  .orderInfo span {
+    display: flex;
+    align-items: center;
+  }
+  
+  .viewDetailsBtn {
+    align-self: flex-end;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .orderActions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  .actionGroup {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .actionGroup > label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.85rem;
+  }
+  
+  .statusSelect, .deliveryInput {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .deleteBtn {
+    width: 100%;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .productCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .productImage {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .productName {
+    font-size: 0.95rem;
+  }
+  
+  .productMeta {
+    gap: 6px;
+    font-size: 0.8rem;
+    flex-direction: column;
+  }
+  
+  .productQty, .productTotal {
+    font-size: 0.85rem;
+  }
+  
+  .productListTitle {
+    font-size: 1.05rem;
+  }
+  
+  .statusBadge {
+    padding: 5px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive Design - Mobile Small (320px to 374px) */
+@media (max-width: 374px) and (min-width: 320px) {
+  .headerContent, .mainContent {
+    padding: 0 8px;
+  }
+  
+  .header {
+    padding: 16px 0 8px 0;
+    margin-bottom: 16px;
+  }
+  
+  .headerContent {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .title {
+    font-size: 1.25rem;
+  }
+  
+  .subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .totalOrders {
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    align-self: flex-end;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 8px;
+  }
+  
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .orderId {
+    font-size: 1rem;
+  }
+  
+  .orderInfo {
+    gap: 12px;
+    font-size: 0.8rem;
+    flex-direction: column;
+  }
+  
+  .orderInfo span {
+    display: flex;
+    align-items: center;
+  }
+  
+  .viewDetailsBtn {
+    align-self: flex-end;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .orderActions {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .actionGroup {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .actionGroup > label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.8rem;
+  }
+  
+  .statusSelect, .deliveryInput {
+    width: 100%;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .deleteBtn {
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .productCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .productImage {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .productName {
+    font-size: 0.9rem;
+  }
+  
+  .productMeta {
+    gap: 4px;
+    font-size: 0.75rem;
+    flex-direction: column;
+  }
+  
+  .productQty, .productTotal {
+    font-size: 0.8rem;
+  }
+  
+  .productListTitle {
+    font-size: 1rem;
+  }
+  
+  .statusBadge {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Extra Small Mobile (below 320px) */
+@media (max-width: 319px) {
+  .headerContent, .mainContent {
+    padding: 0 4px;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 6px;
+  }
+  
+  .title {
+    font-size: 1.1rem;
+  }
+  
+  .subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .totalOrders {
+    padding: 3px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .orderInfo {
+    font-size: 0.75rem;
+  }
+  
+  .viewDetailsBtn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .statusSelect, .deliveryInput {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+  
+  .deleteBtn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .productImage {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .productName {
+    font-size: 0.85rem;
+  }
+  
+  .productMeta {
+    font-size: 0.7rem;
+  }
+  
+  .productQty, .productTotal {
+    font-size: 0.75rem;
+  }
+  
+  .statusBadge {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+/* iPhone 14 Pro Max specific optimizations */
+@media screen and (device-width: 430px) and (device-height: 932px) {
+  .headerContent, .mainContent {
+    padding: 0 16px;
+  }
+  
+  .orderHeader, .productList, .orderActions, .progressBarSection {
+    padding: 14px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .subtitle {
+    font-size: 0.95rem;
+  }
+  
+  .totalOrders {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .orderId {
+    font-size: 1.15rem;
+  }
+  
+  .orderInfo {
+    font-size: 0.9rem;
+  }
+  
+  .viewDetailsBtn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+  
+  .deleteBtn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+  
+  .productCard {
+    padding: 14px;
+    gap: 12px;
+  }
+  
+  .productImage {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .productName {
+    font-size: 1rem;
+  }
+  
+  .productMeta {
+    font-size: 0.85rem;
+  }
+  
+  .productQty, .productTotal {
+    font-size: 0.9rem;
+  }
+  
+  .statusSelect, .deliveryInput {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .statusBadge {
+    padding: 6px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape orientation fixes */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .header {
+    padding: 12px 0 8px 0;
+    margin-bottom: 16px;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .orderHeader {
+    padding: 12px;
+  }
+  
+  .productList {
+    padding: 12px;
+  }
+  
+  .orderActions {
+    padding: 12px;
+  }
+  
+  .productCard {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .productImage {
+    width: 45px;
+    height: 45px;
+  }
 } 

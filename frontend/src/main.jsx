@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from './Navbar.jsx'
 import RealTimeNotifications from './component/RealTimeNotifications.jsx'
+import SEOWrapper from './components/SEO/SEOWrapper.jsx'
+
 
 import Homepage from './component/HomePage/HomePage.jsx';
 import AboutPage from './component/About/AboutPage.jsx';
@@ -41,14 +43,17 @@ import AdminDashboard from './admin/AdminDashboard';
 import PrinterDashboard from './printer/PrinterDashboard';
 import TermsOfService from './component/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
+import ProductManager from './admin/ProductManager.jsx';
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>
     <CartProvider>
       <BrowserRouter>
-        <Navbar />
-        <RealTimeNotifications />
-        <Routes>
+        <SEOWrapper>
+          <Navbar />
+          <RealTimeNotifications />
+          
+          <Routes>
           <Route path="/" element={<Homepage />}></Route>
           <Route path="about" element={<AboutPage />}></Route>
           <Route path="contact" element={<ContactPage />}></Route>
@@ -63,6 +68,11 @@ createRoot(document.getElementById('root')).render(
           <Route path='/orderdetails' element={
             <PrivateRoute allowedRoles={['customer','admin','printer']}>
               <OrderdetailPage />
+            </PrivateRoute>
+          }></Route>
+          <Route path='/admin-dashboard/product-manager' element={
+            <PrivateRoute allowedRoles={['admin']}>
+              <ProductManager />
             </PrivateRoute>
           }></Route>
 
@@ -106,8 +116,7 @@ createRoot(document.getElementById('root')).render(
           />
 
         </Routes>
-
-
+            </SEOWrapper>
 
       </BrowserRouter>
     </CartProvider>

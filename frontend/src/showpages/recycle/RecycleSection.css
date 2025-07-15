@@ -98,14 +98,515 @@
     margin-top: 10px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design for iPhone 14 Pro Max (430px) */
+@media (max-width: 430px) {
     .recycle-container {
+        padding: 15px;
         flex-direction: column;
         align-items: center;
     }
-
+    
     .recycle-card {
+        width: 100%;
+        max-width: 320px;
+        padding: 15px;
+        margin-left: 0;
+        margin-bottom: 20px;
+    }
+    
+    .recycle-card img {
+        height: 150px;
+    }
+    
+    .recycle-title {
+        font-size: 1.2rem;
+        margin-top: 8px;
+    }
+    
+    .recycle-text {
+        font-size: 0.9rem;
+        margin: 8px 0;
+    }
+    
+    .recycle-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        width: 85%;
+    }
+    
+    .recycle-header {
+        margin: 30px auto;
+        padding: 15px;
+        max-width: 100%;
+    }
+    
+    .recycle-header h3 {
+        font-size: 1.5rem;
+    }
+    
+    .recycle-header p {
+        font-size: 1rem;
+        margin-top: 8px;
+    }
+}
+
+/* Responsive Design for iPhone 12/13/14 (390px) */
+@media (max-width: 390px) {
+    .recycle-container {
+        padding: 12px;
+    }
+    
+    .recycle-card {
+        max-width: 300px;
+        padding: 12px;
+    }
+    
+    .recycle-card img {
+        height: 140px;
+    }
+    
+    .recycle-title {
+        font-size: 1.1rem;
+        margin-top: 6px;
+    }
+    
+    .recycle-text {
+        font-size: 0.85rem;
+        margin: 6px 0;
+    }
+    
+    .recycle-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
         width: 90%;
+    }
+    
+    .recycle-header {
+        margin: 25px auto;
+        padding: 12px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .recycle-header p {
+        font-size: 0.9rem;
+        margin-top: 6px;
+    }
+}
+
+/* Responsive Design for iPhone SE (375px) */
+@media (max-width: 375px) {
+    .recycle-container {
+        padding: 10px;
+    }
+    
+    .recycle-card {
+        max-width: 280px;
+        padding: 10px;
+    }
+    
+    .recycle-card img {
+        height: 130px;
+    }
+    
+    .recycle-title {
+        font-size: 1rem;
+        margin-top: 5px;
+    }
+    
+    .recycle-text {
+        font-size: 0.8rem;
+        margin: 5px 0;
+    }
+    
+    .recycle-btn {
+        padding: 7px 12px;
+        font-size: 0.8rem;
+        width: 95%;
+    }
+    
+    .recycle-header {
+        margin: 20px auto;
+        padding: 10px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .recycle-header p {
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+}
+
+/* Responsive Design for iPhone 5/SE (320px) */
+@media (max-width: 320px) {
+    .recycle-container {
+        padding: 8px;
+    }
+    
+    .recycle-card {
+        max-width: 260px;
+        padding: 8px;
+    }
+    
+    .recycle-card img {
+        height: 120px;
+    }
+    
+    .recycle-title {
+        font-size: 0.9rem;
+        margin-top: 4px;
+    }
+    
+    .recycle-text {
+        font-size: 0.75rem;
+        margin: 4px 0;
+    }
+    
+    .recycle-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        width: 100%;
+    }
+    
+    .recycle-header {
+        margin: 15px auto;
+        padding: 8px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .recycle-header p {
+        font-size: 0.8rem;
+        margin-top: 4px;
+    }
+}
+
+/* Responsive Design for tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .recycle-container {
+        padding: 30px;
+        gap: 20px;
+    }
+    
+    .recycle-card {
+        width: 280px;
+        padding: 25px;
+    }
+    
+    .recycle-card img {
+        height: 200px;
+    }
+    
+    .recycle-title {
+        font-size: 1.6rem;
+        margin-top: 15px;
+    }
+    
+    .recycle-text {
+        font-size: 1.1rem;
+        margin: 15px 0;
+    }
+    
+    .recycle-btn {
+        padding: 15px 22px;
+        font-size: 1.1rem;
+        width: 75%;
+    }
+    
+    .recycle-header {
+        margin: 50px auto;
+        padding: 30px;
+        max-width: 800px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 2.2rem;
+    }
+    
+    .recycle-header p {
+        font-size: 1.3rem;
+        margin-top: 15px;
+    }
+}
+
+/* Responsive Design for small laptops (1024px - 1365px) */
+@media (min-width: 1024px) and (max-width: 1365px) {
+    .recycle-container {
+        padding: 25px;
+        gap: 25px;
+    }
+    
+    .recycle-card {
+        width: 290px;
+        padding: 22px;
+    }
+    
+    .recycle-card img {
+        height: 190px;
+    }
+    
+    .recycle-title {
+        font-size: 1.5rem;
+        margin-top: 12px;
+    }
+    
+    .recycle-text {
+        font-size: 1.05rem;
+        margin: 12px 0;
+    }
+    
+    .recycle-btn {
+        padding: 13px 20px;
+        font-size: 1.05rem;
+        width: 78%;
+    }
+    
+    .recycle-header {
+        margin: 45px auto;
+        padding: 25px;
+        max-width: 850px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 2rem;
+    }
+    
+    .recycle-header p {
+        font-size: 1.2rem;
+        margin-top: 12px;
+    }
+}
+
+/* Responsive Design for large screens (1366px+) */
+@media (min-width: 1366px) {
+    .recycle-container {
+        padding: 30px;
+        gap: 30px;
+    }
+    
+    .recycle-card {
+        width: 300px;
+        padding: 25px;
+    }
+    
+    .recycle-card img {
+        height: 200px;
+    }
+    
+    .recycle-title {
+        font-size: 1.6rem;
+        margin-top: 15px;
+    }
+    
+    .recycle-text {
+        font-size: 1.1rem;
+        margin: 15px 0;
+    }
+    
+    .recycle-btn {
+        padding: 15px 22px;
+        font-size: 1.1rem;
+        width: 80%;
+    }
+    
+    .recycle-header {
+        margin: 50px auto;
+        padding: 30px;
+        max-width: 900px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 2.2rem;
+    }
+    
+    .recycle-header p {
+        font-size: 1.3rem;
+        margin-top: 15px;
+    }
+}
+
+/* Responsive Design for 4K screens (1920px+) */
+@media (min-width: 1920px) {
+    .recycle-container {
+        padding: 40px;
+        gap: 40px;
+    }
+    
+    .recycle-card {
+        width: 350px;
+        padding: 30px;
+    }
+    
+    .recycle-card img {
+        height: 240px;
+    }
+    
+    .recycle-title {
+        font-size: 1.8rem;
+        margin-top: 20px;
+    }
+    
+    .recycle-text {
+        font-size: 1.3rem;
+        margin: 20px 0;
+    }
+    
+    .recycle-btn {
+        padding: 18px 28px;
+        font-size: 1.3rem;
+        width: 75%;
+    }
+    
+    .recycle-header {
+        margin: 60px auto;
+        padding: 40px;
+        max-width: 1000px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 2.6rem;
+    }
+    
+    .recycle-header p {
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
+}
+
+/* Touch-friendly interactions for mobile */
+@media (max-width: 768px) {
+    .recycle-card:hover {
+        transform: scale(1); /* Disable hover on mobile */
+    }
+    
+    .recycle-card:active {
+        transform: scale(0.98);
+    }
+    
+    .recycle-btn:hover {
+        background: linear-gradient(135deg, #007BFF, #00D4FF); /* Disable hover on mobile */
+    }
+    
+    .recycle-btn:active {
+        background: linear-gradient(135deg, #0056b3, #00a6d6);
+        transform: scale(0.98);
+    }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .recycle-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .recycle-card {
+        width: 200px;
+        padding: 12px;
+        margin-bottom: 0;
+    }
+    
+    .recycle-card img {
+        height: 100px;
+    }
+    
+    .recycle-title {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+    
+    .recycle-text {
+        font-size: 0.75rem;
+        margin: 5px 0;
+    }
+    
+    .recycle-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        width: 90%;
+    }
+    
+    .recycle-header {
+        margin: 20px auto;
+        padding: 15px;
+    }
+    
+    .recycle-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .recycle-header p {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .recycle-card {
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    
+    .recycle-card:hover {
+        box-shadow: 20px 12px 24px rgba(0, 0, 0, 0.3);
+    }
+    
+    .recycle-header {
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .recycle-card {
+        transition: none;
+    }
+    
+    .recycle-btn {
+        transition: none;
+    }
+    
+    .recycle-card:hover {
+        transform: none;
+    }
+    
+    .recycle-btn:hover {
+        transform: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .recycle-container {
+        background: white;
+        color: black;
+    }
+    
+    .recycle-card {
+        background: white;
+        color: black;
+        box-shadow: none;
+        border: 2px solid #333;
+    }
+    
+    .recycle-header {
+        background: white;
+        color: black;
+        box-shadow: none;
+        border: 2px solid #333;
+    }
+    
+    .recycle-btn {
+        background: #333;
+        color: white;
+        border: 1px solid #333;
     }
 }

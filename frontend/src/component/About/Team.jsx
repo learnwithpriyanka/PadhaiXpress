@@ -72,11 +72,6 @@ function Team() {
           </div>
         </div>
 
-
-       
-
-
-       
         <div className="team">
 
            <div className="team-member-info">
@@ -86,43 +81,6 @@ function Team() {
           <div className="team-member">
             <img
               src="media/image/abhishek.jpg"
-              alt="team-member"
-              className="navnit"
-            />
-          </div>
-
-          
-        </div>
-
-        <div className="team">
-
-
-
-</div>
-        <div className="team">
-          <div className="team-member">
-            <img
-              src="media/image/prachi.jpg"
-              alt="team-member"
-              className="navnit"
-            />
-          </div>
-
-          <div className="team-member-info">
-            <h3>Prachi Kumari</h3>
-            <p><b>Member</b></p>
-          </div>
-        </div>
-
-        <div className="team">
-
-           <div className="team-member-info">
-            <h3>Ayush Kumar</h3>
-            <p><b>Member</b></p>
-          </div>
-          <div className="team-member">
-            <img
-              src="media/image/ayush.jpg"
               alt="team-member"
               className="navnit"
             />

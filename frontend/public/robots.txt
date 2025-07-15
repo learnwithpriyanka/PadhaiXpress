@@ -1,0 +1,144 @@
+# PadhaixPress Robots.txt - SEO Optimized
+# Last Updated: December 2024
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.padhaixpress.in/sitemap.xml
+
+# Crawl delay for all bots (1 second)
+Crawl-delay: 1
+
+# Specific rules for Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Specific rules for Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Specific rules for other major search engines
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+# Block admin and private areas
+Disallow: /admin-dashboard
+Disallow: /printer-dashboard
+Disallow: /profile
+Disallow: /orders
+Disallow: /cart
+Disallow: /viewdetails/
+Disallow: /orderdetails
+Disallow: /forgot-password
+
+# Block authentication pages from indexing (optional - remove if you want them indexed)
+# Disallow: /signin
+# Disallow: /signup
+
+# Block any temporary or development files
+Disallow: /temp/
+Disallow: /test/
+Disallow: /dev/
+Disallow: /staging/
+Disallow: /admin/
+Disallow: /private/
+
+# Block API endpoints and backend files
+Disallow: /api/
+Disallow: /backend/
+Disallow: /server/
+Disallow: /config/
+
+# Block system files
+Disallow: /.env
+Disallow: /.htaccess
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /README.md
+Disallow: /node_modules/
+
+# Explicitly allow important educational pages
+Allow: /workbook
+Allow: /workbook/year1/
+Allow: /workbook/year1/firstyearoddsem
+Allow: /workbook/year1/firstyearevensem
+Allow: /workbook/year1/secondyearoddsem
+Allow: /workbook/year1/secondyearevensem
+Allow: /workbook/year1/thirdyearoddsem
+Allow: /workbook/year1/thirdyearevensem
+Allow: /workbook/year1/fourthyearoddsem
+Allow: /workbook/year1/fourthyearevensem
+
+Allow: /notes
+Allow: /recycle
+Allow: /project
+Allow: /about
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+
+# Allow static assets for better SEO
+Allow: /public/
+Allow: /assets/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+
+# Block image and media files from being indexed as pages
+Disallow: /*.jpg$
+Disallow: /*.jpeg$
+Disallow: /*.png$
+Disallow: /*.gif$
+Disallow: /*.webp$
+Disallow: /*.pdf$
+Disallow: /*.doc$
+Disallow: /*.docx$
+Disallow: /*.xls$
+Disallow: /*.xlsx$
+
+# Allow PDFs in specific directories (educational content)
+Allow: /workbook/*.pdf
+Allow: /notes/*.pdf
+Allow: /study-materials/*.pdf
+
+# Block common spam bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# Block social media bots (optional - remove if you want social sharing)
+# User-agent: Twitterbot
+# Allow: /
+
+# User-agent: facebookexternalhit
+# Allow: /
+
+# User-agent: LinkedInBot
+# Allow: /
+
+# Additional sitemaps (if you create more)
+# Sitemap: https://www.padhaixpress.in/sitemap-news.xml
+# Sitemap: https://www.padhaixpress.in/sitemap-images.xml
+
+# Host directive for canonical domain
+Host: https://www.padhaixpress.in 
