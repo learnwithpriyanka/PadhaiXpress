@@ -1,4 +1,3 @@
-import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './component/HomePage/homepage.css'
@@ -38,87 +37,128 @@ import OrderdetailPage from './orderdetails/OrderdetailPage.jsx';
 import Order from './orderdetails/Order.jsx';
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx';
 import ViewOrderDetailsPage from './orderdetails/ViewOrderDetailsPage.jsx';
+import OrderSuccess from './orderdetails/OrderSuccess.jsx';
 
 import AdminDashboard from './admin/AdminDashboard';
 import PrinterDashboard from './printer/PrinterDashboard';
 import TermsOfService from './component/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 import ProductManager from './admin/ProductManager.jsx';
+import CouponManager from './admin/CouponManager.jsx';
+
+import { ToastProvider } from './components/ToastContext';
+
+
+const links = [
+  { to: '/admin-dashboard', label: 'Dashboard' },
+  { to: '/admin-dashboard/product-manager', label: 'Products' },
+  { to: '/admin-dashboard/coupons', label: 'Coupons' },
+  // Add more links as needed
+];
+
+export default function AdminSidebar() {
+  return (
+    <aside className="admin-sidebar">
+      <div className="admin-sidebar-header">Admin Panel</div>
+      <nav>
+        {links.map(link => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            className={({ isActive }) =>
+              isActive ? 'admin-sidebar-link active' : 'admin-sidebar-link'
+            }
+          >
+            {link.label}
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
+  );
+}
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>
-    <CartProvider>
-      <BrowserRouter>
-        <SEOWrapper>
-          <Navbar />
-          <RealTimeNotifications />
-          
-          <Routes>
-          <Route path="/" element={<Homepage />}></Route>
-          <Route path="about" element={<AboutPage />}></Route>
-          <Route path="contact" element={<ContactPage />}></Route>
-          <Route path="signin" element={<SignInPage />}></Route>
-          <Route path="signup" element={<SignupPage />}></Route>
-          <Route path='cart' element={<ShoppingCart />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-          <Route path="/profile" element={<ProfilePage />}></Route>
-          <Route path='/orders' element={<Order />}></Route>
-          <Route path='/viewdetails/:orderid' element={<ViewOrderDetailsPage />} />
-          
-          <Route path='/orderdetails' element={
-            <PrivateRoute allowedRoles={['customer','admin','printer']}>
-              <OrderdetailPage />
-            </PrivateRoute>
-          }></Route>
-          <Route path='/admin-dashboard/product-manager' element={
-            <PrivateRoute allowedRoles={['admin']}>
-              <ProductManager />
-            </PrivateRoute>
-          }></Route>
-
-          {/* navigation route */}
-
-          <Route path="/workbook" element={<WorkbookPage />}>
-            <Route index element={<Year1 />} />
-            <Route path="year1/firstyearoddsem" element={<FirstYearOddSem />} />
-            <Route path="year1/firstyearevensem" element={<FirstYearEvenSem />} />
-            <Route path="year1/secondyearoddsem" element={<SecondYearOddSem />} />
-            <Route path="year1/secondyearevensem" element={<SecondYearEvenSem />} />
-            <Route path="year1/thirdyearoddsem" element={<ThirdYearOddSem />} />
-            <Route path="year1/thirdyearevensem" element={<ThirdYearEvenSem />} />
-            <Route path="year1/fourthyearoddsem" element={<FourthYearOddSem />} />
-            <Route path="year1/fourthyearevensem" element={<FourthYearEvenSem />} />
-          </Route>
-          <Route path="/notes" element={<NotesPage />}></Route>
-          <Route path="/recycle" element={<RecycleaPage />}></Route>
-          <Route path="/project" element={<ProjectPage />}></Route>
-
-
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/terms' element={<TermsOfService />} />
-          <Route path='/privacy' element={<PrivacyPolicy />} />
-
-          <Route
-            path="/admin-dashboard"
-            element={
+    <ToastProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <SEOWrapper>
+            <Navbar />
+            <RealTimeNotifications />
+            
+            <Routes>
+            <Route path="/" element={<Homepage />}></Route>
+            <Route path="about" element={<AboutPage />}></Route>
+            <Route path="contact" element={<ContactPage />}></Route>
+            <Route path="signin" element={<SignInPage />}></Route>
+            <Route path="signup" element={<SignupPage />}></Route>
+            <Route path='cart' element={<ShoppingCart />}></Route>
+            <Route path="*" element={<NotFound />}></Route>
+            <Route path="/profile" element={<ProfilePage />}></Route>
+            <Route path='/orders' element={<Order />}></Route>
+            <Route path='/viewdetails/:orderid' element={<ViewOrderDetailsPage />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
+            
+            <Route path='/orderdetails' element={
+              <PrivateRoute allowedRoles={['customer','admin','printer']}>
+                <OrderdetailPage />
+              </PrivateRoute>
+            }></Route>
+            <Route path='/admin-dashboard/product-manager' element={
               <PrivateRoute allowedRoles={['admin']}>
-                <AdminDashboard />
+                <ProductManager />
               </PrivateRoute>
-            }
-          />
-          <Route
-            path="/printer-dashboard"
-            element={
-              <PrivateRoute allowedRoles={['printer']}>
-                <PrinterDashboard />
+            }></Route>
+            <Route path='/admin-dashboard/coupons' element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <CouponManager />
               </PrivateRoute>
-            }
-          />
+            } />
 
-        </Routes>
+            {/* navigation route */}
+
+            <Route path="/workbook" element={<WorkbookPage />}>
+              <Route index element={<Year1 />} />
+              <Route path="year1/firstyearoddsem" element={<FirstYearOddSem />} />
+              <Route path="year1/firstyearevensem" element={<FirstYearEvenSem />} />
+              <Route path="year1/secondyearoddsem" element={<SecondYearOddSem />} />
+              <Route path="year1/secondyearevensem" element={<SecondYearEvenSem />} />
+              <Route path="year1/thirdyearoddsem" element={<ThirdYearOddSem />} />
+              <Route path="year1/thirdyearevensem" element={<ThirdYearEvenSem />} />
+              <Route path="year1/fourthyearoddsem" element={<FourthYearOddSem />} />
+              <Route path="year1/fourthyearevensem" element={<FourthYearEvenSem />} />
+            </Route>
+            <Route path="/notes" element={<NotesPage />}></Route>
+            <Route path="/recycle" element={<RecycleaPage />}></Route>
+            <Route path="/project" element={<ProjectPage />}></Route>
+
+
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/terms' element={<TermsOfService />} />
+            <Route path='/privacy' element={<PrivacyPolicy />} />
+
+            <Route
+              path="/admin-dashboard"
+              element={
+                <PrivateRoute allowedRoles={['admin']}>
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/printer-dashboard"
+              element={
+                <PrivateRoute allowedRoles={['printer']}>
+                  <PrinterDashboard />
+                </PrivateRoute>
+              }
+            />
+
+          </Routes>
             </SEOWrapper>
 
-      </BrowserRouter>
-    </CartProvider>
+        </BrowserRouter>
+      </CartProvider>
+    </ToastProvider>
   </AuthProvider>
 );

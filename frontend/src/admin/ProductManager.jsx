@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { Plus, Edit2, Trash2, Upload, X, Package, Search, AlertCircle } from 'lucide-react';
 import './ProductManager.css';
+import AdminSidebar from './AdminSidebar';
 
 const initialForm = {
   id: '',
@@ -129,8 +130,9 @@ function ProductManager() {
   );
 
   return (
-    <div className="product-manager">
-      <div className="product-manager-container">
+    <div style={{ display: 'flex' }}>
+      <AdminSidebar />
+      <div style={{ marginLeft: 220, width: '100%' }}>
         {/* Header */}
         <div className="header-card">
           <div className="header-title">

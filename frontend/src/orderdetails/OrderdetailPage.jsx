@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Order.css';
 import { supabase } from '../supabaseClient';
+import { useToast } from '../components/ToastContext';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -76,6 +77,7 @@ async function placeOrderWithSupabase({ address, cart, total, razorpayInfo, clea
 const OrderdetailPage = () => {
   const { cart, clearCart } = useCart();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -87,6 +89,12 @@ const OrderdetailPage = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState('online'); // 'online' or 'cod'
   const [error, setError] = useState('');
+  // Coupon state
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState('');
+  const [discount, setDiscount] = useState(0);
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
 
   const calculateItemPrice = (item) => {
     const basePrice = Number(item.product?.price) || 0;
@@ -98,7 +106,9 @@ const OrderdetailPage = () => {
   );
   const deliveryCharge = total > 1000 ? 0 : 50;
   const tax = total * 0.18; // 18% GST
-  const finalTotal = total + deliveryCharge + tax;
+  // Coupon discount applied to subtotal (before delivery/tax)
+  const discountedTotal = Math.max(0, total - discount);
+  const finalTotal = discountedTotal + deliveryCharge + tax;
 
   useEffect(() => {
     loadRazorpayScript();
@@ -139,7 +149,7 @@ const OrderdetailPage = () => {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_signature: response.razorpay_signature,
           };
-          await placeOrderWithSupabase({
+          const order = await placeOrderWithSupabase({
             address: fullAddress,
             cart,
             total: finalTotal,
@@ -147,8 +157,7 @@ const OrderdetailPage = () => {
             clearCart,
             paymentMethod: 'online',
           });
-          alert('Order placed and payment successful!');
-          navigate('/orders');
+          navigate('/order-success', { state: { address: fullAddress, order } });
         } catch (err) {
           setError('Order placement failed: ' + err.message);
         }
@@ -158,6 +167,68 @@ const OrderdetailPage = () => {
     const rzp = new window.Razorpay(options);
     rzp.open();
   };
+
+  // Coupon apply handler
+  async function handleApplyCoupon(e) {
+    e.preventDefault();
+    setCouponError('');
+    setCheckingCoupon(true);
+    setDiscount(0);
+    setAppliedCoupon(null);
+    try {
+      const { data, error } = await supabase
+        .from('coupons')
+        .select('*')
+        .eq('code', couponCode.trim())
+        .eq('is_active', true)
+        .maybeSingle();
+      if (error || !data) {
+        setCouponError('Invalid or expired coupon code.');
+        setCheckingCoupon(false);
+        return;
+      }
+      // Check expiry
+      if (data.expiry_date && new Date(data.expiry_date) < new Date()) {
+        setCouponError('This coupon has expired.');
+        setCheckingCoupon(false);
+        return;
+      }
+      // Check min order value
+      if (data.min_order_value && total < data.min_order_value) {
+        setCouponError(`Minimum order value for this coupon is ₹${data.min_order_value}`);
+        setCheckingCoupon(false);
+        return;
+      }
+      // Check max uses
+      if (data.max_uses && data.times_used >= data.max_uses) {
+        setCouponError('This coupon has reached its usage limit.');
+        setCheckingCoupon(false);
+        return;
+      }
+      // Calculate discount
+      let discountValue = 0;
+      if (data.discount_type === 'percent') {
+        discountValue = Math.round((total * data.discount_value) / 100);
+      } else {
+        discountValue = Math.round(data.discount_value);
+      }
+      setDiscount(discountValue);
+      setAppliedCoupon(data);
+      setCouponError('');
+      showToast('Coupon applied!');
+    } catch (err) {
+      setCouponError('Error applying coupon.');
+    }
+    setCheckingCoupon(false);
+  }
+
+  function handleRemoveCoupon() {
+    setCouponCode('');
+    setAppliedCoupon(null);
+    setDiscount(0);
+    setCouponError('');
+    showToast('Coupon removed');
+  }
 
   const handlePlaceOrder = async () => {
     // Validate required fields
@@ -186,7 +257,7 @@ const OrderdetailPage = () => {
 
       if (paymentMethod === 'cod') {
         // Handle Cash on Delivery
-        await placeOrderWithSupabase({
+        const order = await placeOrderWithSupabase({
           address: fullAddress,
           cart,
           total: finalTotal,
@@ -194,8 +265,7 @@ const OrderdetailPage = () => {
           clearCart,
           paymentMethod: 'cod',
         });
-        alert('Order placed successfully! Pay ₹' + finalTotal.toFixed(2) + ' on delivery.');
-        navigate('/orders');
+        navigate('/order-success', { state: { address: fullAddress, order } });
       } else {
         // Handle online payment
         if (!window.Razorpay) {
@@ -317,29 +387,69 @@ const OrderdetailPage = () => {
       </div>
 
       <div className="order-details-right">
+        {/* Coupon input UI */}
+        <div className="coupon-section" style={{ marginBottom: 18, background: '#f8fafc', borderRadius: 10, padding: 16, boxShadow: '0 1px 6px rgba(0,0,0,0.04)' }}>
+          <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input
+              type="text"
+              placeholder="Enter coupon code"
+              value={couponCode}
+              onChange={e => setCouponCode(e.target.value.toUpperCase())}
+              disabled={!!appliedCoupon}
+              style={{ flex: 1, padding: '0.7rem', borderRadius: 6, border: '1px solid #e5e7eb', fontSize: '1rem', fontWeight: 500 }}
+            />
+            {!appliedCoupon ? (
+              <button
+                type="submit"
+                disabled={checkingCoupon || !couponCode.trim()}
+                style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, padding: '0.7rem 1.5rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}
+              >
+                {checkingCoupon ? 'Checking...' : 'Apply'}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleRemoveCoupon}
+                style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 6, padding: '0.7rem 1.5rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}
+              >
+                Remove
+              </button>
+            )}
+          </form>
+          {appliedCoupon && (
+            <div style={{ color: '#22c55e', marginTop: 6, fontWeight: 600 }}>
+              Coupon <b>{appliedCoupon.code}</b> applied! You saved <b>₹{discount}</b>.
+            </div>
+          )}
+          {couponError && (
+            <div style={{ color: '#ef4444', marginTop: 6, fontWeight: 500 }}>{couponError}</div>
+          )}
+        </div>
         <div className="price-details">
           <h2>Price Details</h2>
           <div className="price-row">
             <span>Price ({cart.length} items)</span>
             <span>₹{total.toFixed(2)}</span>
           </div>
-          <div className="price-row">
-            <span>Delivery Charges</span>
-            <span>{deliveryCharge === 0 ? 'FREE' : `₹${deliveryCharge.toFixed(2)}`}</span>
-          </div>
-          <div className="price-row">
-            <span>GST (18%)</span>
-            <span>₹{tax.toFixed(2)}</span>
-          </div>
-          <div className="price-row total">
-            <span>Total Amount</span>
-            <span>₹{finalTotal.toFixed(2)}</span>
-          </div>
-          {deliveryCharge === 0 && (
-            <div className="savings-message">
-              You saved ₹50 on delivery charges
+          {appliedCoupon && (
+            <div className="price-row" style={{ color: '#22c55e', fontWeight: 600 }}>
+              <span>Coupon Discount</span>
+              <span>-₹{discount}</span>
             </div>
           )}
+          <div className="price-row">
+            <span>Delivery Charges</span>
+            <span>{deliveryCharge === 0 ? 'Free' : `₹${deliveryCharge}`}</span>
+          </div>
+          <div className="price-row">
+            <span>Tax (18% GST)</span>
+            <span>₹{tax.toFixed(2)}</span>
+          </div>
+          <div className="price-row" style={{ fontWeight: 700, fontSize: '1.1rem' }}>
+            <span>Total</span>
+            <span>₹{finalTotal.toFixed(2)}</span>
+          </div>
+        </div>
 
           {/* Payment Method Selection */}
           <div className="payment-method-section">
@@ -378,7 +488,6 @@ const OrderdetailPage = () => {
             {paymentMethod === 'cod' ? 'Place Order (Pay on Delivery)' : 'Place Order'}
           </button>
         </div>
-      </div>
     </div>
   );
 };

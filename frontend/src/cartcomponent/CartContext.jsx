@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import { useToast } from '../components/ToastContext';
 
 const CartContext = createContext();
 
@@ -24,6 +25,7 @@ const cartReducer = (state, action) => {
 
 export const CartProvider = ({ children }) => {
   const [cart, dispatch] = useReducer(cartReducer, []);
+  const { showToast } = useToast();
 
   // Load cart from Supabase on mount
   useEffect(() => {
@@ -56,8 +58,8 @@ export const CartProvider = ({ children }) => {
       console.log('Current user:', user);
       
       if (!user) {
-        console.log('No user found, showing alert');
-        alert('Please sign in to add items to cart');
+        console.log('No user found, redirecting to sign in');
+        window.location.href = '/signin';
         return;
       }
       
@@ -84,10 +86,9 @@ export const CartProvider = ({ children }) => {
         console.log('Update result:', data, error);
         if (!error) {
           dispatch({ type: 'UPDATE_CART_ITEM', payload: data });
-          alert('Item quantity updated in cart!');
+          showToast('Item quantity updated in cart!');
         } else {
           console.error('Error updating cart item:', error);
-          alert('Error updating cart item. Please try again.');
         }
       } else {
         // If not in cart, insert new
@@ -105,15 +106,13 @@ export const CartProvider = ({ children }) => {
         console.log('Insert result:', data, error);
         if (!error) {
           dispatch({ type: 'ADD_TO_CART', payload: data });
-          alert('Item added to cart successfully!');
+          showToast('Item added to cart!');
         } else {
           console.error('Error adding item to cart:', error);
-          alert('Error adding item to cart. Please try again.');
         }
       }
     } catch (error) {
       console.error('Error in addToCart:', error);
-      alert('An error occurred. Please try again.');
     }
   };
 

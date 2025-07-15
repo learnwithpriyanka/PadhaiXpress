@@ -67,41 +67,45 @@
 }
 
 .hero-description {
-    font-size: 1.25rem;
+    font-size: 1.20rem;
     color: #4b5563;
     line-height: 1.6;
-    margin: 0;
+    margin: -1rem 0;
+    text-align: left;
 }
 
 /* Quick Actions */
 .hero-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* gap: 1rem; */
+    display: flex;
+    gap: .3rem;
+    margin-bottom: -2rem;
+    justify-content: flex-start; /* or center if you want */
 }
 
 .action-card {
+    /* background: #fff; */
+    border-radius: 10px;
+    /* box-shadow: 0 2px 8px rgba(0,0,0,0.04); */
+    padding: 0.3rem 1.8rem 0.3rem 1.8rem; /* wider left/right, short top/bottom */
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem;
-    background: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    min-width: 180px;   /* wider */
+    min-height: unset;
+    height: unset;
     cursor: pointer;
-    transition: all 0.3s ease;
-    min-height: 100px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: none;
 }
 
-.action-card:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
+/* .action-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    transform: translateY(-4px) scale(1.03);
+} */
 
 .action-icon {
-    width: 2rem;
-    height: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.1rem;
 }
 
 .action-icon-blue {
@@ -109,23 +113,25 @@
 }
 
 .action-icon-green {
-    color: #16a34a;
+    color: #22c55e;
 }
 
 .action-icon-orange {
-    color: #ea580c;
+    color: #f97316;
 }
 
 .action-text {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #111827;
-    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #222;
+    margin-top: 0.1rem;
+    line-height: 1.1;
 }
 
 /* CTA Button */
 .hero-cta {
     display: flex;
+    margin-bottom: -2rem;
 }
 
 .cta-button {
@@ -163,6 +169,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 3rem;
 }
 
 .hero-image {
@@ -750,4 +757,88 @@
     .cta-button:hover .cta-arrow {
         transform: none;
     }
+}
+
+@media (max-width: 900px) {
+  .hero-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+  .action-card {
+    min-width: 140px;
+    padding: 0.3rem 1.2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0;
+  }
+  .action-card {
+    min-width: 90vw;
+    width: 90vw;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+  }
+}
+
+/* Mobile-first styles */
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.action-card {
+  width: 100%;
+  max-width: 400px;
+  min-width: unset;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tablet: 2 per row */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .hero-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+  }
+  .action-card {
+    width: 44vw;
+    max-width: 320px;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Desktop: all in a row, centered */
+@media (min-width: 1024px) {
+  .hero-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: -2rem;
+  }
+  .action-card {
+    width: 220px;
+    max-width: 260px;
+    border-radius: 10px;
+    padding: 0.7rem 1.8rem;
+  }
+}
+
+.hero-container, .hero-section {
+  overflow-x: hidden;
 }
