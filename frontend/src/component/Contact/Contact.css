@@ -1,28 +1,25 @@
-
-
 .image{
    
     /* background: url('./media/image/contactt.jpg'); */
-    width: 99vw;
+    width: 100vw;
     height: 50vh; 
     object-fit: cover; 
     color:black;
     text-align: center;
     align-content: center;
-    
-    
-   
-   
- 
-    
+    min-height: 50vh;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: url('/media/image/cont.jpg') center/cover no-repeat;
+    border: none;
+    box-sizing: border-box;
 }
 
-.c{
-    background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
-    margin: 0px !important;
-
-}
-
+/* .c {
+  min-height: 100vh;
+  margin: 0px !important;
+  background: url('/media/image/newcon.avif') center/cover no-repeat;
+} */
 
 .card1{
 
@@ -91,4 +88,58 @@ label{
     
     
 }
+
+
+.address{
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 80vh;
+    height: 80px;
+    border-radius: 10px;
+    border:none;
+    text-align: center;
+}
+
+
+.map{
+    width: 50%;
+    height: 50%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    border: 2px solid black;
+}
+
+@media (max-width: 900px) {
+  .row.p-5 {
+    flex-direction: column !important;
+    gap: 18px !important;
+    align-items: center !important;
+  }
+  .card1 {
+    width: 90% !important;
+    min-width: 220px !important;
+    max-width: 400px !important;
+    margin: 0 auto 18px auto !important;
+    padding: 18px !important;
+  }
+  .address-card {
+    max-width: 98vw !important;
+    padding: 24px 6px !important;
+  }
+}
+@media (max-width: 600px) {
+  .image h1 {
+    font-size: 2rem !important;
+  }
+  .image p {
+    font-size: 1.1rem !important;
+  }
+  .address-card {
+    border-radius: 18px !important;
+    padding: 14px 2px !important;
+  }
+}
+  
 
