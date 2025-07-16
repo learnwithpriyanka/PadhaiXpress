@@ -79,7 +79,7 @@ function ProductManager() {
     }
     const productData = {
       ...form,
-      price: form.price ? parseFloat(form.price) : null,
+      price: parseFloat(form.pages + 50),
       pages: form.pages ? parseInt(form.pages) : null,
       image: imageUrl,
     };

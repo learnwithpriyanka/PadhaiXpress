@@ -19,7 +19,7 @@ const Breadcrumb = () => {
     'recycle': 'Recycle & Donate',
     'project': 'Projects',
     'forgot-password': 'Forgot Password',
-    'terms': 'Terms of Service',
+    'terms': 'Terms and Conditions',
     'privacy': 'Privacy Policy',
     'admin-dashboard': 'Admin Dashboard',
     'printer-dashboard': 'Printer Dashboard',

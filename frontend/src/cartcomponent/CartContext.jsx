@@ -25,7 +25,6 @@ const cartReducer = (state, action) => {
 
 export const CartProvider = ({ children }) => {
   const [cart, dispatch] = useReducer(cartReducer, []);
-  const { showToast } = useToast();
 
   // Load cart from Supabase on mount
   useEffect(() => {
@@ -86,7 +85,6 @@ export const CartProvider = ({ children }) => {
         console.log('Update result:', data, error);
         if (!error) {
           dispatch({ type: 'UPDATE_CART_ITEM', payload: data });
-          showToast('Item quantity updated in cart!');
         } else {
           console.error('Error updating cart item:', error);
         }
@@ -106,7 +104,6 @@ export const CartProvider = ({ children }) => {
         console.log('Insert result:', data, error);
         if (!error) {
           dispatch({ type: 'ADD_TO_CART', payload: data });
-          showToast('Item added to cart!');
         } else {
           console.error('Error adding item to cart:', error);
         }

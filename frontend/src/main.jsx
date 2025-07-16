@@ -41,12 +41,15 @@ import OrderSuccess from './orderdetails/OrderSuccess.jsx';
 
 import AdminDashboard from './admin/AdminDashboard';
 import PrinterDashboard from './printer/PrinterDashboard';
-import TermsOfService from './component/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 import ProductManager from './admin/ProductManager.jsx';
 import CouponManager from './admin/CouponManager.jsx';
+import ShippingPolicy from './component/TermsOfService/ShippingPolicy.jsx';
 
 import { ToastProvider } from './components/ToastContext';
+import ScrollToTop from './components/ScrollToTop';
+import TermsandConditions from './component/TermsOfService/TermsandConditions.jsx';
+import CancellationPolicy from './component/TermsOfService/CancellationPolicy.jsx';
 
 
 const links = [
@@ -82,6 +85,7 @@ createRoot(document.getElementById('root')).render(
     <ToastProvider>
       <CartProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <SEOWrapper>
             <Navbar />
             <RealTimeNotifications />
@@ -104,6 +108,8 @@ createRoot(document.getElementById('root')).render(
                 <OrderdetailPage />
               </PrivateRoute>
             }></Route>
+            {/* Add Terms and Conditions Route */}
+            <Route path="/terms" element={<TermsandConditions />} />
             <Route path='/admin-dashboard/product-manager' element={
               <PrivateRoute allowedRoles={['admin']}>
                 <ProductManager />
@@ -134,8 +140,10 @@ createRoot(document.getElementById('root')).render(
 
 
             <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/terms' element={<TermsOfService />} />
+            <Route path='/terms' element={<TermsandConditions />} />
             <Route path='/privacy' element={<PrivacyPolicy />} />
+            <Route path="/shipping" element={<ShippingPolicy />} />
+            <Route path="/cancellation" element={<CancellationPolicy />} />
 
             <Route
               path="/admin-dashboard"

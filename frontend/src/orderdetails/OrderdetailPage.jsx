@@ -97,14 +97,19 @@ const OrderdetailPage = () => {
   const [checkingCoupon, setCheckingCoupon] = useState(false);
 
   const calculateItemPrice = (item) => {
-    const basePrice = Number(item.product?.price) || 0;
-    return item.page_type === "single" ? basePrice * 2 : basePrice;
+    const perPagePrice = Number(item.product?.per_page_price) || 0;
+    const pages = Number(item.product?.pages) || 0;
+    const doublePrice = perPagePrice * pages;
+    if (item.page_type === 'single') {
+      return (doublePrice * 2) + 50;
+    }
+    return doublePrice + 50;
   };
 
   const total = cart.reduce((acc, item) => 
     acc + (calculateItemPrice(item) * item.quantity), 0
   );
-  const deliveryCharge = total > 1000 ? 0 : 50;
+  const deliveryCharge = total > 500 ? 0 : 50;
   const tax = total * 0.18; // 18% GST
   // Coupon discount applied to subtotal (before delivery/tax)
   const discountedTotal = Math.max(0, total - discount);
@@ -387,7 +392,47 @@ const OrderdetailPage = () => {
       </div>
 
       <div className="order-details-right">
-        {/* Coupon input UI */}
+        {/* Free delivery message */}
+        <div style={{
+          background: '#e0f7fa',
+          color: '#00796b',
+          borderRadius: 8,
+          padding: '10px 16px',
+          marginBottom: 16,
+          fontWeight: 600,
+          textAlign: 'center',
+          fontSize: '1.05rem',
+          border: '1.5px solid #b2dfdb'
+        }}>
+          Order above ₹500 gets free delivery!
+        </div>
+        <div className="price-details">
+          <h2>Price Details</h2>
+          <div className="price-row">
+            <span>Price ({cart.length} items)</span>
+            <span>₹{total.toFixed(2)}</span>
+          </div>
+          {appliedCoupon && (
+            <div className="price-row" style={{ color: '#22c55e', fontWeight: 600 }}>
+              <span>Coupon Discount</span>
+              <span>-₹{discount}</span>
+            </div>
+          )}
+          <div className="price-row">
+            <span>Delivery Charges</span>
+            <span>{deliveryCharge === 0 ? 'Free' : `₹${deliveryCharge}`}</span>
+          </div>
+          <div className="price-row">
+            <span>Tax (18% GST)</span>
+            <span>₹{tax.toFixed(2)}</span>
+          </div>
+          <div className="price-row" style={{ fontWeight: 700, fontSize: '1.1rem' }}>
+            <span>Total</span>
+            <span>₹{finalTotal.toFixed(2)}</span>
+          </div>
+        </div>
+
+        {/* Coupon input UI - moved here after total, before payment method */}
         <div className="coupon-section" style={{ marginBottom: 18, background: '#f8fafc', borderRadius: 10, padding: 16, boxShadow: '0 1px 6px rgba(0,0,0,0.04)' }}>
           <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <input
@@ -424,31 +469,6 @@ const OrderdetailPage = () => {
           {couponError && (
             <div style={{ color: '#ef4444', marginTop: 6, fontWeight: 500 }}>{couponError}</div>
           )}
-        </div>
-        <div className="price-details">
-          <h2>Price Details</h2>
-          <div className="price-row">
-            <span>Price ({cart.length} items)</span>
-            <span>₹{total.toFixed(2)}</span>
-          </div>
-          {appliedCoupon && (
-            <div className="price-row" style={{ color: '#22c55e', fontWeight: 600 }}>
-              <span>Coupon Discount</span>
-              <span>-₹{discount}</span>
-            </div>
-          )}
-          <div className="price-row">
-            <span>Delivery Charges</span>
-            <span>{deliveryCharge === 0 ? 'Free' : `₹${deliveryCharge}`}</span>
-          </div>
-          <div className="price-row">
-            <span>Tax (18% GST)</span>
-            <span>₹{tax.toFixed(2)}</span>
-          </div>
-          <div className="price-row" style={{ fontWeight: 700, fontSize: '1.1rem' }}>
-            <span>Total</span>
-            <span>₹{finalTotal.toFixed(2)}</span>
-          </div>
         </div>
 
           {/* Payment Method Selection */}

@@ -88,7 +88,17 @@ const Year = ({
                   >
                     <img src={wb.image} alt={wb.name} />
                     <h6 className="card-title">{wb.name} ({wb.code})</h6>
-                    <p className="card-price">Price: ₹{wb.price} &nbsp; &nbsp;   Pages:{wb.pages}</p>
+                    {/* Calculate and display total price using base_price and per_page_price */}
+                    <p className="card-price">
+                      {wb.price !== undefined 
+                        ? `Price: ₹${Number(wb.pages) + 50}`
+                        : `Price: ₹${wb.pages}`}
+                    </p>
+                    <p className="card-price">
+                      {wb.base_price !== undefined && wb.per_page_price !== undefined && wb.pages !== undefined
+                        ? `Pages: ${wb.pages}  `
+                        : `Pages: ${wb.pages}`}
+                    </p>
                     
                     {cartItem ? (
                       <div className="cart-controls">
