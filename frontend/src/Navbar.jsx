@@ -160,11 +160,6 @@ function Navbar() {
                         <i className="fa-solid fa-history"></i>
                         <span>Order History</span>
                       </Link>
-                      <li className="nav-item ">
-                        <Link className="nav-link active" to="/cancellation" style={{ color: 'black' }}>
-                          Cancellation & Refund Policy
-                        </Link>
-                      </li>
                     </div>
                     
                     <div className="dropdown-divider"></div>

@@ -80,6 +80,7 @@ function Footer() {
                         <Link to="/privacy" className="footer-bottom-link">Privacy Policy</Link>
                         <Link to="/terms" className="footer-bottom-link">Terms and Conditions</Link>
                         <Link to="/shipping" className="footer-bottom-link">Shipping & Delivery Policy</Link>
+                        <Link to="/cancellation" className="footer-bottom-link">Cancellation & Refund Policy</Link>
                     </div>
                 </div>
             </div>
