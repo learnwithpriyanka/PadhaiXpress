@@ -60,44 +60,89 @@ const Order = () => {
         return;
       }
 
+      // Pre-update order to mark payment as processing
+      await supabase
+        .from('orders')
+        .update({ 
+          payment_method: 'processing',
+          status: 'payment_processing'
+        })
+        .eq('id', order.id);
+
       const options = {
-        key: 'rzp_test_YoGzNbhZznaSoq',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: Math.round(order.total * 100), // in paise
         currency: 'INR',
         name: 'PadhaiXpress',
         description: `Payment for Order #${order.id}`,
         receipt: `receipt_${Date.now()}`,
         theme: { color: '#3399cc' },
-        handler: async function (response) {
-          try {
-            // Update order payment method and add payment details
-            const { error: updateError } = await supabase
+        modal: {
+          ondismiss: function() {
+            // Reset order status if user cancels
+            supabase
               .from('orders')
-              .update({
-                payment_method: 'online',
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
+              .update({ 
+                payment_method: 'cod',
+                status: 'pending'
               })
               .eq('id', order.id);
-
-            if (updateError) {
-              alert('Payment successful but order update failed. Please contact support.');
-              return;
-            }
-
-            alert('Payment successful! Your order has been updated.');
-            // Refresh order history
-            const { data: orders, error } = await supabase
-              .from('orders')
-              .select('*, order_items(*, product:product_id(*))')
-              .eq('user_id', (await supabase.auth.getUser()).data.user.id)
-              .order('created_at', { ascending: false });
-
-            if (!error) setOrderHistory(orders);
-          } catch (err) {
-            alert('Payment successful but order update failed. Please contact support.');
+            setLoading(prev => ({ ...prev, [order.id]: false }));
           }
+        },
+        prefill: {
+          name: 'Customer',
+          email: 'customer@example.com'
+        },
+        handler: async function (response) {
+          // Use a more reliable approach with retry logic
+          let retryCount = 0;
+          const maxRetries = 3;
+          
+          const updateOrder = async () => {
+            try {
+              const { error: updateError } = await supabase
+                .from('orders')
+                .update({
+                  payment_method: 'online',
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  status: 'confirmed'
+                })
+                .eq('id', order.id);
+
+              if (updateError) {
+                throw updateError;
+              }
+
+              // Success - refresh order history
+              const { data: orders, error } = await supabase
+                .from('orders')
+                .select('*, order_items(*, product:product_id(*))')
+                .eq('user_id', (await supabase.auth.getUser()).data.user.id)
+                .order('created_at', { ascending: false });
+
+              if (!error) setOrderHistory(orders);
+              
+              alert('Payment successful! Your order has been updated.');
+              setLoading(prev => ({ ...prev, [order.id]: false }));
+              return true;
+            } catch (err) {
+              retryCount++;
+              if (retryCount < maxRetries) {
+                // Retry after a short delay
+                setTimeout(updateOrder, 1000);
+                return false;
+              } else {
+                alert('Payment successful but order update failed. Please contact support.');
+                setLoading(prev => ({ ...prev, [order.id]: false }));
+                return false;
+              }
+            }
+          };
+
+          updateOrder();
         },
       };
 
@@ -105,14 +150,13 @@ const Order = () => {
       rzp.open();
     } catch (error) {
       alert('Failed to initiate payment. Please try again.');
-    } finally {
       setLoading(prev => ({ ...prev, [order.id]: false }));
     }
   };
 
   const getPaymentStatusText = (order) => {
     if (order.payment_method === 'cod') {
-      return `Cash on Delivery - Pay ₹${order.total} on delivery`;
+      return `Cash on Delivery - Pay ₹${order.total.toFixed(2)} on delivery`;
     } else if (order.payment_method === 'online') {
       return 'Online Payment - Paid';
     } else {
@@ -142,7 +186,7 @@ const Order = () => {
               <div>
                 <h3>Order ID: {order.id}</h3>
                 <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
-                <p>Total: ₹{order.total}</p>
+                <p>Total: ₹{order.total.toFixed(2)}</p>
                 <p>Status: {order.status}</p>
                 <p>Delivery By: {order.delivery_time ? new Date(order.delivery_time).toLocaleString() : 'TBD'}</p>
                 <p style={{ 
@@ -159,7 +203,7 @@ const Order = () => {
                   {getPaymentStatusText(order)}
                 </p>
                 {/* Pay Now Button for COD Orders */}
-                {order.payment_method === 'cod' && (
+                {order.payment_method === 'cod' && order.status !== 'delivered' && (
                   <button
                     onClick={() => handlePayNow(order)}
                     disabled={loading[order.id]}

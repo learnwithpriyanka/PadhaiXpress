@@ -3,6 +3,12 @@ import { supabase } from '../supabaseClient';
 import { Plus, Edit2, Trash2, Upload, X, Package, Search, AlertCircle } from 'lucide-react';
 import './ProductManager.css';
 import AdminSidebar from './AdminSidebar';
+import { PDFDocument } from 'pdf-lib';
+import Klimage from '../assets/Klimage.png';
+// Replace the DEFAULT_BOOK_IMAGE constant with a local image
+const DEFAULT_BOOK_IMAGE = Klimage; // Current
+// OR try:
+// const DEFAULT_BOOK_IMAGE = '/media/Klimage.png'; // If file is capitalized
 
 const initialForm = {
   id: '',
@@ -11,7 +17,7 @@ const initialForm = {
   price: '',
   pages: '',
   image: '',
-  pagetype: '',
+  pagetype: 'single', // Set default to 'single'
   year: '',
   sem: '',
 };
@@ -20,7 +26,7 @@ function ProductManager() {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,19 +50,46 @@ function ProductManager() {
     setForm((f) => ({ ...f, [name]: value }));
   }
 
+  // Extract page count from PDF file
+  async function extractPdfPageCount(file) {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      return pdfDoc.getPageCount();
+    } catch (error) {
+      console.error('Error extracting page count:', error);
+      setError('Failed to extract page count from PDF');
+      return null;
+    }
+  }
+
   // Handle image file selection
-  function handleFileChange(e) {
-    setImageFile(e.target.files[0]);
+  async function handlePdfChange(e) {
+    const file = e.target.files[0];
+    setPdfFile(file);
+    
+    // Automatically extract page count when PDF is selected
+    if (file && file.type === 'application/pdf') {
+      setLoading(true);
+      const pageCount = await extractPdfPageCount(file);
+      if (pageCount !== null) {
+        setForm(prevForm => ({ 
+          ...prevForm, 
+          pages: pageCount.toString() 
+        }));
+      }
+      setLoading(false);
+    }
   }
 
   // Upload image to Supabase Storage
-  async function uploadImage(file) {
+  async function uploadPdf(file) {
     if (!file) return '';
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
     const { data, error } = await supabase.storage.from('products').upload(fileName, file);
     if (error) {
-      setError('Image upload failed: ' + error.message);
+      setError('PDF upload failed: ' + error.message);
       return '';
     }
     // Get public URL
@@ -69,19 +102,19 @@ function ProductManager() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    let imageUrl = form.image;
-    if (imageFile) {
-      imageUrl = await uploadImage(imageFile);
-      if (!imageUrl) {
+    let pdfUrl = form.image;
+    if (pdfFile) {
+      pdfUrl = await uploadPdf(pdfFile);
+      if (!pdfUrl) {
         setLoading(false);
         return;
       }
     }
     const productData = {
       ...form,
-      price: parseFloat(form.pages + 50),
+      price: parseFloat(form.pages) + 50, // Fixed: convert pages to number first, then add 50
       pages: form.pages ? parseInt(form.pages) : null,
-      image: imageUrl,
+      image: pdfUrl, // keep the same field for compatibility
     };
     if (editingId) {
       // Update
@@ -93,7 +126,7 @@ function ProductManager() {
       if (error) setError(error.message);
     }
     setForm(initialForm);
-    setImageFile(null);
+    setPdfFile(null);
     setEditingId(null);
     fetchProducts();
     setLoading(false);
@@ -118,7 +151,7 @@ function ProductManager() {
   // Cancel editing
   function handleCancel() {
     setForm(initialForm);
-    setImageFile(null);
+    setPdfFile(null);
     setEditingId(null);
   }
 
@@ -174,7 +207,7 @@ function ProductManager() {
                 <label className="form-label">Product Name *</label>
                 <input
                   name="name"
-                  placeholder="Enter product name"
+                  placeholder="Enter book name"
                   value={form.name}
                   onChange={handleChange}
                   required
@@ -211,7 +244,7 @@ function ProductManager() {
                 <label className="form-label">Page Type</label>
                 <input
                   name="pagetype"
-                  placeholder="e.g., A4, Letter"
+                  placeholder="single,double."
                   value={form.pagetype}
                   onChange={handleChange}
                   className="form-input"
@@ -222,7 +255,7 @@ function ProductManager() {
                 <label className="form-label">Year</label>
                 <input
                   name="year"
-                  placeholder="2024"
+                  placeholder="1st ,2nd ,3rd..."
                   value={form.year}
                   onChange={handleChange}
                   className="form-input"
@@ -233,7 +266,7 @@ function ProductManager() {
                 <label className="form-label">Semester</label>
                 <input
                   name="sem"
-                  placeholder="e.g., Fall, Spring"
+                  placeholder="odd ,even"
                   value={form.sem}
                   onChange={handleChange}
                   className="form-input"
@@ -242,20 +275,18 @@ function ProductManager() {
             </div>
             
             <div className="form-field">
-              <label className="form-label">Product Image</label>
+              <label className="form-label">Product PDF</label>
               <div className="file-upload-container">
                 <input
                   type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
+                  accept="application/pdf"
+                  onChange={handlePdfChange}
                   className="file-input"
                 />
-                {form.image && !imageFile && (
-                  <img
-                    src={form.image}
-                    alt="Product"
-                    className="current-image"
-                  />
+                {form.image && !pdfFile && (
+                  <a href={form.image} target="_blank" rel="noopener noreferrer" className="current-pdf-link">
+                    View PDF
+                  </a>
                 )}
               </div>
             </div>
@@ -342,17 +373,23 @@ function ProductManager() {
                   {filteredProducts.map((product) => (
                     <tr key={product.id} className="table-row">
                       <td className="table-cell">
-                        {product.image ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="product-image"
+                        <div className="product-image-container">
+                          <img 
+                            src={DEFAULT_BOOK_IMAGE} 
+                            alt={product.name || 'Book'}
+                            className="product-default-image"
+                            onError={(e) => {
+                              // Hide broken image and show fallback
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
                           />
-                        ) : (
-                          <div className="product-image-placeholder">
-                            <Package className="product-image-placeholder-icon" />
+                          <div className="book-icon-fallback" style={{display: 'none'}}>
+                            <Package className="book-icon" />
+                            <span className="book-text">📚</span>
                           </div>
-                        )}
+                          
+                        </div>
                       </td>
                       <td className="table-cell">{product.code}</td>
                       <td className="table-cell table-cell-medium">{product.name}</td>

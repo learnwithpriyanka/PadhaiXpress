@@ -32,7 +32,15 @@ const ViewOrderDetailsPage = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
   if (!order) return null;
-
+  const calculateItemPrice = (item) => {
+    const perPagePrice = Number(item.product?.per_page_price) || 0;
+    const pages = Number(item.product?.pages) || 0;
+    const doublePrice = perPagePrice * pages;
+    if (item.page_type === 'single') {
+      return (doublePrice * 1.1)+60;
+    }
+    return (doublePrice *.66)+60;
+  };
   return (
     <div className="order-history" style={{ maxWidth: 800, margin: '32px auto', background: '#fff', borderRadius: 16, padding: 24 }}>
       <h2>Order Details</h2>
@@ -40,7 +48,7 @@ const ViewOrderDetailsPage = () => {
         <div>
           <h3>Order ID: {order.id}</h3>
           <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
-          <p>Total: ₹{order.total}</p>
+          <p>Total: ₹{order.total.toFixed(2)}</p>
           <p>Status: {order.status}</p>
           <p>Delivery By: {order.delivery_time ? new Date(order.delivery_time).toLocaleString() : 'TBD'}</p>
         </div>
@@ -50,14 +58,14 @@ const ViewOrderDetailsPage = () => {
         <h4>Products:</h4>
         {order.order_items.map((item) => (
           <div key={item.id} className="cart-item">
-            <img src={item.product?.image} alt={item.product?.name} />
+            <img src={item.product?.images} alt={item.product?.name} />
             <div>
               <h4>{item.product?.name}</h4>
               <p>Code: {item.product?.code}</p>
-              <p>Base Price: ₹{item.product?.price} | Pages: {item.product?.pages}</p>
+              <p>Base Price: ₹{calculateItemPrice(item)} | Pages: {item.product?.pages}</p>
               <p>Print Type: {item.page_type === 'single' ? 'Single Side' : 'Double Side'}</p>
               <p>Quantity: {item.quantity}</p>
-              <p>Item Total: ₹{(Number(item.product?.price) * item.quantity).toFixed(2)}</p>
+              <p>Item Total: ₹{(Number(calculateItemPrice(item)) * item.quantity).toFixed(2)}</p>
             </div>
           </div>
         ))}

@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './component/HomePage/homepage.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Navbar from './Navbar.jsx'
 import RealTimeNotifications from './component/RealTimeNotifications.jsx'
@@ -50,6 +51,7 @@ import { ToastProvider } from './components/ToastContext';
 import ScrollToTop from './components/ScrollToTop';
 import TermsandConditions from './component/TermsOfService/TermsandConditions.jsx';
 import CancellationPolicy from './component/TermsOfService/CancellationPolicy.jsx';
+import DeliveryDashboard from './delivery/DeliveryDashBoard.jsx';
 
 
 const links = [
@@ -104,7 +106,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/order-success" element={<OrderSuccess />} />
             
             <Route path='/orderdetails' element={
-              <PrivateRoute allowedRoles={['customer','admin','printer']}>
+              <PrivateRoute allowedRoles={['customer','admin','printer','delivery']}>
                 <OrderdetailPage />
               </PrivateRoute>
             }></Route>
@@ -155,13 +157,16 @@ createRoot(document.getElementById('root')).render(
             />
             <Route
               path="/printer-dashboard"
+              element={<PrinterDashboard />}
+            />
+            <Route
+              path="/delivery-dash"
               element={
-                <PrivateRoute allowedRoles={['printer']}>
-                  <PrinterDashboard />
+                <PrivateRoute allowedRoles={['delivery']}>
+                  <DeliveryDashboard />
                 </PrivateRoute>
               }
             />
-
           </Routes>
             </SEOWrapper>
 

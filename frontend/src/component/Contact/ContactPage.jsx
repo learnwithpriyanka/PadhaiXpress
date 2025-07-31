@@ -1,11 +1,12 @@
 import React from 'react'
-import ContactMe from './ContactMe';
-import Footer from '../../Footer';
+import ContactMe from './ContactMe'
+import Footer from '../../Footer'   
+import './Contact.css'
 
 
 function ContactPage() {
     return (  
-        <div>
+        <div className="contact-page">
             <ContactMe/>
             <Footer/>
         </div>

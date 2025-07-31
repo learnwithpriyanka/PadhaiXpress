@@ -52,11 +52,11 @@ function Footer() {
                 <div className="footer-section">
                     <h4 className="footer-title">Connect With Us</h4>
                     <div className="social-links">
-                        <a href="#" className="social-link facebook">
-                            <i className="fa-brands fa-facebook"></i>
-                            <span>Facebook</span>
+                        <a href="https://t.me/padhaiexpress1122" className="social-link telegram">
+                            <i className="fa-brands fa-telegram"></i>
+                            <span>Telegram</span>
                         </a>
-                        <a href="#" className="social-link instagram">
+                        <a href="https://www.instagram.com/padhai_xpress/" className="social-link instagram">
                             <i className="fa-brands fa-instagram"></i>
                             <span>Instagram</span>
                         </a>
@@ -64,10 +64,7 @@ function Footer() {
                             <i className="fa-brands fa-square-twitter"></i>
                             <span>Twitter</span>
                         </a>
-                        <a href="#" className="social-link whatsapp">
-                            <i className="fa-brands fa-whatsapp"></i>
-                            <span>WhatsApp</span>
-                        </a>
+                        
                     </div>
                 </div>
             </div>

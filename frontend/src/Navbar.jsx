@@ -2,7 +2,7 @@ import React, {useContext,useState,useRef,useEffect} from 'react'
 import './index.css'
 import './Navbar.css'; // Add a new CSS file for modern responsive styles
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from './cartcomponent/CartContext';
 import { AuthContext } from './context/AuthContext';
 import { supabase } from './supabaseClient';
@@ -11,9 +11,11 @@ function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null); // Ref for the dropdown menu
+  const profileButtonRef = useRef(null); // Ref for the profile button
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
   const [userRole, setUserRole] = useState('');
+  const navigate = useNavigate();
 
   
   const toggleDropdown = (e) => {
@@ -22,8 +24,22 @@ function Navbar() {
     setShowDropdown((prev) => !prev); // Toggle the dropdown menu
   };
 
+  // When mobile menu opens, always close profile dropdown
+  const handleMobileMenuToggle = () => {
+    setShowDropdown(false); // Close profile dropdown
+    setMobileMenuOpen((prev) => !prev);
+  };
+
+  // Add state for mobile menu open/close
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const handleClickOutside = (e) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target) &&
+      profileButtonRef.current &&
+      !profileButtonRef.current.contains(e.target)
+    ) {
       setShowDropdown(false); // Close the dropdown if clicked outside
     }
   };
@@ -59,6 +75,11 @@ function Navbar() {
     }
   }, [isLoggedIn]);
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/signin', { replace: true });
+  };
+
 
   return (
     <nav className="navbar-modern">
@@ -77,11 +98,11 @@ function Navbar() {
           className="navbar-toggle-modern"
           type="button"
           aria-label="Toggle navigation"
-          onClick={() => setShowDropdown((prev) => !prev)}
+          onClick={handleMobileMenuToggle}
         >
           <span className="navbar-toggle-icon" />
         </button>
-        <div className={`navbar-links-modern${showDropdown ? ' open' : ''}`}>
+        <div className={`navbar-links-modern${mobileMenuOpen ? ' open' : ''}`}>
           <ul className="navbar-list-modern">
             <li className="nav-item ">
               <Link className="nav-link active" to="/" style={{ color: 'black' }}>
@@ -90,7 +111,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <Link className="nav-link active" aria-current="page" to="about" state={{ color: "black" }} style={{ color: 'black' }}>
-                About us
+                About 
               </Link>
             </li>
             <li className="nav-item ">
@@ -118,6 +139,7 @@ function Navbar() {
                   className="nav-link active dropdown-toggle"
                   onClick={toggleDropdown}
                   style={{ color: 'black', background: 'transparent' }}
+                  ref={profileButtonRef}
                 >
                   <div className="profile-icon-container">
                     <i className="fa-solid fa-user profile-icon"></i>
@@ -152,6 +174,12 @@ function Navbar() {
                           <span>Printer Dashboard</span>
                         </Link>
                       )}
+                      {userRole === 'delivery' && (
+                        <Link className="dropdown-item-modern" to="/delivery-dash">
+                          <i className="fa-solid fa-truck"></i>
+                          <span>Delivery Dashboard</span>
+                        </Link>
+                      )}
                       <Link className="dropdown-item-modern" to="/profile">
                         <i className="fa-solid fa-user-circle"></i>
                         <span>Profile</span>
@@ -164,7 +192,7 @@ function Navbar() {
                     
                     <div className="dropdown-divider"></div>
                     
-                    <button className="dropdown-item-modern logout-item" onClick={logout}>
+                    <button className="dropdown-item-modern logout-item" onClick={handleLogout}>
                       <i className="fa-solid fa-sign-out-alt"></i>
                       <span>Logout</span>
                     </button>

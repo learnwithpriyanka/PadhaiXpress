@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../cartcomponent/CartContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Order.css';
+import './OrderdetailPage.css';
 import { supabase } from '../supabaseClient';
 import { useToast } from '../components/ToastContext';
 
@@ -101,19 +101,20 @@ const OrderdetailPage = () => {
     const pages = Number(item.product?.pages) || 0;
     const doublePrice = perPagePrice * pages;
     if (item.page_type === 'single') {
-      return (doublePrice * 2) + 50;
+      return ((doublePrice * 1.1) + 60).toFixed(2);
     }
-    return doublePrice + 50;
+    return ((doublePrice*.66) + 60).toFixed(2);
   };
 
   const total = cart.reduce((acc, item) => 
     acc + (calculateItemPrice(item) * item.quantity), 0
   );
-  const deliveryCharge = total > 500 ? 0 : 50;
-  const tax = total * 0.18; // 18% GST
+  const deliveryCharge = total > 500 ? 0 : 40;
+  const processingCharge = 8; // Fixed processing charge
+  const tax = total * 0.04; // 5% GST
   // Coupon discount applied to subtotal (before delivery/tax)
   const discountedTotal = Math.max(0, total - discount);
-  const finalTotal = discountedTotal + deliveryCharge + tax;
+  const finalTotal = discountedTotal + deliveryCharge + processingCharge + tax;
 
   useEffect(() => {
     loadRazorpayScript();
@@ -134,7 +135,7 @@ const OrderdetailPage = () => {
   // Move Razorpay logic inside the component
   const createRazorpayOrder = (amount) => {
     const options = {
-      key: 'rzp_test_YoGzNbhZznaSoq',
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: Math.round(amount * 100), // in paise
       currency: 'INR',
       name: 'PadhaiXpress',
@@ -372,7 +373,7 @@ const OrderdetailPage = () => {
           {cart.map((item) => (
             <div key={item.id} className="order-item">
               <div className="item-image">
-                <img src={item.product?.image} alt={item.product?.name} />
+                <img src={item.product?.images} alt={item.product?.name} />
               </div>
               <div className="item-details">
                 <h3>{item.product?.name}</h3>
@@ -406,7 +407,7 @@ const OrderdetailPage = () => {
         }}>
           Order above ₹500 gets free delivery!
         </div>
-        <div className="price-details">
+        <div className="price-details" style={{position: 'relative', zIndex: 0, background: '#fff'}}>
           <h2>Price Details</h2>
           <div className="price-row">
             <span>Price ({cart.length} items)</span>
@@ -423,17 +424,23 @@ const OrderdetailPage = () => {
             <span>{deliveryCharge === 0 ? 'Free' : `₹${deliveryCharge}`}</span>
           </div>
           <div className="price-row">
-            <span>Tax (18% GST)</span>
+            <span>Processing Charge</span>
+            <span>₹{processingCharge.toFixed(2)}</span>
+          </div>
+          <div className="price-row">
+            <span>Tax (4% GST)</span>
             <span>₹{tax.toFixed(2)}</span>
           </div>
-          <div className="price-row" style={{ fontWeight: 700, fontSize: '1.1rem' }}>
-            <span>Total</span>
-            <span>₹{finalTotal.toFixed(2)}</span>
+          <div style={{position: 'relative', zIndex: 1, background: '#fff'}}>
+            <div className="price-row total-row" style={{ fontWeight: 700, fontSize: '1.1rem', borderTop: '1px solid #eee', marginTop: 10, paddingTop: 10 }}>
+              <span>Total</span>
+              <span>₹{finalTotal.toFixed(2)}</span>
+            </div>
           </div>
         </div>
 
-        {/* Coupon input UI - moved here after total, before payment method */}
-        <div className="coupon-section" style={{ marginBottom: 18, background: '#f8fafc', borderRadius: 10, padding: 16, boxShadow: '0 1px 6px rgba(0,0,0,0.04)' }}>
+        {/* Coupon input UI - always below price details, never inside */}
+        <div className="coupon-section" style={{position: 'relative', zIndex: 0, marginTop: 16, marginBottom: 18, background: '#f8fafc', borderRadius: 10, padding: 16, boxShadow: '0 1px 6px rgba(0,0,0,0.04)'}}>
           <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <input
               type="text"

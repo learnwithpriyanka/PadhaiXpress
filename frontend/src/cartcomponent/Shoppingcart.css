@@ -131,7 +131,7 @@
   .cart-item img {
     width: 6rem;
     height: 6rem;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
     background: #f3f4f6;
     flex-shrink: 0;
