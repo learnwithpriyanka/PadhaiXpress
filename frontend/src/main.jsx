@@ -45,6 +45,7 @@ import PrinterDashboard from './printer/PrinterDashboard';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 import ProductManager from './admin/ProductManager.jsx';
 import CouponManager from './admin/CouponManager.jsx';
+import CustomWorkbookOrders from './admin/CustomWorkbookOrders.jsx';
 import ShippingPolicy from './component/TermsOfService/ShippingPolicy.jsx';
 
 import { ToastProvider } from './components/ToastContext';
@@ -120,6 +121,11 @@ createRoot(document.getElementById('root')).render(
             <Route path='/admin-dashboard/coupons' element={
               <PrivateRoute allowedRoles={['admin']}>
                 <CouponManager />
+              </PrivateRoute>
+            } />
+            <Route path='/admin-dashboard/custom-workbooks' element={
+              <PrivateRoute allowedRoles={['admin', 'printer']}>
+                <CustomWorkbookOrders />
               </PrivateRoute>
             } />
 

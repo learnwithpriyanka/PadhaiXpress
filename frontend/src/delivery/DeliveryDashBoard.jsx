@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import { Link } from "react-router-dom";
 
 const DeliveryDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -636,7 +637,27 @@ const DeliveryDashboard = () => {
           🔄 {loading ? 'Refreshing...' : 'Refresh'}
         </button>
       </div>
-      
+
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <button 
+          onClick={() => window.open('/admin-dashboard/custom-workbooks', '_blank')}
+          style={{
+            display: 'inline-block',
+            padding: '10px 16px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontWeight: '600',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}
+        >
+          View Custom Workbook Orders (New Tab)
+        </button>
+      </div>
+
       {orders.length === 0 ? (
         <div style={styles.emptyState}>
           <div style={{fontSize: '4rem', marginBottom: '16px'}}>📦</div>

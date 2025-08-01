@@ -91,14 +91,32 @@ function Team() {
         </div>
         
         <div className="team">
+            <div className="team-member">
+            <img
+              src="media/image/prachi.jpg"
+              alt="team-member"
+              className="navnit"
+            />
+          </div>
 
            <div className="team-member-info">
+
             <h3>Prachi Kumari</h3>
             <p><b>Data Collector </b></p>
           </div>
+        
+
+          
+        </div> 
+          <div className="team">
+
+           <div className="team-member-info">
+            <h3>Sayani Datta</h3>
+            <p><b>PR Head  </b></p>
+          </div>
           <div className="team-member">
             <img
-              src="media/image/prachi.jpg"
+              src="media/image/sayani.jpg"
               alt="team-member"
               className="navnit"
             />

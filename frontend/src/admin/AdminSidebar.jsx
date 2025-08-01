@@ -5,6 +5,7 @@ const links = [
   { to: '/admin-dashboard', label: 'Dashboard' },
   { to: '/admin-dashboard/product-manager', label: 'Products' },
   { to: '/admin-dashboard/coupons', label: 'Coupons' },
+  { to: '/admin-dashboard/custom-workbooks', label: 'Custom Workbooks' },
 ];
 
 export default function AdminSidebar() {
@@ -26,4 +27,4 @@ export default function AdminSidebar() {
       </nav>
     </aside>
   );
-} 
+}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import './PrinterDashboard.css';
 import { createClient } from '@supabase/supabase-js';
+import { Link } from 'react-router-dom';
 
 const PrinterDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -245,6 +246,24 @@ const PrinterDashboard = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>🖨️ Printer Dashboard</div>
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <Link 
+          to="/admin-dashboard/custom-workbooks" 
+          style={{
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontWeight: '600',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          View Custom Workbook Orders
+        </Link>
+      </div>
       {orders.length === 0 ? (
         <div style={styles.emptyState}>
           <div style={{fontSize: '4rem', marginBottom: '16px'}}>📦</div>
