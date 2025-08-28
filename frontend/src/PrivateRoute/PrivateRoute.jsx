@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { Navigate, useLocation } from 'react-router-dom';
 
-const PrivateRoute = ({ children, allowedRoles = [] }) => {
-  const [loading, setLoading] = useState(true);
-  const [isAllowed, setIsAllowed] = useState(false);
+const PrivateRoute = ({ allowedRoles, children }) => {
+  const [isAllowed, setIsAllowed] = useState(null); // null = loading, false = not allowed, true = allowed
+  const location = useLocation();
 
   useEffect(() => {
-    const checkRole = async () => {
+    const checkAccess = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         setIsAllowed(false);
-        setLoading(false);
         return;
       }
       const { data, error } = await supabase
@@ -19,19 +18,27 @@ const PrivateRoute = ({ children, allowedRoles = [] }) => {
         .select('role')
         .eq('id', user.id)
         .single();
-      if (error || !data || !data.role) {
-        setIsAllowed(false);
+      if (!error && data && allowedRoles.includes(data.role)) {
+        setIsAllowed(true);
       } else {
-        setIsAllowed(Array.isArray(allowedRoles) && allowedRoles.includes(data.role));
+        setIsAllowed(false);
       }
-      setLoading(false);
     };
-    checkRole();
+    checkAccess();
   }, [allowedRoles]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!isAllowed) return <Navigate to="/signin" replace />;
+  if (isAllowed === null) {
+    return <div>Loading...</div>;
+  }
+  if (!isAllowed) {
+    // If not logged in, redirect to signin. If logged in but not allowed, redirect to home.
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return <Navigate to="/signin" state={{ from: location }} replace />;
+    }
+    return <Navigate to="/" replace />;
+  }
   return children;
 };
 
-export default PrivateRoute;
+export default PrivateRoute; 

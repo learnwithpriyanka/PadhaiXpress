@@ -21,7 +21,7 @@ function Team() {
             <p><b>Project Manager
             & Developer</b></p>
            
-            <a href="https://www.linkedin.com/in/priyanka-kumari-7b1b3b1b3/"> Linkedin<i className="fa-brands fa-linkedin"></i></a>
+            <a href="https://www.linkedin.com/in/priyanka-kumari-b91791341/"> Linkedin<i class="fa-brands fa-linkedin"></i></a>
             
              <a href="https://github.com/learnwithpriyanka">Github <i className="fa-brands fa-github"></i></a>
           </div>
@@ -71,6 +71,7 @@ function Team() {
             <a href="https://youtube.com/@collegelife_ricky?si=GovVNMgB8Gytc4TI">Youtube<i className="fa-brands fa-youtube"></i></a>
           </div>
         </div>
+        
 
         <div className="team">
 
@@ -81,6 +82,41 @@ function Team() {
           <div className="team-member">
             <img
               src="media/image/abhishek.jpg"
+              alt="team-member"
+              className="navnit"
+            />
+          </div>
+
+          
+        </div>
+        
+        <div className="team">
+            <div className="team-member">
+            <img
+              src="media/image/prachi.jpg"
+              alt="team-member"
+              className="navnit"
+            />
+          </div>
+
+           <div className="team-member-info">
+
+            <h3>Prachi Kumari</h3>
+            <p><b>Data Collector </b></p>
+          </div>
+        
+
+          
+        </div> 
+          <div className="team">
+
+           <div className="team-member-info">
+            <h3>Sayani Datta</h3>
+            <p><b>PR Head  </b></p>
+          </div>
+          <div className="team-member">
+            <img
+              src="media/image/sayani.jpg"
               alt="team-member"
               className="navnit"
             />

@@ -58,7 +58,7 @@ export const CartProvider = ({ children }) => {
       
       if (!user) {
         console.log('No user found, redirecting to sign in');
-        window.location.href = '/signin';
+        window.location.replace('/signin'); // Use replace for robust redirect
         return;
       }
       

@@ -1,0 +1,196 @@
+/* PrinterDashboard.css */
+
+.printer-dashboard-root {
+  max-width: 1100px;
+  margin: 40px auto 0 auto;
+  padding: 24px;
+  background: #f8fafc;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+.printer-dashboard-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.printer-dashboard-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.printer-dashboard-subtitle {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.printer-dashboard-orders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+}
+
+.printer-order-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 28px 24px 20px 24px;
+  min-width: 320px;
+  max-width: 370px;
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.2s;
+}
+
+.printer-order-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+}
+
+.printer-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.printer-order-id {
+  font-weight: 600;
+  color: #2563eb;
+  font-size: 1.1rem;
+}
+
+.printer-order-status {
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 0.95rem;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.printer-order-items {
+  margin-bottom: 18px;
+}
+
+.printer-order-items h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.05rem;
+  color: #475569;
+}
+
+.printer-order-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.printer-item-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.printer-item-value {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.printer-order-btn {
+  margin-top: 10px;
+  padding: 10px 0;
+  background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.printer-order-btn:hover {
+  background: linear-gradient(90deg, #1d4ed8 0%, #38bdf8 100%);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.13);
+}
+
+.printer-dashboard-empty {
+  width: 100%;
+  text-align: center;
+  color: #64748b;
+  font-size: 1.2rem;
+  padding: 40px 0;
+  background: #f1f5f9;
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.printer-product-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  background: #f3f6fa;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-left: 8px;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 4px rgba(37,99,235,0.04);
+}
+
+.printer-product-name {
+  color: #0e1726;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.printer-product-code {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.98rem;
+  background: #e0e7ef;
+  border-radius: 5px;
+  padding: 2px 8px;
+  margin-left: 2px;
+}
+
+@media (max-width: 900px) {
+  .printer-dashboard-orders {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .printer-order-card {
+    min-width: 90vw;
+    max-width: 98vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .printer-dashboard-root {
+    padding: 8px;
+  }
+  .printer-dashboard-header h2 {
+    font-size: 1.3rem;
+  }
+  .printer-dashboard-subtitle {
+    font-size: 0.98rem;
+  }
+  .printer-order-card {
+    padding: 16px 8px 12px 8px;
+  }
+  .printer-product-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px 0;
+    padding: 6px 8px;
+  }
+} 

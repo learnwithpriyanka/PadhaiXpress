@@ -40,7 +40,10 @@ const AdminDashboard = () => {
     setError('');
     const { data, error } = await supabase
       .from('orders')
-      .select('*, order_items(*, product:product_id(*))')
+      .select(`*, 
+        order_items(*, product:product_id(*)),
+        delivered_by_user:delivered_by (name, email)
+      `)
       .order('created_at', { ascending: false });
     if (error) setError('Failed to fetch orders');
     setOrders(data || []);
@@ -199,13 +202,14 @@ const AdminDashboard = () => {
 
   const getPaymentStatusText = (order) => {
     if (order.payment_method === 'cod') {
-      return `Cash on Delivery - Pay ₹${order.total} on delivery`;
+      return `Cash on Delivery - Pay ₹${order.total.toFixed(2)} on delivery`;
     } else if (order.payment_method === 'online') {
       return 'Online Payment - Paid';
     } else {
       // For orders without payment_method, we can't determine payment type
       // So we'll show a generic message
-      return 'Payment Method: Not specified';
+      // return 'Payment Method: Not specified';
+     return  `Cash on Delivery - Pay ₹${order.total.toFixed(2)} on delivery`;
     }
   };
 
@@ -217,6 +221,15 @@ const AdminDashboard = () => {
     } else {
       return '#6b7280'; // Gray for unspecified
     }
+  };
+  const calculateItemPrice = (item) => {
+    const perPagePrice = Number(item.product?.per_page_price) || 0;
+    const pages = Number(item.product?.pages) || 0;
+    const doublePrice = perPagePrice * pages;
+    if (item.page_type === 'single') {
+      return (doublePrice * 1.1)+60;
+    }
+    return (doublePrice * .66)+60;
   };
 
   if (loading) {
@@ -252,231 +265,251 @@ const AdminDashboard = () => {
     <div style={{ display: 'flex' }}>
       <AdminSidebar />
       <div style={{ marginLeft: 220, width: '100%' }}>
-        {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerContent}>
-            <div>
-              <div className={styles.title}>Admin Dashboard</div>
-              <div className={styles.subtitle}>Manage and track all orders</div>
-            </div>
-
-            <div className={styles.totalOrders}>
-              <Link to="/admin-dashboard/product-manager">Product Manager</Link>
-            </div>
-            <div className={styles.totalOrders}>Total Orders: {orders.length}</div>
+      {/* Header */}
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <div>
+            <div className={styles.title}>Admin Dashboard</div>
+            <div className={styles.subtitle}>Manage and track all orders</div>
           </div>
-        </div>
-        {/* Main Content */}
-        <div className={styles.mainContent}>
-          {orders.length > 0 ? (
-            orders.map(order => (
-              <div key={order.id} className={styles.orderCard}>
-                {/* Order Header */}
-                <div className={styles.orderHeader}>
-                  <div className={styles.orderMeta}>
-                    <div className={styles.orderId}>Order #{order.id}</div>
-                    <div className={styles.orderInfo}>
-                      <span><Calendar style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {new Date(order.created_at).toLocaleDateString()}</span>
-                      <span><IndianRupee style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {order.total}</span>
-                      <span><Clock style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {order.delivery_time ? new Date(order.delivery_time).toLocaleString() : 'TBD'}</span>
-                    </div>
-                    {/* Payment Status */}
-                    <div style={{ 
-                      marginTop: '8px',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '0.9rem',
-                      fontWeight: '600',
-                      backgroundColor: getPaymentStatusColor(order) === '#f59e0b' ? '#fef3c7' : 
-                                     getPaymentStatusColor(order) === '#10b981' ? '#d1fae5' : '#f3f4f6',
-                      color: getPaymentStatusColor(order),
-                      display: 'inline-block'
-                    }}>
-                      {getPaymentStatusText(order)}
-                    </div>
-                  </div>
-                  <div>
-                    <span className={getStatusBadgeClass(order.status)}>{order.status}</span>
-                  </div>
-                  <button onClick={() => handleViewDetails(order.id)} className={styles.viewDetailsBtn}>
-                    <Eye style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> View Details
-                  </button>
-                </div>
 
-                {/* Delivery Address Section */}
-                {order.address && (
+          <div className={styles.totalOrders}>
+            <Link to="/admin-dashboard/product-manager">Product Manager</Link>
+          </div>
+          <div className={styles.totalOrders}>Total Orders: {orders.length}</div>
+        </div>
+      </div>
+      {/* Main Content */}
+      <div className={styles.mainContent}>
+        {orders.length > 0 ? (
+          orders.map(order => (
+            <div key={order.id} className={styles.orderCard}>
+              {/* Order Header */}
+              <div className={styles.orderHeader}>
+                <div className={styles.orderMeta}>
+                  <div className={styles.orderId}>Order #{order.id}</div>
+                  <div className={styles.orderInfo}>
+                    <span><Calendar style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {new Date(order.created_at).toLocaleDateString()}</span>
+                    <span><IndianRupee style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {order.total}</span>
+                    <span><Clock style={{width:16,height:16,marginRight:4,verticalAlign:'middle'}} /> {order.delivery_time ? new Date(order.delivery_time).toLocaleString() : 'TBD'}</span>
+                  </div>
+                  {/* Payment Status */}
+                  <div style={{ 
+                    marginTop: '8px',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    backgroundColor: getPaymentStatusColor(order) === '#f59e0b' ? '#fef3c7' : 
+                                   getPaymentStatusColor(order) === '#10b981' ? '#d1fae5' : '#f3f4f6',
+                    color: getPaymentStatusColor(order),
+                    display: 'inline-block'
+                  }}>
+                    {getPaymentStatusText(order)}
+                  </div>
+                </div>
+                <div>
+                  <span className={getStatusBadgeClass(order.status)}>{order.status}</span>
+                </div>
+                <button onClick={() => handleViewDetails(order.id)} className={styles.viewDetailsBtn}>
+                  <Eye style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> View Details
+                </button>
+              </div>
+
+              {/* Delivery Info Section */}
+              {order.delivered_by_user && (
+                <div style={{
+                  background: '#e0f2fe',
+                  border: '1px solid #bae6fd',
+                  borderRadius: '8px',
+                  padding: '10px 16px',
+                  margin: '12px 0',
+                  fontWeight: 500,
+                  color: '#0369a1',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  fontSize: '0.98rem'
+                }}>
+                  <span style={{fontWeight:600}}>Delivered By:</span>
+                  <span>{order.delivered_by_user.name} ({order.delivered_by_user.email})</span>
+                </div>
+              )}
+
+              {/* Delivery Address Section */}
+              {order.address && (
+                <div style={{
+                  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  margin: '16px 0',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
                   <div style={{
-                    background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '12px',
-                    padding: '16px',
-                    margin: '16px 0',
-                    position: 'relative',
-                    overflow: 'hidden'
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '4px',
+                    height: '100%',
+                    background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)'
+                  }}></div>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px'
                   }}>
                     <div style={{
-                      position: 'absolute',
-                      top: '0',
-                      left: '0',
-                      width: '4px',
-                      height: '100%',
-                      background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)'
-                    }}></div>
-                    <div style={{
+                      background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)',
+                      color: 'white',
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
                       display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '12px'
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      boxShadow: '0 2px 8px rgba(234, 88, 12, 0.3)'
                     }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                      </svg>
+                    </div>
+                    <div style={{ flex: 1 }}>
                       <div style={{
-                        background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)',
-                        color: 'white',
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#374151',
+                        marginBottom: '4px',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        boxShadow: '0 2px 8px rgba(234, 88, 12, 0.3)'
+                        gap: '6px'
                       }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                          <circle cx="12" cy="10" r="3"/>
-                        </svg>
+                        <span>📍</span>
+                        Delivery Address
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '600',
-                          color: '#374151',
-                          marginBottom: '4px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px'
-                        }}>
-                          <span>📍</span>
-                          Delivery Address
-                        </div>
-                        <div style={{
-                          fontSize: '0.875rem',
-                          color: '#4b5563',
-                          lineHeight: '1.5',
-                          whiteSpace: 'pre-line',
-                          fontFamily: 'monospace',
-                          background: 'white',
-                          padding: '8px 12px',
-                          borderRadius: '6px',
-                          border: '1px solid #e5e7eb',
-                          marginTop: '4px'
-                        }}>
-                          {order.address}
-                        </div>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: '#4b5563',
+                        lineHeight: '1.5',
+                        whiteSpace: 'pre-line',
+                        fontFamily: 'monospace',
+                        background: 'white',
+                        padding: '8px 12px',
+                        borderRadius: '6px',
+                        border: '1px solid #e5e7eb',
+                        marginTop: '4px'
+                      }}>
+                        {order.address}
                       </div>
                     </div>
                   </div>
-                )}
-
-                {/* Progress Bar */}
-                <div className={styles.progressBarSection}>
-                  <OrderStatusProgressBar status={order.status} />
                 </div>
-                {/* Order Items */}
-                <div className={styles.productList}>
-                  <div className={styles.productListTitle}><ShoppingCart style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> Order Items</div>
-                  <div className={styles.productsGrid}>
-                    {order.order_items && order.order_items.map((item) => (
-                      <div key={item.id} className={styles.productCard}>
-                        <img 
-                          src={item.product?.image} 
-                          alt={item.product?.name}
-                          className={styles.productImage}
-                        />
-                        <div className={styles.productDetails}>
-                          <div className={styles.productName}>{item.product?.name}</div>
-                          <div className={styles.productMeta}>
-                            <span>Code: <span style={{fontWeight:500}}>{item.product?.code}</span></span>
-                            <span>Base Price: <span style={{fontWeight:500}}>₹{item.product?.price}</span></span>
-                            <span>Pages: <span style={{fontWeight:500}}>{item.product?.pages}</span></span>
-                            <span>Print Type: <span style={{fontWeight:500}}>{item.page_type === 'single' ? 'Single Side' : 'Double Side'}</span></span>
-                          </div>
-                        </div>
-                        <div>
-                          <div className={styles.productQty}>Qty: {item.quantity}</div>
-                          <div className={styles.productTotal}>₹{(Number(item.product?.price) * item.quantity).toFixed(2)}</div>
+              )}
+
+              {/* Progress Bar */}
+              <div className={styles.progressBarSection}>
+                <OrderStatusProgressBar status={order.status} />
+              </div>
+              {/* Order Items */}
+              <div className={styles.productList}>
+                <div className={styles.productListTitle}><ShoppingCart style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> Order Items</div>
+                <div className={styles.productsGrid}>
+                  {order.order_items && order.order_items.map((item) => (
+                    <div key={item.id} className={styles.productCard}>
+                      <img 
+                        src={item.product?.images} 
+                        alt={item.product?.name}
+                        className={styles.productImage}
+                      />
+                      <div className={styles.productDetails}>
+                        <div className={styles.productName}>{item.product?.name}</div>
+                        <div className={styles.productMeta}>
+                          <span>Code: <span style={{fontWeight:500}}>{item.product?.code}</span></span>
+                          <span>Base Price: <span style={{fontWeight:500}}>₹{calculateItemPrice(item)}</span></span>
+                          <span>Pages: <span style={{fontWeight:500}}>{item.product?.pages}</span></span>
+                          <span>Print Type: <span style={{fontWeight:500}}>{item.page_type === 'single' ? 'Single Side' : 'Double Side'}</span></span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      <div>
+                        <div className={styles.productQty}>Qty: {item.quantity}</div>
+                        <div className={styles.productTotal}>₹{(Number(calculateItemPrice(item)) * item.quantity ).toFixed(2)}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                {/* Order Actions */}
-                <div className={styles.orderActions}>
-                  <div className={styles.actionGroup}>
-                    <label>Status:</label>
-                    <select
-                      value={order.status}
-                      onChange={e => updateOrder(order.id, { status: e.target.value })}
-                      className={styles.statusSelect}
-                    >
-                      {statusOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt.replace('-', ' ')}</option>
-                      ))}
-                    </select>
-                    <label>Delivery Time:</label>
-                    <input
-                      type="datetime-local"
-                      value={order.delivery_time ? new Date(order.delivery_time).toISOString().slice(0,16) : ''}
-                      onChange={e => updateOrder(order.id, { delivery_time: e.target.value })}
-                      className={styles.deliveryInput}
-                    />
-                  </div>
-                  <button 
-                    onClick={() => {
-                      console.log('Delete button clicked for order:', order.id);
-                      if (window.confirm(`Delete Order #${order.id}?`)) {
-                        deleteOrder(order.id);
-                      }
-                    }} 
-                    className={styles.deleteBtn}
-                    disabled={deletingOrderId === order.id}
-                    style={{
-                      opacity: deletingOrderId === order.id ? 0.6 : 1,
-                      cursor: deletingOrderId === order.id ? 'not-allowed' : 'pointer'
-                    }}
+              </div>
+              {/* Order Actions */}
+              <div className={styles.orderActions}>
+                <div className={styles.actionGroup}>
+                  <label>Status:</label>
+                  <select
+                    value={order.status}
+                    onChange={e => updateOrder(order.id, { status: e.target.value })}
+                    className={styles.statusSelect}
                   >
-                    {deletingOrderId === order.id ? (
-                      <>
-                        <div style={{
-                          width: 16,
-                          height: 16,
-                          border: '2px solid #fff',
-                          borderTop: '2px solid transparent',
-                          borderRadius: '50%',
-                          animation: 'spin 1s linear infinite',
-                          display: 'inline-block',
-                          marginRight: 6
-                        }}></div>
-                        Deleting...
-                      </>
-                    ) : (
-                      <>
-                        <Trash2 style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> 
-                        Delete Order
-                      </>
-                    )}
-                  </button>
+                    {statusOptions.map(opt => (
+                      <option key={opt} value={opt}>{opt.replace('-', ' ')}</option>
+                    ))}
+                  </select>
+                  <label>Delivery Time:</label>
+                  <input
+                    type="datetime-local"
+                    value={order.delivery_time ? new Date(order.delivery_time).toISOString().slice(0,16) : ''}
+                    onChange={e => updateOrder(order.id, { delivery_time: e.target.value })}
+                    className={styles.deliveryInput}
+                  />
                 </div>
+                <button 
+                  onClick={() => {
+                    console.log('Delete button clicked for order:', order.id);
+                    if (window.confirm(`Delete Order #${order.id}?`)) {
+                        deleteOrder(order.id);
+                    }
+                  }} 
+                  className={styles.deleteBtn}
+                  disabled={deletingOrderId === order.id}
+                  style={{
+                    opacity: deletingOrderId === order.id ? 0.6 : 1,
+                    cursor: deletingOrderId === order.id ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {deletingOrderId === order.id ? (
+                    <>
+                      <div style={{
+                        width: 16,
+                        height: 16,
+                        border: '2px solid #fff',
+                        borderTop: '2px solid transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite',
+                        display: 'inline-block',
+                        marginRight: 6
+                      }}></div>
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 style={{width:18,height:18,marginRight:6,verticalAlign:'middle'}} /> 
+                      Delete Order
+                    </>
+                  )}
+                </button>
               </div>
-            ))
-          ) : (
-            <div style={{textAlign:'center',padding:'48px 0'}}>
-              <div style={{margin:'0 auto',width:96,height:96,color:'#a3a3a3'}}>
-                <Package style={{width:'100%',height:'100%'}} />
-              </div>
-              <h3 style={{marginTop:16,fontSize:20,fontWeight:600,color:'#22223b'}}>No orders found</h3>
-              <p style={{marginTop:8,color:'#666'}}>Orders will appear here once customers start placing them.</p>
             </div>
-          )}
-        </div>
+          ))
+        ) : (
+          <div style={{textAlign:'center',padding:'48px 0'}}>
+            <div style={{margin:'0 auto',width:96,height:96,color:'#a3a3a3'}}>
+              <Package style={{width:'100%',height:'100%'}} />
+            </div>
+            <h3 style={{marginTop:16,fontSize:20,fontWeight:600,color:'#22223b'}}>No orders found</h3>
+            <p style={{marginTop:8,color:'#666'}}>Orders will appear here once customers start placing them.</p>
+          </div>
+        )}
+      </div>
       </div>
     </div>
   );

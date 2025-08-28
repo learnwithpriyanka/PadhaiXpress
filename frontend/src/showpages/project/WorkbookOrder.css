@@ -1,0 +1,231 @@
+.workbook-order-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.workbook-order-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    padding: 2rem;
+}
+
+.steps-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.steps-indicator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e0e0e0;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.step {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+.step-content {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.step-description {
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.security-note {
+    margin-bottom: 1.5rem;
+    color: #4CAF50;
+    font-size: 0.9rem;
+}
+
+.file-upload-container {
+    margin-bottom: 1.5rem;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border: 1px dashed #ccc;
+}
+
+.file-upload-label:hover {
+    background: #e0e0e0;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-selected {
+    display: inline-block;
+    margin-left: 10px;
+    color: #4CAF50;
+}
+
+.error-message {
+    color: #f44336;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.payment-options {
+    margin-bottom: 2rem;
+}
+
+.payment-option {
+    display: block;
+    margin-bottom: 1rem;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+    border-color: #4CAF50;
+}
+
+.payment-option input {
+    margin-right: 10px;
+}
+
+.payment-option-content {
+    display: flex;
+    align-items: center;
+}
+
+.payment-icon {
+    margin-right: 10px;
+    font-style: normal;
+    font-size: 1.2rem;
+}
+
+.payment-option.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.step-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.back-button,
+.next-button,
+.place-order-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.back-button {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.back-button:hover {
+    background: #e0e0e0;
+}
+
+.next-button {
+    background: #2196F3;
+    color: white;
+}
+
+.next-button:hover {
+    background: #0b7dda;
+}
+
+.place-order-button {
+    background: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+}
+
+.place-order-button:hover {
+    background: #45a049;
+}

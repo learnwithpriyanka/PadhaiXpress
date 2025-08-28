@@ -393,13 +393,14 @@ textarea.form-input {
 /* Price details styles */
 .price-details {
   position: sticky;
-  top: 20px;
+  top: 15px;
+  margin-top: 10px;
 }
 
 .price-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: -2px !important;
   color: #333;
   font-size: 14px;
 }
@@ -408,8 +409,8 @@ textarea.form-input {
   font-size: 18px;
   font-weight: bold;
   border-top: 1px solid #eee;
-  margin-top: 15px;
-  padding-top: 15px;
+  margin-top: 5px;
+  padding-top: 5px;
 }
 
 .savings-message {
@@ -432,7 +433,7 @@ textarea.form-input {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .place-order:hover {

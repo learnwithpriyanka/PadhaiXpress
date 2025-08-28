@@ -6,13 +6,18 @@ const RealTimeNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [user, setUser] = useState(null);
 
+  // Always keep user state in sync with Supabase auth
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
     };
-
     fetchUser();
+    // Subscribe to auth state changes
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => { listener?.unsubscribe(); };
   }, []);
 
   useEffect(() => {
@@ -106,7 +111,7 @@ const RealTimeNotifications = () => {
             .single();
           
           const newNotification = {
-            id: Date.now(),
+            id: Date.now() + Math.random(), // Ensure unique id for each notification
             type: 'cart_add',
             message: `${product?.name || 'Item'} added to cart`,
             timestamp: new Date(),

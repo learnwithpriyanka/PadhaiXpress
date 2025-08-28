@@ -1,231 +1,275 @@
+
 import React, { useState } from "react";
 import "./contact.css";
-import MapComponent from "./MapComponent";
-import { FaCommentDots, FaPhoneAlt, FaInstagram, FaPaperPlane, FaTelegramPlane } from "react-icons/fa";
+import { MessageCircle, Phone, Instagram, Send, MapPin, Mail } from "lucide-react";
 
-const ContactPage = () => {
+const ContactMe = () => {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [success, setSuccess] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
     // Simple validation
     if (!form.name || !form.email || !form.subject || !form.message) {
       setSuccess("Please fill all fields.");
+      setIsSubmitting(false);
       return;
     }
-    setSuccess("Thank you for contacting us!");
-    setForm({ name: "", email: "", subject: "", message: "" });
-    setTimeout(() => setSuccess(""), 3000);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setSuccess("Thank you for contacting us! We'll get back to you soon.");
+      setForm({ name: "", email: "", subject: "", message: "" });
+      setIsSubmitting(false);
+      setTimeout(() => setSuccess(""), 5000);
+    }, 1000);
   };
 
   return (
-    <>
-      <div className="c" style={{ minHeight: "100vh", padding: "0 8px" }}>
-        <div
-          className="contac"
-          style={{
-            maxWidth: "1200px",
-            margin: "0 ",
-            padding: " 0",
-          }}
-        >
-          <div className="image" style={{ textAlign: "center", marginBottom: "32px" }}>
-            <h1
-              style={{
-                fontSize: "clamp(2rem, 6vw, 60px)",
-                fontWeight: "bold",
-                color: "#2D5F9A",
-                marginBottom: "12px",
-                lineHeight: 1.1,
-              }}
-            >
-              Get in touch
-            </h1>
-            <p style={{ fontSize: "clamp(1.1rem, 3vw, 30px)", color: "#444" }}>
-              Have questions? We'd love to hear from you.
-            </p>
-          </div>
+    <div className="contactme-root contact-page">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">Get in Touch</h1>
+          <p className="hero-subtitle">
+            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          </p>
+        </div>
+        <div className="hero-overlay"></div>
+      </section>
 
-          {/* Cards Section */}
-          <div
-            className="row p-5 contact-card-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "32px",
-              justifyItems: "center",
-              alignItems: "stretch",
-              width: "100%",
-              margin: "0 auto",
-              padding: 0,
-              maxWidth: "1200px",
-            }}
-          >
+      <div className="container">
+        {/* Contact Cards Grid */}
+        <section className="contact-cards-section">
+          <div className="contact-cards-grid">
             {/* Feedback Card */}
-            <div
-              className="card1 col-3 p-5"
+            <div 
+              className="contact-card"
               onClick={() =>
                 window.open(
                   "https://docs.google.com/forms/d/e/1FAIpQLScKnuChJGLO1KfBc641A6G0R6fa7u0ISEviIo5u6Ufjqi4pkg/viewform?usp=headero",
                   "_blank"
                 )
               }
-              style={{ cursor: "pointer" }}
+              role="button"
               tabIndex={0}
               aria-label="Feedback"
             >
-              <FaCommentDots size={60} color="#2D5F9A" style={{ marginLeft: "30px" }} />
-              <h4>Feedback</h4>
+              <div className="card-icon">
+                <MessageCircle />
+              </div>
+              <h3>Feedback</h3>
+              <p>Share your thoughts with us</p>
             </div>
 
             {/* Contact Card */}
-            <div className="card1 col-3 p-5">
+            <div className="contact-card">
               <a
                 href="tel:+917667761697"
-                style={{ color: "#2D5F9A", textDecoration: "none" }}
+                className="card-link"
                 aria-label="Call us"
               >
-                <FaPhoneAlt size={60} color="#2D5F9A" style={{ marginLeft: "30px" }} />
-                <h4>Contact us</h4>
-                <p style={{ color: "black" }}>+91 7667761697</p>
+                <div className="card-icon">
+                  <Phone />
+                </div>
+                <h3>Call Us</h3>
+                <p>+91 7667761697</p>
+              </a>
+            </div>
+
+            {/* Email Card */}
+            <div className="contact-card">
+              <a
+                href="mailto:support@padhaixpress.in"
+                className="card-link"
+                aria-label="Email us"
+              >
+                <div className="card-icon">
+                  <Mail />
+                </div>
+                <h3>Email Us</h3>
+                <p>support@padhaixpress.in</p>
               </a>
             </div>
 
             {/* Telegram Card */}
-            <div className="card1 col-3 p-5">
+            <div className="contact-card">
               <a
-                href="https://t.me/padhaiexpress1122" // <-- Replace with your actual Telegram link
+                href="https://t.me/padhaiexpress1122"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#2D5F9A", textDecoration: "none" }}
+                className="card-link"
                 aria-label="Telegram"
               >
-                <FaTelegramPlane size={60} style={{ marginLeft: "30px" }} />
-                <h4>Telegram</h4>
-                <p style={{ color: "black" }}>Join our channel</p>
+                <div className="card-icon telegram">
+                  <Send />
+                </div>
+                <h3>Telegram</h3>
+                <p>Join our channel</p>
               </a>
             </div>
 
             {/* Instagram Card */}
             <div
-              className="card1 col-3 p-5"
+              className="contact-card"
               onClick={() =>
                 window.open(
                   "https://www.instagram.com/padhai_xpress?igsh=MWtpNDU2cDE1cTBnNw==",
                   "_blank"
                 )
               }
-              style={{ cursor: "pointer" }}
+              role="button"
               tabIndex={0}
               aria-label="Instagram"
             >
-              <FaInstagram size={60} color="#E4405F" style={{ marginLeft: "30px" }} />
-              <h4>Instagram</h4>
-              <p style={{ color: "black" }}>See our Instagram</p>
-            </div>
-          </div>
-
-          <div
-            className="address-map-row"
-            style={{
-              display: "flex",
-              width: "100%",
-              marginTop: "40px",
-              alignItems: "stretch",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            {/* Address Card */}
-            <div
-              className="card1 address-card"
-              style={{
-                flex: "1 1 320px",
-                minWidth: "260px",
-                maxWidth: "600px",
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "rgba(255,255,255,0.95)",
-                boxShadow: "0 8px 32px rgba(44,95,154,0.10)",
-                border: "2px solid #2D5F9A",
-                borderRadius: "32px",
-                padding: "32px 12px",
-                margin: "10px auto",
-              }}
-              tabIndex={0}
-              aria-label="Office Address"
-            >
-              <h2
-                style={{
-                  marginBottom: "18px",
-                  color: "#2D5F9A",
-                  width: "100%",
-                  textAlign: "center",
-                  fontSize: "clamp(1.3rem, 4vw, 2rem)",
-                  fontWeight: "700",
-                  letterSpacing: "1px",
-                  marginTop: "20px",
-                }}
-              >
-                Our Address
-              </h2>
-              <div
-                style={{
-                  color: "#222",
-                  fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
-                  lineHeight: "2",
-                  textAlign: "center",
-                  width: "100%",
-                  wordBreak: "break-word",
-                  marginBottom: "24px",
-                }}
-              >
-                <strong style={{ fontSize: "1.1em", color: "#2D5F9A" }}>PadhaiXpress Office</strong>
-                <br />
-                Kolanukonda, near Ambedkar Statue, EVS Clueave,  
-Guntur,  
-Mangalagiri - 522503,  
-Andhra Pradesh,
-                
-                India
+              <div className="card-icon instagram">
+                <Instagram />
               </div>
-              <a
-               href="https://maps.google.com/?q=Kolanukonda, near Ambedkar Statue, EVS Clueave, Guntur, Mangalagiri - 522503, Andhra Pradesh" target="_blank"
-                
-                rel="noopener noreferrer"
-                style={{
-                  marginTop: "0",
-                  marginBottom: "18px",
-                  color: "#fff",
-                  background: "#2D5F9A",
-                  padding: "10px 24px",
-                  borderRadius: "24px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                  fontSize: "clamp(1rem, 2vw, 1.15rem)",
-                  boxShadow: "0 2px 8px rgba(44,95,154,0.10)",
-                  width: "fit-content",
-                  alignSelf: "center",
-                  transition: "background 0.2s, transform 0.2s",
-                  display: "inline-block",
-                }}
-              >
-                View on Map
-              </a>
+              <h3>Instagram</h3>
+              <p>Follow us on Instagram</p>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Main Content Section */}
+        <section className="main-content">
+          <div className="content-grid">
+            {/* Contact Form */}
+            <div className="form-section">
+              <div className="form-header">
+                <h2>Send us a Message</h2>
+                <p>Fill out the form below and we'll get back to you .</p>
+              </div>
+              
+              <form onSubmit={handleSubmit} className="contact-form">
+                <div className="form-group">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="subject">Subject</label>
+                  <input
+                    type="text"
+                    id="subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                    placeholder="What's this about?"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="message">Message</label>
+                  <textarea
+                    id="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="Tell us more about your inquiry..."
+                    rows={6}
+                    required
+                  />
+                </div>
+
+                <button 
+                  type="submit" 
+                  className={`submit-btn ${isSubmitting ? 'loading' : ''}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </button>
+
+                {success && (
+                  <div className={`success-message ${success.includes('Please') ? 'error' : ''}`}>
+                    {success}
+                  </div>
+                )}
+              </form>
+            </div>
+
+            {/* Address and Map Section */}
+            <div className="address-section">
+              <div className="address-card">
+                <div className="address-header">
+                  <div className="address-icon">
+                    <MapPin />
+                  </div>
+                  <h2>Our Office</h2>
+                </div>
+                
+                <div className="address-content">
+                  <h3>PadhaiXpress Office</h3>
+                  <p>
+                    Kolanukonda, near Ambedkar Statue,<br/>
+                   Guntur,<br/>
+                    Mangalagiri - 522503,<br/>
+                    Andhra Pradesh, India
+                  </p>
+                  
+                  <div className="address-actions">
+                                        <a
+                      href="https://maps.google.com/maps?q=Kalinga%20University%20Naya%20Raipur&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="map-btn"
+                    >
+                      <MapPin />
+                      View on Map
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Office Hours */}
+              <div className="office-hours">
+                <h3>Office Hours</h3>
+                <div className="hours-grid">
+                  <div className="hour-item">
+                    <span className="day">Monday - Friday</span>
+                    <span className="time">9:00 AM - 6:00 PM</span>
+                  </div>
+                  <div className="hour-item">
+                    <span className="day">Saturday</span>
+                    <span className="time">10:00 AM - 4:00 PM</span>
+                  </div>
+                  <div className="hour-item">
+                    <span className="day">Sunday</span>
+                    <span className="time">Closed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ContactPage;
+export default ContactMe;

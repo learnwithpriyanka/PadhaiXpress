@@ -34,10 +34,6 @@ function SignIn() {
         localStorage.setItem("token", data.session.access_token);
         login(data.session.access_token);
         setMessage("Login successful!");
-        const from = location.state?.from || "/";
-        setTimeout(() => {
-          navigate(from);
-        }, 1500);
 
         // 2. Get user ID
         const userId = data.user.id;
@@ -54,14 +50,8 @@ function SignIn() {
           return;
         }
 
-        // 4. Redirect based on role
-        if (userData.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (userData.role === 'printer') {
-          navigate('/printer-dashboard');
-        } else {
-          navigate('/'); // or user dashboard/home
-        }
+        // 4. Redirect logic: prioritize previous page
+        navigate(location.state?.from || "/", { replace: true });
       }
     } catch (err) {
       setMessage("An error occurred. Please try again.");

@@ -26,16 +26,17 @@ const ShoppingCart = () => {
     const pages = Number(item.product?.pages) || 0;
     const doublePrice = perPagePrice * pages;
     if (item.page_type === 'single') {
-      return (doublePrice * 2)+50;
+      return ((doublePrice * 1.1)+ 60).toFixed(2);
     }
-    return doublePrice+50;
+    return ((doublePrice*0.66)+60).toFixed(2);
   };
 
   const total = cart.reduce((acc, item) =>
     acc + (calculateItemPrice(item) * item.quantity), 0
   );
 
-  const deliveryCharge = total > 500 ? 0 : 50;
+  const deliveryCharge = total > 500 ? 0 : 40
+  0;
 
   const handleBuyNow = () => {
     if (!cart.length) {
@@ -76,7 +77,7 @@ const ShoppingCart = () => {
             <h3>Your cart is empty</h3>
             <p>Start shopping to add items to your cart!</p>
             <button className="continueShopping">
-              <Link to="/workbook/year1/firstyearoddsem">
+              <Link to="/workbook">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -90,8 +91,8 @@ const ShoppingCart = () => {
             <div className="cart-items">
               {cart.map((item) => (
                 <div key={item.id} className="cart-item">
-                  <div className="cart-item-content">
-                    <img src={item.product?.image} alt={item.product?.name} />
+                  <div className="cart-item-content ">
+                    <img src={item.product?.images} alt={item.product?.name} />
                     
                     <div className="cart-item-details">
                       <h4>{item.product?.name}</h4>
@@ -193,7 +194,7 @@ const ShoppingCart = () => {
 
               <div className="buttons">
                 <button className="continueShopping">
-                  <Link to="/workbook/year1/firstyearoddsem">
+                  <Link to="/workbook">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>

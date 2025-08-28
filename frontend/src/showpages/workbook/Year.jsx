@@ -86,12 +86,12 @@ const Year = ({
                       animationDelay: `${index * 0.1}s`
                     }}
                   >
-                    <img src={wb.image} alt={wb.name} />
+                    <img src={wb.images} alt={wb.name} />
                     <h6 className="card-title">{wb.name} ({wb.code})</h6>
                     {/* Calculate and display total price using base_price and per_page_price */}
                     <p className="card-price">
                       {wb.price !== undefined 
-                        ? `Price: ₹${Number(wb.pages) + 50}`
+                        ? `Price: ₹${(Number((wb.pages)*0.66) + 60).toFixed(2)}`
                         : `Price: ₹${wb.pages}`}
                     </p>
                     <p className="card-price">

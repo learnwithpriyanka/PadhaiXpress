@@ -108,8 +108,8 @@ const OrderSuccess = () => {
         {/* Animated title */}
         <h1 className="success-title">
           <span className="title-word" style={{ animationDelay: '0.3s' }}>🎉</span>
-          <span className="title-word" style={{ animationDelay: '0.4s' }}>Order</span>
-          <span className="title-word" style={{ animationDelay: '0.5s' }}>Placed</span>
+          <span className="title-word" style={{ animationDelay: '0.4s' }}>Order&nbsp;&nbsp;</span>
+          <span className="title-word" style={{ animationDelay: '0.5s' }}>Placed&nbsp;&nbsp;</span>
           <span className="title-word" style={{ animationDelay: '0.6s' }}>Successfully!</span>
         </h1>
 

@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './component/HomePage/homepage.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Navbar from './Navbar.jsx'
 import RealTimeNotifications from './component/RealTimeNotifications.jsx'
@@ -44,12 +45,14 @@ import PrinterDashboard from './printer/PrinterDashboard';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 import ProductManager from './admin/ProductManager.jsx';
 import CouponManager from './admin/CouponManager.jsx';
+import CustomWorkbookOrders from './admin/CustomWorkbookOrders.jsx';
 import ShippingPolicy from './component/TermsOfService/ShippingPolicy.jsx';
 
 import { ToastProvider } from './components/ToastContext';
 import ScrollToTop from './components/ScrollToTop';
 import TermsandConditions from './component/TermsOfService/TermsandConditions.jsx';
 import CancellationPolicy from './component/TermsOfService/CancellationPolicy.jsx';
+import DeliveryDashboard from './delivery/DeliveryDashBoard.jsx';
 
 
 const links = [
@@ -104,7 +107,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/order-success" element={<OrderSuccess />} />
             
             <Route path='/orderdetails' element={
-              <PrivateRoute allowedRoles={['customer','admin','printer']}>
+              <PrivateRoute allowedRoles={['customer','admin','printer','delivery']}>
                 <OrderdetailPage />
               </PrivateRoute>
             }></Route>
@@ -118,6 +121,11 @@ createRoot(document.getElementById('root')).render(
             <Route path='/admin-dashboard/coupons' element={
               <PrivateRoute allowedRoles={['admin']}>
                 <CouponManager />
+              </PrivateRoute>
+            } />
+            <Route path='/admin-dashboard/custom-workbooks' element={
+              <PrivateRoute allowedRoles={['admin', 'printer']}>
+                <CustomWorkbookOrders />
               </PrivateRoute>
             } />
 
@@ -155,13 +163,16 @@ createRoot(document.getElementById('root')).render(
             />
             <Route
               path="/printer-dashboard"
+              element={<PrinterDashboard />}
+            />
+            <Route
+              path="/delivery-dash"
               element={
-                <PrivateRoute allowedRoles={['printer']}>
-                  <PrinterDashboard />
+                <PrivateRoute allowedRoles={['delivery']}>
+                  <DeliveryDashboard />
                 </PrivateRoute>
               }
             />
-
           </Routes>
             </SEOWrapper>
 
