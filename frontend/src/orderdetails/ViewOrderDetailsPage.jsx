@@ -54,6 +54,7 @@ const ViewOrderDetailsPage = () => {
         </div>
       </div>
       <OrderStatusProgressBar status={order.status} />
+      
       <div className="order-products">
         <h4>Products:</h4>
         {order.order_items.map((item) => (

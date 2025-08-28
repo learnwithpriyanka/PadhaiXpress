@@ -288,233 +288,278 @@ const OrderdetailPage = () => {
 
   return (
     <div className="order-details-container">
-      <div className="order-details-left">
-        <div className="delivery-address">
-          <h2>Delivery Address</h2>
-          <div className="form-group">
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Full Name *"
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              placeholder="Phone Number (10 digits) *"
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <textarea
-              name="streetAddress"
-              value={formData.streetAddress}
-              onChange={handleChange}
-              placeholder="Street Address *"
-              className="form-input"
-              rows="2"
-            />
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                placeholder="City *"
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                placeholder="State *"
-                className="form-input"
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <input
-                type="text"
-                name="pinCode"
-                value={formData.pinCode}
-                onChange={handleChange}
-                placeholder="PIN Code (6 digits) *"
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="text"
-                name="landmark"
-                value={formData.landmark}
-                onChange={handleChange}
-                placeholder="Landmark (Optional)"
-                className="form-input"
-              />
-            </div>
-          </div>
-          {error && <p className="error-message">{error}</p>}
+      <div className="order-details-main">
+        {/* Header */}
+        <div className="order-details-header">
+          <h1>📋 Checkout</h1>
+          <p>Complete your order details and payment</p>
         </div>
 
-        <div className="order-items">
-          <h2>Order Items ({cart.length})</h2>
-          {cart.map((item) => (
-            <div key={item.id} className="order-item">
-              <div className="item-image">
-                <img src={item.product?.images} alt={item.product?.name} />
-              </div>
-              <div className="item-details">
-                <h3>{item.product?.name}</h3>
-                <p className="item-code">Code: {item.product?.code}</p>
-                <p className="item-pages">Pages: {item.product?.pages}</p>
-                <p className="item-print-type">Print Type: {item.page_type === 'single' ? 'Single Side' : 'Double Side'}</p>
-
-                <div className="item-price-qty">
-                  <span className="quantity">Quantity: {item.quantity}</span>
-                  <span className="price">₹{calculateItemPrice(item)}</span>
+        <div className="order-details-content">
+          {/* Left Column - Form and Items */}
+          <div className="order-details-left">
+            {/* Delivery Address Section */}
+            <div className="form-section">
+              <h2>📍 Delivery Address</h2>
+              <div className="form-grid">
+                <div className="form-field">
+                  <label htmlFor="fullName">Full Name *</label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    id="fullName"
+                    className="form-input"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                  />
                 </div>
-                <p className="item-total">Item Total: ₹{(calculateItemPrice(item)* item.quantity).toFixed(2)}</p>
+                <div className="form-field">
+                  <label htmlFor="phoneNumber">Phone Number *</label>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    className="form-input"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    placeholder="10-digit mobile number"
+                  />
+                </div>
+                <div className="form-field" style={{ gridColumn: '1 / -1' }}>
+                  <label htmlFor="streetAddress">Street Address *</label>
+                  <textarea
+                    name="streetAddress"
+                    id="streetAddress"
+                    className="form-textarea"
+                    value={formData.streetAddress}
+                    onChange={handleChange}
+                    placeholder="Enter your complete street address"
+                    rows="3"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="city">City *</label>
+                  <input
+                    type="text"
+                    name="city"
+                    id="city"
+                    className="form-input"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="Enter city name"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="state">State *</label>
+                  <input
+                    type="text"
+                    name="state"
+                    id="state"
+                    className="form-input"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="Enter state name"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="pinCode">PIN Code *</label>
+                  <input
+                    type="text"
+                    name="pinCode"
+                    id="pinCode"
+                    className="form-input"
+                    value={formData.pinCode}
+                    onChange={handleChange}
+                    placeholder="6-digit PIN code"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="landmark">Landmark (Optional)</label>
+                  <input
+                    type="text"
+                    name="landmark"
+                    id="landmark"
+                    className="form-input"
+                    value={formData.landmark}
+                    onChange={handleChange}
+                    placeholder="Nearby landmark"
+                  />
+                </div>
+              </div>
+              {error && (
+                <div className="error-message">
+                  ⚠️ {error}
+                </div>
+              )}
+            </div>
+
+            {/* Order Items Section */}
+            <div className="form-section">
+              <h2>🛒 Order Items ({cart.length})</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {cart.map((item) => (
+                  <div key={item.id} className="order-item-card">
+                    <div className="order-item-image">
+                      <img 
+                        src={item.product?.images} 
+                        alt={item.product?.name}
+                      />
+                    </div>
+                    <div className="order-item-details">
+                      <h3 className="order-item-title">{item.product?.name}</h3>
+                      <div className="order-item-tags">
+                        <span className="order-item-tag">Code: {item.product?.code}</span>
+                        <span className="order-item-tag">Pages: {item.product?.pages}</span>
+                        <span className="order-item-tag">{item.page_type === 'single' ? 'Single Side' : 'Double Side'}</span>
+                      </div>
+                      <div className="order-item-price-row">
+                        <span className="order-item-tag">Quantity: {item.quantity}</span>
+                        <span className="order-item-tag" style={{ color: '#059669', fontWeight: 600, fontSize: '1.1rem', background: 'none' }}>
+                          ₹{calculateItemPrice(item)}
+                        </span>
+                      </div>
+                      <div className="order-item-total">
+                        <span style={{ fontSize: '1rem', fontWeight: 600, color: '#059669' }}>
+                          Item Total: ₹{(calculateItemPrice(item) * item.quantity).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Right Column - Price Details and Payment */}
+          <div className="order-details-right">
+            {/* Free Delivery Banner */}
+            <div className="free-delivery-banner">
+              🚚 Order above ₹500 gets free delivery!
+            </div>
+
+            {/* Price Details */}
+            <div className="price-card">
+              <h3>💰 Price Details</h3>
+              <div>
+                <div className="price-row">
+                  <span>Price ({cart.length} items)</span>
+                  <span>₹{total.toFixed(2)}</span>
+                </div>
+                {appliedCoupon && (
+                  <div className="price-row" style={{ color: '#059669', fontWeight: 600 }}>
+                    <span>Coupon Discount</span>
+                    <span>-₹{discount}</span>
+                  </div>
+                )}
+                <div className="price-row">
+                  <span>Delivery Charges</span>
+                  <span style={{ color: deliveryCharge === 0 ? '#059669' : undefined, fontWeight: 500 }}>
+                    {deliveryCharge === 0 ? 'Free' : `₹${deliveryCharge}`}
+                  </span>
+                </div>
+                <div className="price-row">
+                  <span>Processing Charge</span>
+                  <span>₹{processingCharge.toFixed(2)}</span>
+                </div>
+                <div className="price-row">
+                  <span>Tax (4% GST)</span>
+                  <span>₹{tax.toFixed(2)}</span>
+                </div>
+                <div className="price-total">
+                  <div className="price-row">
+                    <span>Total</span>
+                    <span>₹{finalTotal.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Coupon Section */}
+            <div className="price-card">
+              <h3>🎫 Apply Coupon</h3>
+              <form className="coupon-form" onSubmit={handleApplyCoupon}>
+                <input
+                  type="text"
+                  className="coupon-input"
+                  placeholder="Enter coupon code"
+                  value={couponCode}
+                  onChange={e => setCouponCode(e.target.value.toUpperCase())}
+                  disabled={!!appliedCoupon}
+                />
+                {!appliedCoupon ? (
+                  <button
+                    type="submit"
+                    className="coupon-button"
+                    disabled={checkingCoupon || !couponCode.trim()}
+                  >
+                    {checkingCoupon ? 'Checking...' : 'Apply'}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="coupon-button coupon-remove"
+                    onClick={handleRemoveCoupon}
+                  >
+                    Remove
+                  </button>
+                )}
+              </form>
+              {appliedCoupon && (
+                <div className="coupon-success">
+                  ✅ Coupon <b>{appliedCoupon.code}</b> applied! You saved <b>₹{discount}</b>.
+                </div>
+              )}
+              {couponError && (
+                <div className="coupon-error">
+                  ❌ {couponError}
+                </div>
+              )}
+            </div>
+
+            {/* Payment Method Section */}
+            <div className="price-card">
+              <h3>💳 Payment Method</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <label className={`payment-option${paymentMethod === 'online' ? ' selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="online"
+                    checked={paymentMethod === 'online'}
+                    onChange={handlePaymentMethodChange}
+                  />
+                  <div className="payment-option-content">
+                    <i className="fa-solid fa-credit-card online"></i>
+                    <span>Online Payment</span>
+                  </div>
+                </label>
+                <label className={`payment-option${paymentMethod === 'cod' ? ' selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cod"
+                    checked={paymentMethod === 'cod'}
+                    onChange={handlePaymentMethodChange}
+                  />
+                  <div className="payment-option-content">
+                    <i className="fa-solid fa-money-bill-wave cod"></i>
+                    <span>Cash on Delivery</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Place Order Button */}
+            <button 
+              className="place-order-button"
+              onClick={handlePlaceOrder}
+            >
+              {paymentMethod === 'cod' ? '🛒 Place Order (Pay on Delivery)' : '💳 Place Order'}
+            </button>
+          </div>
         </div>
       </div>
-
-      <div className="order-details-right">
-        {/* Free delivery message */}
-        <div style={{
-          background: '#e0f7fa',
-          color: '#00796b',
-          borderRadius: 8,
-          padding: '10px 16px',
-          marginBottom: 16,
-          fontWeight: 600,
-          textAlign: 'center',
-          fontSize: '1.05rem',
-          border: '1.5px solid #b2dfdb'
-        }}>
-          Order above ₹500 gets free delivery!
-        </div>
-        <div className="price-details" style={{position: 'relative', zIndex: 0, background: '#fff'}}>
-          <h2>Price Details</h2>
-          <div className="price-row">
-            <span>Price ({cart.length} items)</span>
-            <span>₹{total.toFixed(2)}</span>
-          </div>
-          {appliedCoupon && (
-            <div className="price-row" style={{ color: '#22c55e', fontWeight: 600 }}>
-              <span>Coupon Discount</span>
-              <span>-₹{discount}</span>
-            </div>
-          )}
-          <div className="price-row">
-            <span>Delivery Charges</span>
-            <span>{deliveryCharge === 0 ? 'Free' : `₹${deliveryCharge}`}</span>
-          </div>
-          <div className="price-row">
-            <span>Processing Charge</span>
-            <span>₹{processingCharge.toFixed(2)}</span>
-          </div>
-          <div className="price-row">
-            <span>Tax (4% GST)</span>
-            <span>₹{tax.toFixed(2)}</span>
-          </div>
-          <div style={{position: 'relative', zIndex: 1, background: '#fff'}}>
-            <div className="price-row total-row" style={{ fontWeight: 700, fontSize: '1.1rem', borderTop: '1px solid #eee', marginTop: 10, paddingTop: 10 }}>
-              <span>Total</span>
-              <span>₹{finalTotal.toFixed(2)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Coupon input UI - always below price details, never inside */}
-        <div className="coupon-section" style={{position: 'relative', zIndex: 0, marginTop: 16, marginBottom: 18, background: '#f8fafc', borderRadius: 10, padding: 16, boxShadow: '0 1px 6px rgba(0,0,0,0.04)'}}>
-          <form onSubmit={handleApplyCoupon} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <input
-              type="text"
-              placeholder="Enter coupon code"
-              value={couponCode}
-              onChange={e => setCouponCode(e.target.value.toUpperCase())}
-              disabled={!!appliedCoupon}
-              style={{ flex: 1, padding: '0.7rem', borderRadius: 6, border: '1px solid #e5e7eb', fontSize: '1rem', fontWeight: 500 }}
-            />
-            {!appliedCoupon ? (
-              <button
-                type="submit"
-                disabled={checkingCoupon || !couponCode.trim()}
-                style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, padding: '0.7rem 1.5rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}
-              >
-                {checkingCoupon ? 'Checking...' : 'Apply'}
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleRemoveCoupon}
-                style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 6, padding: '0.7rem 1.5rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}
-              >
-                Remove
-              </button>
-            )}
-          </form>
-          {appliedCoupon && (
-            <div style={{ color: '#22c55e', marginTop: 6, fontWeight: 600 }}>
-              Coupon <b>{appliedCoupon.code}</b> applied! You saved <b>₹{discount}</b>.
-            </div>
-          )}
-          {couponError && (
-            <div style={{ color: '#ef4444', marginTop: 6, fontWeight: 500 }}>{couponError}</div>
-          )}
-        </div>
-
-          {/* Payment Method Selection */}
-          <div className="payment-method-section">
-            <h3>Payment Method</h3>
-            <div className="payment-options">
-              <label className="payment-option">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="online"
-                  checked={paymentMethod === 'online'}
-                  onChange={handlePaymentMethodChange}
-                />
-                <div className="payment-option-content">
-                  <i className="fa-solid fa-credit-card"></i>
-                  <span>Online Payment</span>
-                </div>
-              </label>
-              <label className="payment-option">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="cod"
-                  checked={paymentMethod === 'cod'}
-                  onChange={handlePaymentMethodChange}
-                />
-                <div className="payment-option-content">
-                  <i className="fa-solid fa-money-bill-wave"></i>
-                  <span>Cash on Delivery</span>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <button className="place-order" onClick={handlePlaceOrder}>
-            {paymentMethod === 'cod' ? 'Place Order (Pay on Delivery)' : 'Place Order'}
-          </button>
-        </div>
     </div>
   );
 };

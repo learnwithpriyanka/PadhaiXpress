@@ -1,60 +1,192 @@
 /* src/component/OrderStatusProgressBar.css */
 .order-status-progress-bar {
-    display: flex;
-    align-items: center;
-    margin: 24px 0;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.step-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 1px;
+  margin-left: 10px;
+  flex-wrap: wrap;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 1;
+  transition: background 0.3s, color 0.3s;
+}
+
+.step-circle.active {
+  background: #f59e0b;
+  color: #fff;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.step-label {
+  margin-top: 8px;
+  font-size: 14px;
+  text-align: center;
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  white-space: nowrap;
+  color: #020202;
+}
+
+.step-line {
+  width: 120px;
+  gap: 10px;
+  height: 4px;
+  background: #e0e0e0;
+  margin: 0 8px;
+  border-radius: 2px;
+  transition: background 0.3s;
+  z-index: 0;
+}
+
+.step-line.active {
+  background: linear-gradient(90deg, #f59e0b 60%, #fbbf24 100%);
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-status-progress-bar {
+    margin: 3px 0;
   }
   
   .step-container {
-    display: flex;
-    align-items: center;
-    position: relative;
+    margin-left: 5px;
   }
   
   .step-circle {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #e0e0e0;
-    color: #888;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 18px;
-    z-index: 1;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  .step-circle.active {
-    background: #2196f3;
-    color: #fff;
-    box-shadow: 0 0 8px #2196f3;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
   }
   
   .step-label {
-    margin-top: 8px;
-    font-size: 14px;
-    text-align: center;
-    position: absolute;
-    top: 36px;
-    left: 50%;
-    transform: translateX(-50%);
+    font-size: 12px;
+    top: 32px;
+    width: 70px;
+  }
+  
+  .step-line {
     width: 80px;
+    margin: 0 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  .step-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+  
+  .step-label {
+    font-size: 11px;
+    top: 28px;
+    width: 60px;
   }
   
   .step-line {
     width: 60px;
-    height: 4px;
-    background: #e0e0e0;
-    margin: 0 8px;
-    border-radius: 2px;
-    transition: background 0.3s;
-    z-index: 0;
+    margin: 0 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-status-progress-bar {
+    margin: 2px 0;
   }
   
-  .step-line.active {
-    background: linear-gradient(90deg, #2196f3 60%, #90caf9 100%);
-    box-shadow: 0 0 8px #2196f3;
+  .step-container {
+    margin-left: 3px;
   }
+  
+  .step-circle {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+  
+  .step-label {
+    font-size: 10px;
+    top: 24px;
+    width: 50px;
+  }
+  
+  .step-line {
+    width: 40px;
+    margin: 0 3px;
+    height: 3px;
+  }
+}
+
+@media (max-width: 360px) {
+  .step-circle {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+  
+  .step-label {
+    font-size: 9px;
+    top: 22px;
+    width: 45px;
+  }
+  
+  .step-line {
+    width: 30px;
+    margin: 0 2px;
+    height: 2px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+  .step-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+  
+  .step-label {
+    font-size: 11px;
+    top: 28px;
+  }
+  
+  .step-line {
+    width: 60px;
+    height: 3px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .step-circle {
+    border-width: 0.5px;
+  }
+  
+  .step-line {
+    border-width: 0.5px;
+  }
+}

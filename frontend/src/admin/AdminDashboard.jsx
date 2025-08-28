@@ -29,11 +29,62 @@ const AdminDashboard = () => {
   const [addingBook, setAddingBook] = useState(false);
   const [deletingBookId, setDeletingBookId] = useState(null);
   const [newBook, setNewBook] = useState({ name: '', code: '', price: '', pages: '', image: '' });
+  const [filters, setFilters] = useState({
+    startDate: '',
+    endDate: '',
+    paymentMethod: '',
+    status: '',
+    product: '',
+  });
+  const [filteredOrders, setFilteredOrders] = useState([]);
 
   useEffect(() => {
     fetchOrders();
     fetchBooks();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [orders, filters]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  const applyFilters = () => {
+    let updatedOrders = [...orders];
+
+    if (filters.startDate) {
+      updatedOrders = updatedOrders.filter(order => new Date(order.created_at) >= new Date(filters.startDate));
+    }
+    if (filters.endDate) {
+      updatedOrders = updatedOrders.filter(order => new Date(order.created_at) <= new Date(filters.endDate));
+    }
+    if (filters.paymentMethod) {
+      updatedOrders = updatedOrders.filter(order => order.payment_method === filters.paymentMethod);
+    }
+    if (filters.status) {
+      updatedOrders = updatedOrders.filter(order => order.status === filters.status);
+    }
+    if (filters.product) {
+      updatedOrders = updatedOrders.filter(order => 
+        order.order_items.some(item => item.product.name.toLowerCase().includes(filters.product.toLowerCase()))
+      );
+    }
+
+    setFilteredOrders(updatedOrders);
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      startDate: '',
+      endDate: '',
+      paymentMethod: '',
+      status: '',
+      product: '',
+    });
+  };
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -276,13 +327,60 @@ const AdminDashboard = () => {
           <div className={styles.totalOrders}>
             <Link to="/admin-dashboard/product-manager">Product Manager</Link>
           </div>
-          <div className={styles.totalOrders}>Total Orders: {orders.length}</div>
+          <div className={styles.totalOrders}>Total Orders: {filteredOrders.length}</div>
+          <div className={styles.totalOrders}>
+            Total Books:{' '}
+            {filteredOrders.reduce(
+              (sum, order) => sum + ((order.order_items || []).reduce((s, it) => s + (Number(it.quantity) || 0), 0)),
+              0
+            )}
+          </div>
+          <div className={styles.totalOrders}>
+            Total Price: ₹
+            {filteredOrders
+              .reduce((sum, order) => sum + order.total, 0)
+              .toFixed(2)}
+          </div>
         </div>
       </div>
+
+      {/* Filter Section */}
+      <div className={styles.filterContainer}>
+        <div className={styles.filterGroup}>
+          <label>Date Range</label>
+          <div className={styles.dateInputs}>
+            <input type="date" name="startDate" value={filters.startDate} onChange={handleFilterChange} className={styles.filterInput} />
+            <input type="date" name="endDate" value={filters.endDate} onChange={handleFilterChange} className={styles.filterInput} />
+          </div>
+        </div>
+        <div className={styles.filterGroup}>
+          <label>Payment Method</label>
+          <select name="paymentMethod" value={filters.paymentMethod} onChange={handleFilterChange} className={styles.filterSelect}>
+            <option value="">All</option>
+            <option value="cod">Cash on Delivery</option>
+            <option value="online">Online</option>
+          </select>
+        </div>
+        <div className={styles.filterGroup}>
+          <label>Status</label>
+          <select name="status" value={filters.status} onChange={handleFilterChange} className={styles.filterSelect}>
+            <option value="">All</option>
+            {statusOptions.map(status => <option key={status} value={status}>{status}</option>)}
+          </select>
+        </div>
+        <div className={styles.filterGroup}>
+          <label>Product Name</label>
+          <input type="text" name="product" placeholder="Enter product name..." value={filters.product} onChange={handleFilterChange} className={styles.filterInput} />
+        </div>
+        <div className={styles.filterActions}>
+          <button onClick={resetFilters} className={styles.resetButton}>Reset Filters</button>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className={styles.mainContent}>
-        {orders.length > 0 ? (
-          orders.map(order => (
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map(order => (
             <div key={order.id} className={styles.orderCard}>
               {/* Order Header */}
               <div className={styles.orderHeader}>

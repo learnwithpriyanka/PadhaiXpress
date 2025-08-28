@@ -169,10 +169,16 @@ function Navbar() {
                         </Link>
                       )}
                       {userRole === 'printer' && (
-                        <Link className="dropdown-item-modern" to="/printer-dashboard">
-                          <i className="fa-solid fa-print"></i>
-                          <span>Printer Dashboard</span>
-                        </Link>
+                        <>
+                          <Link className="dropdown-item-modern" to="/printer-dashboard">
+                            <i className="fa-solid fa-print"></i>
+                            <span>Printer Dashboard</span>
+                          </Link>
+                          <Link className="dropdown-item-modern" to="/printed-orders">
+                            <i className="fa-solid fa-list-check"></i>
+                            <span>Printed Orders</span>
+                          </Link>
+                        </>
                       )}
                       {userRole === 'delivery' && (
                         <Link className="dropdown-item-modern" to="/delivery-dash">

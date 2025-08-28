@@ -91,7 +91,7 @@ const DeliveryDashboard = () => {
           event: '*', 
           schema: 'public', 
           table: 'orders',
-          filter: 'status=in.(printed,out-for-delivery)'
+          filter: 'status=in.(printed,out-for-delivery)' // This correctly listens for printed orders
         }, 
         (payload) => {
           console.log('Order status changed:', payload);
@@ -333,6 +333,22 @@ const DeliveryDashboard = () => {
       }));
 
       setOrders(ordersWithProducts);
+    }
+  };
+
+  const markPrinted = async (orderId) => {
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: 'printed' })
+      .eq('id', orderId);
+      
+    if (error) {
+      console.error('Error marking order as printed:', error);
+      alert('Failed to mark order as printed: ' + error.message);
+    } else {
+      console.log(`Order ${orderId} marked as printed`);
+      // Refresh the orders list
+      fetchOrders();
     }
   };
 
