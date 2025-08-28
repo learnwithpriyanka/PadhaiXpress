@@ -21,9 +21,9 @@ function Team() {
             <p><b>Project Manager
             & Developer</b></p>
            
-            <a href="https://www.linkedin.com/in/priyanka-kumari-7b1b3b1b3/"> Linkedin<i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://www.linkedin.com/in/priyanka-kumari-7b1b3b1b3/"> Linkedin<i className="fa-brands fa-linkedin"></i></a>
             
-             <a href="https://github.com/learnwithpriyanka">Github <i class="fa-brands fa-github"></i></a>
+             <a href="https://github.com/learnwithpriyanka">Github <i className="fa-brands fa-github"></i></a>
           </div>
         </div>
 
@@ -33,8 +33,8 @@ function Team() {
            <div className="team-member-info " >
             <h3>Nikhil Kumar</h3>
             <p><b>Creator & Developer</b></p>
-            <a href="https://www.linkedin.com/in/nikhil-gupta-a99947220?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Linkedin<i class="fa-brands fa-linkedin"></i></a>
-            <a href="">Github <i class="fa-brands fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/nikhil-gupta-a99947220?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Linkedin<i className="fa-brands fa-linkedin"></i></a>
+            <a href="">Github <i className="fa-brands fa-github"></i></a>
             <br></br>
             <a href="c:\Users\Priyanka\AppData\Local\Packages\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\TempState\02F657D55EAF1C4840CE8D66FCDAF90C\WhatsApp Image 2025-03-16 at 17.37.30_d4ea62d1.jpg">Instagram <i class="fa-brands fa-instagram"></i></a>
             <a href="https://youtube.com/@nikhilinklu?si=HUWamUU01vDN1dhM">Youtube<i class="fa-brands fa-youtube"></i></a>
@@ -67,8 +67,8 @@ function Team() {
             <a href="https://www.linkedin.com/in/navnit-kumar-2b3564284?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Linkedin<i class="fa-brands fa-linkedin"></i></a>
             <a href="https://github.com/NavnitRicky">Github <i class="fa-brands fa-github"></i></a>
             <br></br>
-            <a href="https://www.instagram.com/rickysingh227?igsh=MjVjYnI2djl3MGVk">Instagram <i class="fa-brands fa-instagram"></i></a>
-            <a href="https://youtube.com/@collegelife_ricky?si=GovVNMgB8Gytc4TI">Youtube<i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.instagram.com/rickysingh227?igsh=MjVjYnI2djl3MGVk">Instagram <i className="fa-brands fa-instagram"></i></a>
+            <a href="https://youtube.com/@collegelife_ricky?si=GovVNMgB8Gytc4TI">Youtube<i className="fa-brands fa-youtube"></i></a>
           </div>
         </div>
 

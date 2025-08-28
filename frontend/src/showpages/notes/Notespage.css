@@ -1,340 +1,191 @@
 /* NotesPage.css */
-.notes-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #f2e7bc, #f2e7bc);
-  }
-  
-  .notes-card {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 1.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    transform: translateY(0);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .notes-card:hover {
+.notesp {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 50vh;
+  /* background-color: black; */
+
+  /* background: #1a1a1a; */
+  padding: 2rem 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.notes-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 500px;
+  background: white;
+  color: #000;
+
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.notes-1st,
+.notes-2nd,
+.notes-3rd,
+.notes-4th {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* color: black; */
+  position: relative;
+} 
+
+.notes-1st h3 i{
+  color: #000;
+}
+.notes-2nd h3 i{
+  color: #000;
+}
+.notes-3rd h3 i{
+  color: #000;
+}
+.notes-4th h3 i{
+ color: #000;
+}
+
+
+.notes-1st{
+  background:  #e7edfd;
+  font-size: 1.5;
+ }
+ .notes-2nd{
+   background: #e6faea;
+ }
+ .notes-3rd{
+   background: #f3e7fd;
+ }
+ .notes-4th {
+   background: #fff4e6;
+ }
+ 
+
+.notes-1st:hover{
+ background:  #e7edfd;
+ 
+ 
+    box-shadow: 0 20px 20px rgb(127, 125, 125);
+    transition-duration: 0.5s;
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+
+ font-size: 1.5;
+}
+.notes-2nd:hover{
+  background: #e6faea;
+  box-shadow: 0 20px 20px rgb(127, 125, 125);
+    transition-duration: 0.5s;
+    transform: translateY(-5px);
+}
+.notes-3rd:hover{
+  background: #f3e7fd;
+  box-shadow: 0 20px 20px rgb(127, 125, 125);
+    transition-duration: 0.5s;
+    transform: translateY(-5px);
+}
+.notes-4th:hover {
+  background: #fff4e6;
+  box-shadow: 0 20px 20px rgb(127, 125, 125);
+    transition-duration: 0.5s;
+    transform: translateY(-5px);
+}
+
+.notes-1st.active,
+.notes-2nd.active,
+.notes-3rd.active,
+.notes-4th.active {
+  background: #404040;
+}
+
+.notes-1st button,
+.notes-2nd button,
+.notes-3rd button,
+.notes-4th button {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  flex: 1;
+}
+
+.notes-1st h6,
+.notes-2nd h6,
+.notes-3rd h6,
+.notes-4th h6 {
+  display: none;
+}
+
+.notes-1st .card-info,
+.notes-2nd .card-info,
+.notes-3rd .card-info,
+.notes-4th .card-info {
+  color: black;
+  font-size: 1.25rem;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.notes-1st:hover .card-info,
+.notes-2nd:hover .card-info,
+.notes-3rd:hover .card-info,
+.notes-4th:hover .card-info {
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notesp {
+    padding: 1rem 0.5rem;
   }
   
-  .title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
+  .notes-header {
+    width: 100%;
+    max-width: 320px;
   }
   
-  .subtitle {
-    font-size: 1.2rem;
-    color: #555;
-    margin-top: 0.5rem;
+  .notes-1st,
+  .notes-2nd,
+  .notes-3rd,
+  .notes-4th {
+    padding: 0.875rem 1rem;
   }
   
-  .icon {
-    font-size: 2rem;
-    margin-top: 1rem;
+  .notes-1st button,
+  .notes-2nd button,
+  .notes-3rd button,
+  .notes-4th button {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .notes-header {
+    max-width: 280px;
   }
   
-  .icon span {
-    display: inline-block;
-    animation: wiggle 1.5s infinite ease-in-out;
+  .notes-1st,
+  .notes-2nd,
+  .notes-3rd,
+  .notes-4th {
+    padding: 0.75rem 0.875rem;
   }
   
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(10deg); }
-    50% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
+  .notes-1st button,
+  .notes-2nd button,
+  .notes-3rd button,
+  .notes-4th button {
+    font-size: 0.9rem;
   }
-
-  /* Responsive Design for iPhone 14 Pro Max (430px) */
-  @media (max-width: 430px) {
-    .notes-container {
-      padding: 1rem;
-      height: 100vh;
-    }
-    
-    .notes-card {
-      padding: 2rem 1.5rem;
-      border-radius: 1rem;
-      max-width: 100%;
-      width: 100%;
-    }
-    
-    .title {
-      font-size: 1.75rem;
-    }
-    
-    .subtitle {
-      font-size: 1rem;
-      margin-top: 0.4rem;
-    }
-    
-    .icon {
-      font-size: 1.75rem;
-      margin-top: 0.8rem;
-    }
-  }
-
-  /* Responsive Design for iPhone 12/13/14 (390px) */
-  @media (max-width: 390px) {
-    .notes-container {
-      padding: 0.8rem;
-    }
-    
-    .notes-card {
-      padding: 1.75rem 1.25rem;
-      border-radius: 0.875rem;
-    }
-    
-    .title {
-      font-size: 1.5rem;
-    }
-    
-    .subtitle {
-      font-size: 0.875rem;
-      margin-top: 0.3rem;
-    }
-    
-    .icon {
-      font-size: 1.5rem;
-      margin-top: 0.7rem;
-    }
-  }
-
-  /* Responsive Design for iPhone SE (375px) */
-  @media (max-width: 375px) {
-    .notes-container {
-      padding: 0.6rem;
-    }
-    
-    .notes-card {
-      padding: 1.5rem 1rem;
-      border-radius: 0.75rem;
-    }
-    
-    .title {
-      font-size: 1.375rem;
-    }
-    
-    .subtitle {
-      font-size: 0.8125rem;
-      margin-top: 0.25rem;
-    }
-    
-    .icon {
-      font-size: 1.375rem;
-      margin-top: 0.6rem;
-    }
-  }
-
-  /* Responsive Design for iPhone 5/SE (320px) */
-  @media (max-width: 320px) {
-    .notes-container {
-      padding: 0.5rem;
-    }
-    
-    .notes-card {
-      padding: 1.25rem 0.875rem;
-      border-radius: 0.625rem;
-    }
-    
-    .title {
-      font-size: 1.25rem;
-    }
-    
-    .subtitle {
-      font-size: 0.75rem;
-      margin-top: 0.2rem;
-    }
-    
-    .icon {
-      font-size: 1.25rem;
-      margin-top: 0.5rem;
-    }
-  }
-
-  /* Responsive Design for tablets (768px - 1023px) */
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .notes-container {
-      padding: 2rem;
-    }
-    
-    .notes-card {
-      padding: 3rem 2.5rem;
-      border-radius: 1.75rem;
-      max-width: 500px;
-    }
-    
-    .title {
-      font-size: 2.5rem;
-    }
-    
-    .subtitle {
-      font-size: 1.5rem;
-      margin-top: 0.75rem;
-    }
-    
-    .icon {
-      font-size: 2.5rem;
-      margin-top: 1.25rem;
-    }
-  }
-
-  /* Responsive Design for small laptops (1024px - 1365px) */
-  @media (min-width: 1024px) and (max-width: 1365px) {
-    .notes-card {
-      padding: 3rem 2.5rem;
-      border-radius: 1.75rem;
-      max-width: 450px;
-    }
-    
-    .title {
-      font-size: 2.25rem;
-    }
-    
-    .subtitle {
-      font-size: 1.375rem;
-      margin-top: 0.6rem;
-    }
-    
-    .icon {
-      font-size: 2.25rem;
-      margin-top: 1.1rem;
-    }
-  }
-
-  /* Responsive Design for large screens (1366px+) */
-  @media (min-width: 1366px) {
-    .notes-card {
-      padding: 3.5rem 3rem;
-      border-radius: 2rem;
-      max-width: 500px;
-    }
-    
-    .title {
-      font-size: 2.75rem;
-    }
-    
-    .subtitle {
-      font-size: 1.5rem;
-      margin-top: 0.75rem;
-    }
-    
-    .icon {
-      font-size: 2.75rem;
-      margin-top: 1.5rem;
-    }
-  }
-
-  /* Responsive Design for 4K screens (1920px+) */
-  @media (min-width: 1920px) {
-    .notes-card {
-      padding: 4rem 3.5rem;
-      border-radius: 2.5rem;
-      max-width: 600px;
-    }
-    
-    .title {
-      font-size: 3.5rem;
-    }
-    
-    .subtitle {
-      font-size: 1.875rem;
-      margin-top: 1rem;
-    }
-    
-    .icon {
-      font-size: 3.5rem;
-      margin-top: 2rem;
-    }
-  }
-
-  /* Touch-friendly interactions for mobile */
-  @media (max-width: 768px) {
-    .notes-card:hover {
-      transform: translateY(0); /* Disable hover on mobile */
-    }
-    
-    .notes-card:active {
-      transform: scale(0.98);
-    }
-  }
-
-  /* Landscape orientation for mobile */
-  @media (max-width: 768px) and (orientation: landscape) {
-    .notes-container {
-      height: 100vh;
-      padding: 1rem;
-    }
-    
-    .notes-card {
-      padding: 1.5rem 1.25rem;
-      max-width: 80%;
-    }
-    
-    .title {
-      font-size: 1.5rem;
-    }
-    
-    .subtitle {
-      font-size: 1rem;
-      margin-top: 0.3rem;
-    }
-    
-    .icon {
-      font-size: 1.5rem;
-      margin-top: 0.5rem;
-    }
-  }
-
-  /* High DPI displays */
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .notes-card {
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-  }
-
-  /* Reduced motion for accessibility */
-  @media (prefers-reduced-motion: reduce) {
-    .notes-card {
-      transition: none;
-    }
-    
-    .notes-card:hover {
-      transform: none;
-    }
-    
-    .icon span {
-      animation: none;
-    }
-  }
-
-  /* Print styles */
-  @media print {
-    .notes-container {
-      background: white;
-      height: auto;
-      padding: 2rem;
-    }
-    
-    .notes-card {
-      box-shadow: none;
-      border: 2px solid #333;
-    }
-    
-    .title {
-      color: black;
-    }
-    
-    .subtitle {
-      color: #333;
-    }
-  }
-  
+}

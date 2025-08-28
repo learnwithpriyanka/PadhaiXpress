@@ -1,0 +1,73 @@
+
+  /* Hero Section */
+  .npp {
+    text-align: center;
+    padding: 80px 20px;
+  }
+  
+  /* Main Heading */
+  .npp h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #111;
+    animation: fadeUp 1s ease-out forwards;
+    position: relative;
+  }
+  
+  /* Underline Animation */
+  .npp h1::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 3px;
+    background: #ff9800;
+    margin: 10px auto 0;
+    transition: width 0.5s ease;
+  }
+  .npp h1:hover::after {
+    width: 60%;
+  }
+  
+  /* Subheading */
+  .npp h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #444;
+    margin-top: 15px;
+    opacity: 0;
+    animation: fadeUp 1.5s ease-out forwards;
+    animation-delay: 0.3s;
+    text-shadow: 0px 0px 8px rgba(255, 152, 0, 0.3);
+  }
+  
+  /* Paragraph */
+  .npp p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 15px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 2s ease-out forwards;
+    animation-delay: 0.6s;
+  }
+  
+  /* Animations */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes gradientBG {
+    0% { background: linear-gradient(120deg, #fdfcfb, #e2d1c3); }
+    /* 100% { background: linear-gradient(120deg, #d4fc79, #96e6a1); } */
+  }
+  

@@ -44,6 +44,11 @@ import PrinterDashboard from './printer/PrinterDashboard';
 import TermsOfService from './component/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 import ProductManager from './admin/ProductManager.jsx';
+import FirstYearNotes from './showpages/notes/FirstYearNotes.jsx';
+import SecondYearNotes from './showpages/notes/SecondYearNotes.jsx';
+import ThirdYearNotes from './showpages/notes/ThirdYearNotes.jsx';
+import FourthYearNotes from './showpages/notes/FourthYearNotes.jsx';
+
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>
@@ -75,6 +80,11 @@ createRoot(document.getElementById('root')).render(
               <ProductManager />
             </PrivateRoute>
           }></Route>
+          {/* Notes */}
+          <Route path="/firstyearnotes" element={<FirstYearNotes />} />
+          <Route path="/secondyearnotes" element={<SecondYearNotes />} />
+          <Route path="/thirdyearnotes" element={<ThirdYearNotes />} />
+          <Route path="/fourthyearnotes" element={<FourthYearNotes />} />
 
           {/* navigation route */}
 

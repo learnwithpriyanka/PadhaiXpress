@@ -1,0 +1,33 @@
+.year-notes-wrapper{ padding: 24px 16px; display: flex; flex-direction: column; gap: 16px; }
+.year-notes-header{ text-align: center; max-width: 980px; margin: 0 auto; }
+.year-notes-header h1{ font-size: clamp(1.8rem, 2.8vw, 2.6rem); margin: 0 0 8px; }
+.year-notes-header p{ color: #6b7280; margin: 0; }
+
+.accordion{ max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.accordion-item{ border: 1px solid #d8e0ff; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.08); background: transparent; }
+.accordion-item.open{ border-color: #3b82f6; }
+
+.accordion-summary{ width: 100%; border: 0; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+/* alternating backgrounds */
+.accordion-item:nth-child(odd) .accordion-summary{ background: #e7edfd; color: #0f172a; }
+.accordion-item:nth-child(even) .accordion-summary{ background: #e6faea; color: #0f172a; }
+
+.summary-left{ display: flex; align-items: center; gap: 14px; }
+.badge{ background: #ffffff; color: #0f172a; width: 42px; height: 42px; border-radius: 999px; display: grid; place-items: center; font-weight: 700; border: 1px solid #cbd5e1; }
+.title{ font-weight: 700; font-size: 1.1rem; }
+.subtitle{ color: #334155; font-size: 0.95rem; margin-top: 4px; }
+.chev{ color: #0f172a; transform: rotate(-90deg); transition: transform .2s ease; font-size: 18px; }
+.chev.rot{ transform: rotate(0deg); }
+
+.accordion-content{ max-height: 0; overflow: hidden; background: #ffffff; transition: max-height .25s ease; }
+.accordion-item.open .accordion-content{ max-height: 480px; }
+
+.content-list{ list-style: none; padding: 8px 16px 16px; margin: 0; display: grid; gap: 10px; }
+.content-row{ display: flex; align-items: center; justify-content: space-between; padding: 12px 12px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
+.content-row a{ color: #1d4ed8; text-decoration: none; font-weight: 600; }
+.content-row a:hover{ text-decoration: underline; }
+.meta{ color: #64748b; font-size: 0.85rem; }
+
+.empty{ color: #64748b; padding: 16px; }
+
+@media (max-width: 768px){ .accordion{ padding: 0 4px; } .badge{ width: 36px; height: 36px; } }

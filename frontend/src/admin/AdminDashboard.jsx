@@ -260,6 +260,9 @@ const AdminDashboard = () => {
           <div className={styles.totalOrders}>
             <Link to="/admin-dashboard/product-manager">Product Manager</Link>
           </div>
+          <div className={styles.totalOrders}>
+            <Link to="/admin-dashboard/waste-collection">Waste Collection</Link>
+          </div>
           <div className={styles.totalOrders}>Total Orders: {orders.length}</div>
         </div>
       </div>
