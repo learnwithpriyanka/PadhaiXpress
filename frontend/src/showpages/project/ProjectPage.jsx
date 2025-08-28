@@ -9,6 +9,7 @@ function ProjectPage() {
     const [file, setFile] = useState(null);
     const [fileError, setFileError] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [bindingType, setBindingType] = useState('spiral');
     const [formData, setFormData] = useState({
         fullName: '',
         phoneNumber: '',
@@ -22,9 +23,12 @@ function ProjectPage() {
     const [orderId, setOrderId] = useState(null);
     const [estimatedPages, setEstimatedPages] = useState(0);
     
-    // Constants
-    const BINDING_CHARGE = 50;
-    const PER_PAGE_COST = 2; // ₹2 per page
+    const BINDING_CHARGES = {
+        spiral: 40,
+        tape: 30,
+        white: 60
+    };
+    const PER_PAGE_COST = 2;
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -35,14 +39,12 @@ function ProjectPage() {
             return;
         }
         
-        // Check if file is PDF
         if (selectedFile.type !== 'application/pdf') {
             setFileError('Please upload a PDF file only');
             setFile(null);
             return;
         }
         
-        // Check file size (25MB = 25 * 1024 * 1024 bytes)
         if (selectedFile.size > 25 * 1024 * 1024) {
             setFileError('File size exceeds 25MB limit');
             setFile(null);
@@ -50,10 +52,12 @@ function ProjectPage() {
         }
         
         setFile(selectedFile);
-        
-        // Estimate pages (this is just a rough estimate based on file size)
-        const estimatedPageCount = Math.ceil(selectedFile.size / (75 * 1024)); // Assuming ~75KB per page
+        const estimatedPageCount = Math.ceil(selectedFile.size / (10 * 1024));
         setEstimatedPages(estimatedPageCount);
+    };
+
+    const handleBindingTypeChange = (e) => {
+        setBindingType(e.target.value);
     };
     
     const handleInputChange = (e) => {
@@ -81,32 +85,33 @@ function ProjectPage() {
     };
     
     const calculateTotal = () => {
-        return (estimatedPages * PER_PAGE_COST) + BINDING_CHARGE;
+        return (estimatedPages * PER_PAGE_COST) + BINDING_CHARGES[bindingType];
     };
     
     const handleSubmit = async () => {
-        // Validate form
         if (!formData.fullName || !formData.phoneNumber || !formData.address || !formData.pincode) {
             alert('Please fill all required fields');
             return;
         }
         
-        // Validate phone number (10 digits)
         if (!/^\d{10}$/.test(formData.phoneNumber)) {
             alert('Please enter a valid 10-digit phone number');
             return;
         }
         
-        // Validate pincode (6 digits)
         if (!/^\d{6}$/.test(formData.pincode)) {
             alert('Please enter a valid 6-digit pincode');
+            return;
+        }
+        
+        if (!isLoggedIn) {
+            alert('Please log in to place your order. This ensures your order is properly tracked.');
             return;
         }
         
         setIsSubmitting(true);
         
         try {
-            // 1. Upload PDF to Supabase Storage
             const timestamp = new Date().getTime();
             const fileName = `${timestamp}_${file.name}`;
             const filePath = `workbooks/${fileName}`;
@@ -123,19 +128,18 @@ function ProjectPage() {
                 
             if (uploadError) throw uploadError;
             
-            // Get the public URL
             const { data: { publicUrl } } = supabase.storage
                 .from('workbooks')
                 .getPublicUrl(filePath);
             
-            // 2. Create order in database
             const { data: orderData, error: orderError } = await supabase
                 .from('custom_workbook_orders')
                 .insert([
                     {
-                        user_id: isLoggedIn ? (await supabase.auth.getUser ()).data.user?.id : null,
+                        user_id: isLoggedIn ? (await supabase.auth.getUser()).data.user?.id : null,
                         pdf_file_url: publicUrl,
                         pages: estimatedPages,
+                        binding_type: bindingType,
                         delivery_name: formData.fullName,
                         phone: formData.phoneNumber,
                         address: formData.address,
@@ -150,10 +154,9 @@ function ProjectPage() {
                 
             if (orderError) throw orderError;
             
-            // Success
             setOrderId(orderData[0].id);
             setOrderSuccess(true);
-            setCurrentStep(5); // Move to success step
+            setCurrentStep(5);
             
         } catch (error) {
             console.error('Error submitting order:', error);
@@ -163,226 +166,376 @@ function ProjectPage() {
             setUploadProgress(0);
         }
     };
+
+    const stepTitles = ['Upload & Binding', 'Delivery Details', 'Order Summary', 'Payment'];
     
     return (
-        <div className="workbook-order-container">
+        <div className="workbook-container">
             {!orderSuccess ? (
-                <div className="workbook-order-card">
-                    <div className="steps-indicator">
-                        {[1, 2, 3, 4].map((step) => (
-                            <div 
-                                key={step} 
-                                className={`step ${currentStep >= step ? 'active' : ''}`}
-                                onClick={() => currentStep > step && setCurrentStep(step)}
-                            >
-                                {step}
+                <div className="workbook-page">
+                    <div className="page-header">
+                        <div className="brand-info">
+                            <h1>Custom Workbook Printing</h1>
+                            <p>Professional printing service with fast delivery</p>
+                        </div>
+                        
+                        <div className="progress-indicator">
+                            <div className="steps-nav">
+                                {[1, 2, 3, 4].map((step) => (
+                                    <div key={step} className="step-item">
+                                        <div 
+                                            className={`step-circle ${currentStep >= step ? 'active' : ''} ${currentStep > step ? 'completed' : ''}`}
+                                            onClick={() => currentStep > step && setCurrentStep(step)}
+                                        >
+                                            {currentStep > step ? '✓' : step}
+                                        </div>
+                                        <span className="step-title">{stepTitles[step - 1]}</span>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                            <div className="progress-track">
+                                <div 
+                                    className="progress-bar" 
+                                    style={{ width: `${(currentStep - 1) * 33.33}%` }}
+                                ></div>
+                            </div>
+                        </div>
                     </div>
                     
-                    {currentStep === 1 && (
-                        <div className="step-content">
-                            <h2>📤 Upload Your Lab Workbook</h2>
-                            <p className="step-description">Please upload your lab workbook in PDF format (Max size: 25MB).</p>
-                            <p className="security-note">🔒 Your files are safe and used only for printing purposes.</p>
-                            
-                            <div className="file-upload-container">
-                                <label className="file-upload-label">
-                                    {file ? file.name : 'Choose PDF File'}
-                                    <input 
-                                        type="file" 
-                                        accept=".pdf" 
-                                        onChange={handleFileChange} 
-                                        className="file-input"
-                                    />
-                                </label>
-                                {file && <span className="file-selected">✓ File selected</span>}
-                            </div>
-                            
-                            {fileError && <p className="error-message">{fileError}</p>}
-                            
-                            <div className="step-buttons">
-                                <button className="next-button" onClick={nextStep}>Continue</button>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {currentStep === 2 && (
-                        <div className="step-content">
-                            <h2>📍 Enter Your Delivery Address</h2>
-                            <p className="step-description">Make sure the address is complete and accurate.</p>
-                            
-                            <div className="form-group">
-                                <label>Full Name *</label>
-                                <input 
-                                    type="text" 
-                                    name="fullName" 
-                                    value={formData.fullName} 
-                                    onChange={handleInputChange} 
-                                    placeholder="Enter your full name"
-                                    required
-                                />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Phone Number *</label>
-                                <input 
-                                    type="tel" 
-                                    name="phoneNumber" 
-                                    value={formData.phoneNumber} 
-                                    onChange={handleInputChange} 
-                                    placeholder="10-digit mobile number"
-                                    pattern="[0-9]{10}"
-                                    required
-                                />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Delivery Address *</label>
-                                <textarea 
-                                    name="address" 
-                                    value={formData.address} 
-                                    onChange={handleInputChange} 
-                                    placeholder="Enter your complete address"
-                                    rows="3"
-                                    required
-                                ></textarea>
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Pincode *</label>
-                                <input 
-                                    type="text" 
-                                    name="pincode" 
-                                    value={formData.pincode} 
-                                    onChange={handleInputChange} 
-                                    placeholder="6-digit pincode"
-                                    pattern="[0-9]{6}"
-                                    required
-                                />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Landmark (Optional)</label>
-                                <input 
-                                    type="text" 
-                                    name="landmark" 
-                                    value={formData.landmark} 
-                                    onChange={handleInputChange} 
-                                    placeholder="Nearby landmark for easy delivery"
-                                />
-                            </div>
-                            
-                            <div className="step-buttons">
-                                <button className="back-button" onClick={prevStep}>Back</button>
-                                <button className="next-button" onClick={nextStep}>Continue</button>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {currentStep === 3 && (
-                        <div className="step-content">
-                            <h2>💳 Choose Payment Option</h2>
-                            
-                            <div className="payment-options">
-                                <label className="payment-option">
-                                    <input 
-                                        type="radio" 
-                                        name="paymentMethod" 
-                                        value="cod" 
-                                        checked={paymentMethod === 'cod'} 
-                                        onChange={handlePaymentMethodChange} 
-                                    />
-                                    <div className="payment-option-content">
-                                        <i className="payment-icon">💵</i>
-                                        <span>Cash on Delivery (COD)</span>
+                    <div className="page-content">
+                        {currentStep === 1 && (
+                            <div className="step-page">
+                                <div className="step-header">
+                                    <h2>Upload Your Workbook & Select Binding</h2>
+                                    <p>Upload your PDF file and choose your preferred binding type</p>
+                                </div>
+                                
+                                <div className="step-body">
+                                    <div className="upload-section">
+                                        <div className={`file-upload-area ${file ? 'has-file' : ''}`}>
+                                            <input 
+                                                type="file" 
+                                                accept=".pdf" 
+                                                onChange={handleFileChange} 
+                                                className="file-input"
+                                                id="pdf-upload"
+                                            />
+                                            <label htmlFor="pdf-upload" className="upload-label">
+                                                {file ? (
+                                                    <div className="file-selected">
+                                                        <div className="file-icon">📄</div>
+                                                        <div className="file-info">
+                                                            <span className="file-name">{file.name}</span>
+                                                            <span className="file-size">{(file.size / (1024 * 1024)).toFixed(2)} MB</span>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="upload-prompt">
+                                                        <div className="upload-icon">📤</div>
+                                                        <span className="upload-text">Click to upload PDF</span>
+                                                        <span className="upload-subtext">Maximum file size: 25MB</span>
+                                                    </div>
+                                                )}
+                                            </label>
+                                        </div>
+                                        
+                                        {fileError && <div className="error-message">{fileError}</div>}
+                                        
+                                        {file && (
+                                            <div className="file-details">
+                                                <div className="detail-item">
+                                                    <span>Estimated Pages:</span>
+                                                    <span>{estimatedPages}</span>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                </label>
-                                
-                                <label className="payment-option disabled">
-                                    <input 
-                                        type="radio" 
-                                        name="paymentMethod" 
-                                        value="upi" 
-                                        disabled 
-                                    />
-                                    <div className="payment-option-content">
-                                        <i className="payment-icon">📱</i>
-                                        <span>UPI / QR Code Payment (Coming Soon)</span>
+
+                                    <div className="binding-section">
+                                        <h3>Choose Binding Type</h3>
+                                        <div className="binding-options">
+                                            {Object.entries(BINDING_CHARGES).map(([type, price]) => (
+                                                <label key={type} className={`binding-option ${bindingType === type ? 'selected' : ''}`}>
+                                                    <input 
+                                                        type="radio" 
+                                                        name="bindingType" 
+                                                        value={type} 
+                                                        checked={bindingType === type} 
+                                                        onChange={handleBindingTypeChange} 
+                                                    />
+                                                    <div className="binding-content">
+                                                        <div className="binding-icon">
+                                                            {type === 'spiral' && '🌀'}
+                                                            {type === 'tape' && '📎'}
+                                                            {type === 'white' && '⚪'}
+                                                        </div>
+                                                        <div className="binding-details">
+                                                            <span className="binding-name">
+                                                                {type === 'spiral' && 'Spiral Binding'}
+                                                                {type === 'tape' && 'Tape Binding'}
+                                                                {type === 'white' && 'White Binding'}
+                                                            </span>
+                                                            <span className="binding-price">₹{price}</span>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            ))}
+                                        </div>
                                     </div>
-                                </label>
-                            </div>
-                            
-                            <div className="step-buttons">
-                                <button className="back-button" onClick={prevStep}>Back</button>
-                                <button className="next-button" onClick={nextStep}>Continue</button>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {currentStep === 4 && (
-                        <div className="step-content">
-                            <h2>📝 Confirm Your Order</h2>
-                            
-                            <div className="order-summary">
-                                <div className="summary-item">
-                                    <span>File Uploaded:</span>
-                                    <span>{file?.name}</span>
                                 </div>
                                 
-                                <div className="summary-item">
-                                    <span>Estimated Pages:</span>
-                                    <span>{estimatedPages}</span>
-                                </div>
-                                
-                                <div className="summary-item">
-                                    <span>Page Cost:</span>
-                                    <span>₹{estimatedPages * PER_PAGE_COST}</span>
-                                </div>
-                                
-                                <div className="summary-item">
-                                    <span>Binding Charge:</span>
-                                    <span>₹{BINDING_CHARGE}</span>
-                                </div>
-                                
-                                <div className="summary-item total">
-                                    <span>Total Cost:</span>
-                                    <span>₹{calculateTotal()}</span>
+                                <div className="step-footer">
+                                    <button className="btn btn-primary btn-full" onClick={nextStep}>
+                                        Continue
+                                    </button>
                                 </div>
                             </div>
-                            
-                            <div className="delivery-note">
-                                <p>✅ Once printed, your workbook will be delivered within 18 hours.</p>
-                                <p>📞 You'll receive updates on your provided phone number.</p>
+                        )}
+                        
+                        {currentStep === 2 && (
+                            <div className="step-page">
+                                <div className="step-header">
+                                    <h2>Delivery Information</h2>
+                                    <p>Please provide accurate delivery details</p>
+                                </div>
+                                
+                                <div className="step-body">
+                                    <div className="form-container">
+                                        <div className="form-group">
+                                            <label>Full Name *</label>
+                                            <input 
+                                                type="text" 
+                                                name="fullName" 
+                                                value={formData.fullName} 
+                                                onChange={handleInputChange} 
+                                                placeholder="Enter your full name"
+                                            />
+                                        </div>
+                                        
+                                        <div className="form-group">
+                                            <label>Phone Number *</label>
+                                            <input 
+                                                type="tel" 
+                                                name="phoneNumber" 
+                                                value={formData.phoneNumber} 
+                                                onChange={handleInputChange} 
+                                                placeholder="10-digit mobile number"
+                                            />
+                                        </div>
+                                        
+                                        <div className="form-group">
+                                            <label>Delivery Address *</label>
+                                            <textarea 
+                                                name="address" 
+                                                value={formData.address} 
+                                                onChange={handleInputChange} 
+                                                placeholder="Enter complete address with area details"
+                                                rows="3"
+                                            />
+                                        </div>
+                                        
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label>Pincode *</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="pincode" 
+                                                    value={formData.pincode} 
+                                                    onChange={handleInputChange} 
+                                                    placeholder="6-digit pincode"
+                                                />
+                                            </div>
+                                            
+                                            <div className="form-group">
+                                                <label>Landmark (Optional)</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="landmark" 
+                                                    value={formData.landmark} 
+                                                    onChange={handleInputChange} 
+                                                    placeholder="Nearby landmark"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="step-footer">
+                                    <button className="btn btn-secondary" onClick={prevStep}>
+                                        Back
+                                    </button>
+                                    <button className="btn btn-primary" onClick={nextStep}>
+                                        Continue
+                                    </button>
+                                </div>
                             </div>
-                            
-                            <div className="step-buttons">
-                                <button className="back-button" onClick={prevStep}>Back</button>
-                                <button 
-                                    className="place-order-button" 
-                                    onClick={handleSubmit}
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <span className="spinner"></span>
-                                            {uploadProgress > 0 ? `Uploading... ${uploadProgress}%` : 'Processing...'}
-                                        </>
-                                    ) : 'Place Order'}
-                                </button>
+                        )}
+                        
+                        {currentStep === 3 && (
+                            <div className="step-page">
+                                <div className="step-header">
+                                    <h2>Order Summary</h2>
+                                    <p>Review your order details</p>
+                                </div>
+                                
+                                <div className="step-body">
+                                    <div className="summary-container">
+                                        <div className="order-summary">
+                                            <div className="summary-row">
+                                                <span>File:</span>
+                                                <span>{file?.name}</span>
+                                            </div>
+                                            <div className="summary-row">
+                                                <span>Estimated Pages:</span>
+                                                <span>{estimatedPages}</span>
+                                            </div>
+                                            <div className="summary-row">
+                                                <span>Binding Type:</span>
+                                                <span>
+                                                    {bindingType === 'spiral' && 'Spiral Binding'}
+                                                    {bindingType === 'tape' && 'Tape Binding'}
+                                                    {bindingType === 'white' && 'White Binding'}
+                                                </span>
+                                            </div>
+                                            <div className="summary-row">
+                                                <span>Page Cost ({estimatedPages} pages):</span>
+                                                <span>₹{estimatedPages * PER_PAGE_COST}</span>
+                                            </div>
+                                            <div className="summary-row">
+                                                <span>Binding Charge:</span>
+                                                <span>₹{BINDING_CHARGES[bindingType]}</span>
+                                            </div>
+                                            <div className="summary-row total">
+                                                <span>Total Amount:</span>
+                                                <span>₹{calculateTotal()}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="delivery-promises">
+                                            <div className="promise-item">
+                                                <div className="promise-icon">🚚</div>
+                                                <div>
+                                                    <h4>Fast Delivery</h4>
+                                                    <p>Delivered within 18 hours</p>
+                                                </div>
+                                            </div>
+                                            <div className="promise-item">
+                                                <div className="promise-icon">📱</div>
+                                                <div>
+                                                    <h4>SMS Updates</h4>
+                                                    <p>Track your order status</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="step-footer">
+                                    <button className="btn btn-secondary" onClick={prevStep}>
+                                        Back
+                                    </button>
+                                    <button className="btn btn-primary" onClick={nextStep}>
+                                        Continue
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                        
+                        {currentStep === 4 && (
+                            <div className="step-page">
+                                <div className="step-header">
+                                    <h2>Payment Method</h2>
+                                    <p>Choose your preferred payment option</p>
+                                </div>
+                                
+                                <div className="step-body">
+                                    <div className="payment-container">
+                                        <div className="total-banner">
+                                            <span>Total Amount: ₹{calculateTotal()}</span>
+                                        </div>
+                                        
+                                        <div className="payment-options">
+                                            <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
+                                                <input 
+                                                    type="radio" 
+                                                    name="paymentMethod" 
+                                                    value="cod" 
+                                                    checked={paymentMethod === 'cod'} 
+                                                    onChange={handlePaymentMethodChange} 
+                                                />
+                                                <div className="payment-content">
+                                                    <div className="payment-icon">💵</div>
+                                                    <div className="payment-details">
+                                                        <span className="payment-name">Cash on Delivery</span>
+                                                        <span className="payment-desc">Pay when you receive</span>
+                                                    </div>
+                                                    <div className="selection-indicator"></div>
+                                                </div>
+                                            </label>
+                                            
+                                            <label className="payment-option disabled">
+                                                <input 
+                                                    type="radio" 
+                                                    name="paymentMethod" 
+                                                    value="upi" 
+                                                    disabled 
+                                                />
+                                                <div className="payment-content">
+                                                    <div className="payment-icon">📱</div>
+                                                    <div className="payment-details">
+                                                        <span className="payment-name">UPI Payment</span>
+                                                        <span className="payment-desc">Coming Soon</span>
+                                                    </div>
+                                                    <div className="coming-soon-badge">Soon</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="step-footer">
+                                    <button className="btn btn-secondary" onClick={prevStep}>
+                                        Back
+                                    </button>
+                                    <button 
+                                        className="btn btn-success" 
+                                        onClick={handleSubmit}
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <div className="spinner"></div>
+                                                {uploadProgress > 0 ? `Uploading ${uploadProgress}%` : 'Processing...'}
+                                            </>
+                                        ) : (
+                                            'Place Order'
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             ) : (
-                <div className="order-success">
+                <div className="success-screen">
                     <div className="success-icon">✅</div>
-                    <h2>Order Placed Successfully!</h2>
-                    <p>Your order has been received and is being processed.</p>
-                    <p className="order-id">Order ID: #{orderId}</p>
-                    <p>We'll send updates about your order to your phone number.</p>
-                    <p>Thank you for choosing PadhaiXpress!</p>
-                    <button className="home-button" onClick={() => window.location.href = '/'}>Back to Home</button>
+                    <h1>Order Placed Successfully!</h1>
+                    <p>Your workbook order has been received and is being processed</p>
+                    <div className="order-id">Order ID: #{orderId}</div>
+                    <div className="success-actions">
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => window.location.href = '/'}
+                        >
+                            Back to Home
+                        </button>
+                        <button 
+                            className="btn btn-secondary" 
+                            onClick={() => window.location.href = '/orders'}
+                        >
+                            View Orders
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

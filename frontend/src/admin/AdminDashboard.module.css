@@ -277,6 +277,187 @@
   background: #b91c1c;
 }
 
+/* /* Your existing CSS with responsive enhancements */
+/* Your existing CSS with responsive enhancements */
+
+.filterContainer {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  align-items: center;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filterGroup label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.dateInputs {
+  display: flex;
+  gap: 8px;
+}
+
+.filterInput, .filterSelect {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  background: #f9fafb;
+  color: #22223b;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filterInput:focus, .filterSelect:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.filterActions {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.resetButton {
+  background: #6b7280;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.resetButton:hover {
+  background: #4b5563;
+}
+
+/* Responsive Media Queries */
+
+/* Large screens - prevent overflow */
+@media (min-width: 1200px) {
+  .filterContainer {
+    grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+    max-width: 100%;
+  }
+}
+
+/* Medium screens - 3 columns max */
+@media (max-width: 1199px) and (min-width: 769px) {
+  .filterContainer {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .dateInputs {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+}
+
+/* Tablet and smaller screens (768px and below) */
+@media (max-width: 768px) {
+  .filterContainer {
+    padding: 20px;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 24px;
+    overflow-x: visible;
+  }
+  
+  .dateInputs {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filterInput, .filterSelect {
+    font-size: 0.95rem;
+    padding: 12px 14px;
+  }
+  
+  .resetButton {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile phones (480px and below) */
+@media (max-width: 480px) {
+  .filterContainer {
+    padding: 16px;
+    gap: 16px;
+    grid-template-columns: 1fr;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .filterGroup label {
+    font-size: 0.9rem;
+  }
+  
+  .dateInputs {
+    gap: 10px;
+  }
+  
+  .filterInput, .filterSelect {
+    padding: 11px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .filterActions {
+    align-items: stretch;
+  }
+  
+  .resetButton {
+    padding: 11px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Very small mobile phones (360px and below) */
+@media (max-width: 360px) {
+  .filterContainer {
+    padding: 12px;
+    gap: 14px;
+    margin: 0 -8px 16px -8px;
+    border-radius: 8px;
+  }
+  
+  .filterGroup label {
+    font-size: 0.85rem;
+  }
+  
+  .filterInput, .filterSelect {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+  
+  .resetButton {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+}
 /* Responsive Design - Desktop (1200px and above) */
 @media (min-width: 1200px) {
   .headerContent, .mainContent {

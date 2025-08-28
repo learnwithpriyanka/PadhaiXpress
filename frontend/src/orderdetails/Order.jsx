@@ -13,21 +13,59 @@ const Order = () => {
       const user = (await supabase.auth.getUser()).data.user;
       if (!user) return;
 
-      // Fetch orders with product details for each order item
-      const { data: orders, error } = await supabase
-        .from('orders')
-        .select('*, order_items(*, product:product_id(*))')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+      try {
+        // Fetch regular orders with product details
+        const { data: regularOrders, error: regularError } = await supabase
+          .from('orders')
+          .select('*, order_items(*, product:product_id(*))')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
 
-      if (!error) setOrderHistory(orders);
+        // Fetch custom workbook orders
+        const { data: customOrders, error: customError } = await supabase
+          .from('custom_workbook_orders')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('placed_at', { ascending: false });
+
+        if (regularError) console.error('Error fetching regular orders:', regularError);
+        if (customError) console.error('Error fetching custom orders:', customError);
+
+        // Combine and format orders
+        const formattedRegularOrders = (regularOrders || []).map(order => ({
+          ...order,
+          orderType: 'regular',
+          displayDate: order.created_at,
+          displayTotal: order.total
+        }));
+
+        const formattedCustomOrders = (customOrders || []).map(order => ({
+          ...order,
+          orderType: 'custom',
+          displayDate: order.placed_at,
+          displayTotal: order.total_amount,
+          status: order.status
+        }));
+
+        // Combine and sort by date (newest first)
+        const allOrders = [...formattedRegularOrders, ...formattedCustomOrders]
+          .sort((a, b) => new Date(b.displayDate) - new Date(a.displayDate));
+
+        setOrderHistory(allOrders);
+      } catch (error) {
+        console.error('Error fetching order history:', error);
+      }
     };
 
     fetchOrderHistory();
   }, []);
 
-  const handleViewDetails = (orderId) => {
-    navigate(`/viewdetails/${orderId}`);
+  const handleViewDetails = (order) => {
+    if (order.orderType === 'custom') {
+      navigate(`/custom-workbook-details/${order.id}`);
+    } else {
+      navigate(`/viewdetails/${order.id}`);
+    }
   };
 
   const loadRazorpayScript = () => {
@@ -155,13 +193,13 @@ const Order = () => {
   };
 
   const getPaymentStatusText = (order) => {
+    const total = order.orderType === 'custom' ? order.total_amount : order.total;
+    
     if (order.payment_method === 'cod') {
-      return `Cash on Delivery - Pay ₹${order.total.toFixed(2)} on delivery`;
+      return `Cash on Delivery - Pay ₹${total.toFixed(2)} on delivery`;
     } else if (order.payment_method === 'online') {
       return 'Online Payment - Paid';
     } else {
-      // For orders without payment_method, we can't determine payment type
-      // So we'll show a generic message
       return 'Payment Method: Not specified';
     }
   };
@@ -178,81 +216,73 @@ const Order = () => {
 
   return (
     <div className="order-history">
-      <h2>Order History</h2>
+      <h2>📋 Complete Order History</h2>
       {orderHistory.length > 0 ? (
         orderHistory.map((order) => (
-          <div key={order.id} className="order-item">
+          <div key={`${order.orderType}-${order.id}`} className="order-item">
+            {/* Order Type Badge */}
+            <div className={`order-type-badge ${order.orderType}`}>{order.orderType === 'custom' ? '📚 Custom Workbook' : '📖 Lab Workbook'}</div>
             <div className="order-header">
               <div>
-                <h3>Order ID: {order.id}</h3>
-                <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
-                <p>Total: ₹{order.total.toFixed(2)}</p>
-                <p>Status: {order.status}</p>
-                <p>Delivery By: {order.delivery_time ? new Date(order.delivery_time).toLocaleString() : 'TBD'}</p>
-                <p style={{ 
-                  color: getPaymentStatusColor(order), 
-                  fontWeight: '600',
-                  fontSize: '0.9rem',
-                  marginTop: '8px',
-                  padding: '4px 8px',
-                  backgroundColor: getPaymentStatusColor(order) === '#f59e0b' ? '#fef3c7' : 
-                                 getPaymentStatusColor(order) === '#10b981' ? '#d1fae5' : '#f3f4f6',
-                  borderRadius: '4px',
-                  display: 'inline-block'
-                }}>
+                <h3>Order ID: #{order.id}</h3>
+                <p>📅 Date: {new Date(order.displayDate).toLocaleDateString()}</p>
+                <p>💰 Total: ₹{order.displayTotal.toFixed(2)}</p>
+                <p>📊 Status: {order.status.replace('_', ' ').toUpperCase()}</p>
+                {order.orderType === 'regular' && order.delivery_time && (
+                  <p>🚚 Delivery By: {new Date(order.delivery_time).toLocaleString()}</p>
+                )}
+                {order.orderType === 'custom' && (
+                  <p>📄 Pages: {order.pages}</p>
+                )}
+                <p className="order-payment-status" style={{ color: getPaymentStatusColor(order), backgroundColor: getPaymentStatusColor(order) === '#f59e0b' ? '#fef3c7' : getPaymentStatusColor(order) === '#10b981' ? '#d1fae5' : '#f3f4f6' }}>
                   {getPaymentStatusText(order)}
                 </p>
-                {/* Pay Now Button for COD Orders */}
-                {order.payment_method === 'cod' && order.status !== 'delivered' && (
+                {/* Pay Now Button for COD Orders (only for regular orders) */}
+                {order.orderType === 'regular' && order.payment_method === 'cod' && order.status !== 'delivered' && (
                   <button
+                    className="pay-now-btn"
                     onClick={() => handlePayNow(order)}
                     disabled={loading[order.id]}
-                    style={{
-                      marginTop: '12px',
-                      padding: '8px 16px',
-                      backgroundColor: '#10b981',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '6px',
-                      cursor: loading[order.id] ? 'not-allowed' : 'pointer',
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      transition: 'background-color 0.2s ease',
-                      opacity: loading[order.id] ? 0.7 : 1
-                    }}
-                    onMouseOver={(e) => !loading[order.id] && (e.target.style.backgroundColor = '#059669')}
-                    onMouseOut={(e) => !loading[order.id] && (e.target.style.backgroundColor = '#10b981')}
                   >
                     {loading[order.id] ? 'Processing...' : '💳 Pay Now'}
                   </button>
                 )}
               </div>
               <button 
-                onClick={() => handleViewDetails(order.id)} 
-                className="view-details-btn"
-                style={{
-                  height: '40px',
-                  padding: '8px 16px',
-                  backgroundColor: '#007bff',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px',
-                  transition: 'background-color 0.2s ease'
-                }}
-                onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
-                onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+                onClick={() => handleViewDetails(order)} 
+                className={`view-details-btn ${order.orderType}`}
               >
-                View Details
+                👁️ View Details
               </button>
             </div>
             <OrderStatusProgressBar status={order.status} />
+            {/* Order Summary for Custom Orders */}
+            {order.orderType === 'custom' && (
+              <div className="custom-order-summary">
+                <h4>📋 Order Summary</h4>
+                <p><strong>Customer:</strong> {order.delivery_name}</p>
+                <p><strong>Phone:</strong> {order.phone}</p>
+                <p><strong>Address:</strong> {order.address}</p>
+                {order.landmark && <p><strong>Landmark:</strong> {order.landmark}</p>}
+                <p><strong>Pincode:</strong> {order.pincode}</p>
+              </div>
+            )}
           </div>
         ))
       ) : (
-        <p>No orders found.</p>
+        <div className="order-empty-state">
+          <div className="order-empty-icon">📋</div>
+          <h3>No Orders Found</h3>
+          <p>You haven't placed any orders yet.</p>
+          <div className="order-empty-actions">
+            <button className="primary-button" onClick={() => navigate('/workbook')}>
+              📖 Browse Lab Workbooks
+            </button>
+            <button className="secondary-button" onClick={() => navigate('/project')}>
+              📚 Create Custom Workbook
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

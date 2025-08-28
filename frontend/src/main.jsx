@@ -42,6 +42,7 @@ import OrderSuccess from './orderdetails/OrderSuccess.jsx';
 
 import AdminDashboard from './admin/AdminDashboard';
 import PrinterDashboard from './printer/PrinterDashboard';
+import PrintedOrders from './printer/PrintedOrders';
 import PrivacyPolicy from './component/PrivacyPolicy/PrivacyPolicy.jsx';
 import ProductManager from './admin/ProductManager.jsx';
 import CouponManager from './admin/CouponManager.jsx';
@@ -104,6 +105,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/profile" element={<ProfilePage />}></Route>
             <Route path='/orders' element={<Order />}></Route>
             <Route path='/viewdetails/:orderid' element={<ViewOrderDetailsPage />} />
+            {/* <Route path='/custom-workbook-details/:orderid' element={<CustomWorkbookOrderDetails />} /> */}
             <Route path="/order-success" element={<OrderSuccess />} />
             
             <Route path='/orderdetails' element={
@@ -124,7 +126,7 @@ createRoot(document.getElementById('root')).render(
               </PrivateRoute>
             } />
             <Route path='/admin-dashboard/custom-workbooks' element={
-              <PrivateRoute allowedRoles={['admin', 'printer']}>
+              <PrivateRoute allowedRoles={['admin', 'printer','delivery']}>
                 <CustomWorkbookOrders />
               </PrivateRoute>
             } />
@@ -164,6 +166,10 @@ createRoot(document.getElementById('root')).render(
             <Route
               path="/printer-dashboard"
               element={<PrinterDashboard />}
+            />
+            <Route
+              path="/printed-orders"
+              element={<PrintedOrders />}
             />
             <Route
               path="/delivery-dash"
