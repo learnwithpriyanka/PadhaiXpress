@@ -37,15 +37,15 @@ const Hero1 = () => {
 
             {/* Quick Actions */}
             <div className="hero-actions">
-              <div className="action-card">
+              <div className="action-card" onClick={() => navigate('/workbook')} style={{ cursor: 'pointer' }}>
                 <ShoppingBag className="action-icon action-icon-blue" />
                 <div className="action-text">Buy Workbooks</div>
               </div>
-              <div className="action-card">
+              <div className="action-card" onClick={() => navigate('/project')} style={{ cursor: 'pointer' }}>
                 <FileText className="action-icon action-icon-green" />
                 <div className="action-text">Print PDFs</div>
               </div>
-              <div className="action-card">
+              <div className="action-card" onClick={() => navigate('/recycle')} style={{ cursor: 'pointer' }}>
                 <Recycle className="action-icon action-icon-orange" />
                 <div className="action-text">Recycle Books</div>
               </div>

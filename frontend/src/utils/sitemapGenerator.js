@@ -123,8 +123,8 @@ export const sitemapData = [
   },
   {
     url: '/terms',
-    title: 'Terms of Service - PadhaixPress',
-    description: 'Read PadhaixPress terms of service and user agreement for our educational platform and services.',
+    title: 'Terms and Conditions - PadhaixPress',
+    description: 'Read PadhaixPress terms and conditions and user agreement for our educational platform and services.',
     priority: 0.4,
     changefreq: 'yearly'
   },

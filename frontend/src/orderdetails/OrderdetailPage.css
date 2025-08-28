@@ -1,0 +1,62 @@
+.order-details-container-modern {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.order-details-left-modern {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.order-details-right-modern {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+  padding: 0.6rem 0.5rem;
+  margin-bottom: 0;
+}
+
+.order-item {
+  gap: 0.3rem;
+  padding: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 900px) {
+  .order-details-container-modern {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .order-details-left-modern, .order-details-right-modern {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .order-details-root {
+    padding: 0.1rem 0;
+  }
+  .order-details-container-modern {
+    padding: 0 0.05rem;
+  }
+  .card {
+    padding: 0.3rem 0.2rem;
+    border-radius: 6px;
+  }
+  .order-item {
+    gap: 0.2rem;
+    padding: 0.2rem;
+  }
+} 

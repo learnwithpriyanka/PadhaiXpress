@@ -1,0 +1,139 @@
+.navbar-modern {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.2rem;
+}
+
+.navbar-brand-modern {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #222;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.navbar-toggle-modern {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.navbar-toggle-icon {
+  width: 28px;
+  height: 3px;
+  background: #222;
+  display: block;
+  border-radius: 2px;
+  position: relative;
+}
+.navbar-toggle-icon::before,
+.navbar-toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 3px;
+  background: #222;
+  border-radius: 2px;
+  transition: 0.2s;
+}
+.navbar-toggle-icon::before {
+  top: -9px;
+}
+.navbar-toggle-icon::after {
+  top: 9px;
+}
+
+.navbar-links-modern {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-list-modern {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+  .navbar-container {
+    padding: 0.5rem 0.5rem;
+  }
+  .navbar-list-modern {
+    gap: 0.7rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar-toggle-modern {
+    display: block;
+  }
+  .navbar-links-modern {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 0.5rem;
+    display: none;
+    z-index: 100;
+  }
+  .navbar-links-modern.open {
+    display: flex;
+  }
+  .navbar-list-modern {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+}
+
+/* Cart icon and count */
+.cart-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cart-icon {
+  font-size: 1.3rem;
+  color: #2563eb;
+}
+.cart-count {
+  position: absolute;
+  top: -7px;
+  right: -10px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 50%;
+  padding: 2px 7px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Dropdown menu (keep your existing styles for .modern-dropdown-menu, etc.) */ 

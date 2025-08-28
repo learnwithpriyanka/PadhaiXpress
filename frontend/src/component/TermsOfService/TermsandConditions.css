@@ -1,0 +1,92 @@
+/* Modern, Responsive, and Professional Terms and Conditions Styles */
+
+.terms-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.terms-content {
+  background: #fff;
+  max-width: 800px;
+  width: 100%;
+  margin: 40px 0 24px 0;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(60, 72, 88, 0.10);
+  padding: 40px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.terms-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.terms-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.last-updated {
+  font-size: 1rem;
+  color: #607d8b;
+  margin-bottom: 0;
+}
+
+.terms-section {
+  font-size: 1.08rem;
+  color: #222;
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
+}
+
+.terms-section ul {
+  padding-left: 1.2rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.terms-section li {
+  margin-bottom: 0.7rem;
+  font-size: 1.05rem;
+  color: #374151;
+  position: relative;
+  padding-left: 0.5rem;
+}
+
+.terms-section li::marker {
+  color: #1a237e;
+  font-size: 1.1em;
+}
+
+.terms-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 1.1rem;
+  color: #1a237e;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .terms-content {
+    padding: 20px 8px 16px 8px;
+    border-radius: 10px;
+    margin: 24px 0 12px 0;
+  }
+  .terms-header h1 {
+    font-size: 1.5rem;
+  }
+  .terms-section {
+    font-size: 0.98rem;
+  }
+  .terms-footer {
+    font-size: 1rem;
+  }
+} 
