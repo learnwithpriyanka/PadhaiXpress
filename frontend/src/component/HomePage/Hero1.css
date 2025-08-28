@@ -130,15 +130,15 @@
 
 /* CTA Button */
 .hero-cta {
-    display: flex;
-    margin-bottom: -2rem;
+    display: flex !important;
+    margin-bottom: -2rem !important
 }
 
 .cta-button {
     display: flex;
     align-items: center;
-    background: #ea580c;
-    color: white;
+    background: #ea580c !important;
+    color: white!important;
     border-radius: 0.5rem;
     font-weight: 600;
     border: none;
