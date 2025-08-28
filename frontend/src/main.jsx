@@ -54,6 +54,10 @@ import ScrollToTop from './components/ScrollToTop';
 import TermsandConditions from './component/TermsOfService/TermsandConditions.jsx';
 import CancellationPolicy from './component/TermsOfService/CancellationPolicy.jsx';
 import DeliveryDashboard from './delivery/DeliveryDashBoard.jsx';
+import FirstYearNotes from './showpages/notes/FirstYearNotes.jsx';
+import FourthYearNotes from './showpages/notes/FourthYearNotes.jsx';
+import SecondYearNotes from './showpages/notes/SecondYearNotes.jsx';
+import ThirdYearNotes from './showpages/notes/ThirdYearNotes.jsx';
 
 
 const links = [
@@ -145,6 +149,11 @@ createRoot(document.getElementById('root')).render(
               <Route path="year1/fourthyearevensem" element={<FourthYearEvenSem />} />
             </Route>
             <Route path="/notes" element={<NotesPage />}></Route>
+
+                <Route path="/firstyearnotes" element={<FirstYearNotes/>}></Route> 
+                <Route path="/secondyearnotes" element={<SecondYearNotes/>}></Route>
+                <Route path="/thirdyearnotes" element={<ThirdYearNotes/>}></Route>
+                <Route path="/fourthyearnotes" element={<FourthYearNotes/>}></Route> 
             <Route path="/recycle" element={<RecycleaPage />}></Route>
             <Route path="/project" element={<ProjectPage />}></Route>
 
