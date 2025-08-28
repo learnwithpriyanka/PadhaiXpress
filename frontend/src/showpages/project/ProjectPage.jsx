@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { supabase } from '../../supabaseClient';
 import './WorkbookOrder.css';
+import { PDFDocument } from 'pdf-lib';
 
 function ProjectPage() {
     const { isLoggedIn } = useContext(AuthContext);
@@ -26,34 +27,46 @@ function ProjectPage() {
     const BINDING_CHARGES = {
         spiral: 40,
         tape: 30,
-        white: 60
+        white: 60,
+        normal: 5
     };
     const PER_PAGE_COST = 2;
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const selectedFile = e.target.files[0];
         setFileError('');
         
         if (!selectedFile) {
             setFile(null);
+            setEstimatedPages(0);
             return;
         }
         
         if (selectedFile.type !== 'application/pdf') {
             setFileError('Please upload a PDF file only');
             setFile(null);
+            setEstimatedPages(0);
             return;
         }
         
         if (selectedFile.size > 25 * 1024 * 1024) {
             setFileError('File size exceeds 25MB limit');
             setFile(null);
+            setEstimatedPages(0);
             return;
         }
         
         setFile(selectedFile);
-        const estimatedPageCount = Math.ceil(selectedFile.size / (10 * 1024));
-        setEstimatedPages(estimatedPageCount);
+        try {
+            const buffer = await selectedFile.arrayBuffer();
+            const pdfDoc = await PDFDocument.load(buffer);
+            const pageCount = pdfDoc.getPageCount();
+            setEstimatedPages(pageCount || 0);
+        } catch (err) {
+            console.error('Failed to parse PDF for page count, using estimate.', err);
+            const fallbackEstimate = Math.ceil(selectedFile.size / (150 * 1024));
+            setEstimatedPages(fallbackEstimate);
+        }
     };
 
     const handleBindingTypeChange = (e) => {
@@ -72,11 +85,59 @@ function ProjectPage() {
         setPaymentMethod(e.target.value);
     };
     
+    // Razorpay loader
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            if (window.Razorpay) {
+                resolve(true);
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    useEffect(() => {
+        loadRazorpayScript();
+    }, []);
+    
     const nextStep = () => {
         if (currentStep === 1 && !file) {
             setFileError('Please upload a PDF file');
             return;
         }
+        
+        if (currentStep === 2) {
+            // Validate delivery form
+            if (!formData.fullName.trim()) {
+                alert('Please enter your full name');
+                return;
+            }
+            if (!formData.phoneNumber.trim()) {
+                alert('Please enter your phone number');
+                return;
+            }
+            if (!/^\d{10}$/.test(formData.phoneNumber)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            if (!formData.address.trim()) {
+                alert('Please enter your delivery address');
+                return;
+            }
+            if (!formData.pincode.trim()) {
+                alert('Please enter your pincode');
+                return;
+            }
+            if (!/^\d{6}$/.test(formData.pincode)) {
+                alert('Please enter a valid 6-digit pincode');
+                return;
+            }
+        }
+        
         setCurrentStep(currentStep + 1);
     };
     
@@ -88,6 +149,103 @@ function ProjectPage() {
         return (estimatedPages * PER_PAGE_COST) + BINDING_CHARGES[bindingType];
     };
     
+    const createRazorpayOrder = async (amount) => {
+        if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
+            alert('Payment is not configured. Missing Razorpay key.');
+            return;
+        }
+        if (!window.Razorpay) {
+            const loaded = await loadRazorpayScript();
+            if (!loaded) {
+                alert('Payment gateway failed to load. Please try again.');
+                return;
+            }
+        }
+        if (!amount || amount <= 0) {
+            alert('Calculated amount is invalid. Please reselect your file.');
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: Math.round(amount * 100),
+            currency: 'INR',
+            name: 'PadhaiXpress',
+            description: 'Custom Workbook Payment',
+            receipt: `receipt_${Date.now()}`,
+            prefill: {
+                name: formData.fullName,
+                contact: formData.phoneNumber,
+            },
+            theme: { color: '#3399cc' },
+            handler: async function (response) {
+                try {
+                    setIsSubmitting(true);
+                    const timestamp = new Date().getTime();
+                    const fileName = `${timestamp}_${file.name}`;
+                    const filePath = `workbooks/${fileName}`;
+
+                    const { error: uploadError } = await supabase.storage
+                        .from('workbooks')
+                        .upload(filePath, file, {
+                            cacheControl: '3600',
+                            upsert: false,
+                            onUploadProgress: (progress) => {
+                                setUploadProgress(Math.round((progress.loaded / progress.total) * 100));
+                            }
+                        });
+                    if (uploadError) throw uploadError;
+
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('workbooks')
+                        .getPublicUrl(filePath);
+
+                    const { data: orderData, error: orderError } = await supabase
+                        .from('custom_workbook_orders')
+                        .insert([
+                            {
+                                user_id: (await supabase.auth.getUser()).data.user?.id || null,
+                                pdf_file_url: publicUrl,
+                                pages: estimatedPages,
+                                binding_type: bindingType,
+                                delivery_name: formData.fullName,
+                                phone: formData.phoneNumber,
+                                address: formData.address,
+                                pincode: formData.pincode,
+                                landmark: formData.landmark || null,
+                                payment_method: 'online',
+                                status: 'uploaded',
+                                total_amount: calculateTotal(),
+                                razorpay_payment_id: response?.razorpay_payment_id || null,
+                                razorpay_order_id: response?.razorpay_order_id || null,
+                                razorpay_signature: response?.razorpay_signature || null,
+                            }
+                        ])
+                        .select();
+                    if (orderError) throw orderError;
+
+                    setOrderId(orderData[0].id);
+                    setOrderSuccess(true);
+                    setCurrentStep(5);
+                } catch (error) {
+                    console.error('Error submitting order:', error);
+                    alert(`Error submitting order: ${error.message}`);
+                } finally {
+                    setIsSubmitting(false);
+                    setUploadProgress(0);
+                }
+            },
+            modal: {
+                ondismiss: function () {
+                    // Optional: user closed without paying
+                }
+            }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+    };
+
     const handleSubmit = async () => {
         if (!formData.fullName || !formData.phoneNumber || !formData.address || !formData.pincode) {
             alert('Please fill all required fields');
@@ -109,14 +267,24 @@ function ProjectPage() {
             return;
         }
         
+        // If online payment, open Razorpay and finish flow within handler
+        if (paymentMethod === 'online') {
+            if (!window.Razorpay) {
+                alert('Payment gateway is loading. Please try again in a moment.');
+                return;
+            }
+            await createRazorpayOrder(calculateTotal());
+            return;
+        }
+
+        // COD flow (original)
         setIsSubmitting(true);
-        
         try {
             const timestamp = new Date().getTime();
             const fileName = `${timestamp}_${file.name}`;
             const filePath = `workbooks/${fileName}`;
-            
-            const { data: uploadData, error: uploadError } = await supabase.storage
+
+            const { error: uploadError } = await supabase.storage
                 .from('workbooks')
                 .upload(filePath, file, {
                     cacheControl: '3600',
@@ -125,13 +293,12 @@ function ProjectPage() {
                         setUploadProgress(Math.round((progress.loaded / progress.total) * 100));
                     }
                 });
-                
             if (uploadError) throw uploadError;
-            
+
             const { data: { publicUrl } } = supabase.storage
                 .from('workbooks')
                 .getPublicUrl(filePath);
-            
+
             const { data: orderData, error: orderError } = await supabase
                 .from('custom_workbook_orders')
                 .insert([
@@ -151,13 +318,11 @@ function ProjectPage() {
                     }
                 ])
                 .select();
-                
             if (orderError) throw orderError;
-            
+
             setOrderId(orderData[0].id);
             setOrderSuccess(true);
             setCurrentStep(5);
-            
         } catch (error) {
             console.error('Error submitting order:', error);
             alert(`Error submitting order: ${error.message}`);
@@ -268,12 +433,14 @@ function ProjectPage() {
                                                             {type === 'spiral' && '🌀'}
                                                             {type === 'tape' && '📎'}
                                                             {type === 'white' && '⚪'}
+                                                            {type === 'normal' && '🖨️'}
                                                         </div>
                                                         <div className="binding-details">
                                                             <span className="binding-name">
                                                                 {type === 'spiral' && 'Spiral Binding'}
                                                                 {type === 'tape' && 'Tape Binding'}
                                                                 {type === 'white' && 'White Binding'}
+                                                                {type === 'normal' && 'Normal Printing'}
                                                             </span>
                                                             <span className="binding-price">₹{price}</span>
                                                         </div>
@@ -395,6 +562,7 @@ function ProjectPage() {
                                                     {bindingType === 'spiral' && 'Spiral Binding'}
                                                     {bindingType === 'tape' && 'Tape Binding'}
                                                     {bindingType === 'white' && 'White Binding'}
+                                                    {bindingType === 'normal' && 'Normal Printing'}
                                                 </span>
                                             </div>
                                             <div className="summary-row">
@@ -455,6 +623,23 @@ function ProjectPage() {
                                         </div>
                                         
                                         <div className="payment-options">
+                                            <label className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}>
+                                                <input 
+                                                    type="radio" 
+                                                    name="paymentMethod" 
+                                                    value="online" 
+                                                    checked={paymentMethod === 'online'} 
+                                                    onChange={handlePaymentMethodChange} 
+                                                />
+                                                <div className="payment-content">
+                                                    <div className="payment-icon">💳</div>
+                                                    <div className="payment-details">
+                                                        <span className="payment-name">Online Payment</span>
+                                                        <span className="payment-desc">Pay securely with Razorpay</span>
+                                                    </div>
+                                                    <div className="selection-indicator"></div>
+                                                </div>
+                                            </label>
                                             <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
                                                 <input 
                                                     type="radio" 
@@ -470,23 +655,6 @@ function ProjectPage() {
                                                         <span className="payment-desc">Pay when you receive</span>
                                                     </div>
                                                     <div className="selection-indicator"></div>
-                                                </div>
-                                            </label>
-                                            
-                                            <label className="payment-option disabled">
-                                                <input 
-                                                    type="radio" 
-                                                    name="paymentMethod" 
-                                                    value="upi" 
-                                                    disabled 
-                                                />
-                                                <div className="payment-content">
-                                                    <div className="payment-icon">📱</div>
-                                                    <div className="payment-details">
-                                                        <span className="payment-name">UPI Payment</span>
-                                                        <span className="payment-desc">Coming Soon</span>
-                                                    </div>
-                                                    <div className="coming-soon-badge">Soon</div>
                                                 </div>
                                             </label>
                                         </div>
