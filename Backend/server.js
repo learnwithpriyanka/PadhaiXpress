@@ -9,6 +9,7 @@ const cors = require("cors");
 const authRouter = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profile"); // Updated path
 const paymentRoutes = require("./routes/paymentRoutes");
+const wasteCollectionRoutes = require("./routes/wasteCollectionRoutes");
 
 const app = express();
 
@@ -66,6 +67,7 @@ connectDB();
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/waste-collection", wasteCollectionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
